@@ -21,7 +21,7 @@
         
         <div class="flex-shrink-0">
             <a href="/">
-                <img src="{{ asset('LOGO_FOCCUS.png') }}" width="180" alt="Logo Foccus">
+                <img src="{{ asset('LOGO_FOCCUS.png') }}" class="w-40 brightness-0 invert" alt="Logo Foccus">
             </a>
         </div>
 
@@ -52,7 +52,11 @@
                     <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-slate-100">Todos os Produtos</a>
                     <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-slate-100">Lançamentos</a>
                     <hr class="my-1">
-                    <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-slate-100">Periféricos</a>
+                    @foreach($categorias as $nomeCategoria)
+    <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-slate-100">
+        {{ $nomeCategoria }}
+    </a>
+@endforeach
                 </div>
             </div>
 
