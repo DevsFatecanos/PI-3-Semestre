@@ -132,22 +132,42 @@
         </header>
 
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            @foreach ($produtosGerais as $produto)
-                <div class="border p-4 rounded-lg shadow-sm bg-white hover:shadow-md transition-all group">
-                    <div class="h-40 bg-gray-100 mb-4 rounded flex items-center justify-center overflow-hidden">
-                         <img src="{{ $produto->imagem ?? 'https://via.placeholder.com/150' }}" class="group-hover:scale-110 transition-transform duration-300">
-                    </div>
-                    <h3 class="font-bold text-lg text-gray-800">{{ $produto->nome }}</h3>
-                    <p class="text-sm text-gray-500">Estoque: {{ $produto->estoque }} un.</p>
-                    <p class="text-blue-700 font-bold text-xl mt-2 font-mono">
-                        R$ {{ number_format($produto->preco_atual, 2, ',', '.') }}
-                    </p>
-                    <button class="w-full mt-4 bg-blue-600 text-white py-2 rounded-md font-medium hover:bg-blue-700 transition-colors">
-                        Adicionar ao Pedido
-                    </button>
+    @foreach ($produtosGerais as $produto)
+        <div class="border p-4 rounded-lg shadow-sm bg-white hover:shadow-md transition-all group">
+            <div class="h-40 bg-gray-100 mb-4 rounded flex items-center justify-center overflow-hidden">
+                 <img src="{{ $produto->url_imagem }}" class="group-hover:scale-110 transition-transform duration-300">
+            </div>
+
+            <h3 class="font-bold text-lg text-gray-800 truncate">{{ $produto->nome }}</h3>
+            <p class="text-xs text-gray-400 mb-1">{{ $produto->marca }}</p>
+            
+            <p class="text-sm {{ $produto->quantidade > 0 ? 'text-green-600' : 'text-red-600' }}">
+                Estoque: {{ $produto->quantidade }} un.
+            </p>
+
+            <p class="text-blue-700 font-bold text-xl mt-2 font-mono">
+                R$ {{ number_format($produto->preco_atual, 2, ',', '.') }}
+            </p>
+
+            <form action="#" method="POST" class="mt-4">
+                @csrf
+                <input type="hidden" name="produto_id" value="{{ $produto->id }}">
+                
+                <div class="flex items-center mb-3">
+                    <label class="text-xs font-bold text-gray-400 mr-2 uppercase">Qtd:</label>
+                    <input type="number" name="quantidade" value="1" min="1" max="{{ $produto->quantidade }}" 
+                           class="w-full border border-gray-200 rounded px-2 py-1 text-sm focus:ring-2 focus:ring-blue-200 outline-none">
                 </div>
-            @endforeach
+
+                <button type="submit" 
+                        {{ $produto->quantidade <= 0 ? 'disabled' : '' }}
+                        class="w-full bg-blue-600 text-white py-2 rounded-md font-medium hover:bg-blue-700 transition-colors disabled:bg-gray-300 disabled:cursor-not-allowed">
+                    {{ $produto->quantidade > 0 ? 'Adicionar ao Pedido' : 'Esgotado' }}
+                </button>
+            </form>
         </div>
+    @endforeach
+</div>
     </main>
 
     <footer class="mt-20 border-t border-gray-200 bg-white p-8 text-center text-gray-400 text-sm">

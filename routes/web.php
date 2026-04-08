@@ -24,3 +24,5 @@ Route::get('/', function () {
 Route::get('/register', [RegisteredUserController::class, 'create'])->name('register');
 Route::post('/register', [RegisteredUserController::class, 'store']);
 Route::get('/empresa/{cnpj}', [EmpresaController::class, 'consultarCnpj']);
+Route::get('/register', function () { return view('auth.register'); })->name('register');
+Route::post('/register', [RegisteredUserController::class, 'store']);

@@ -38,21 +38,17 @@
             <form action="{{ route('register') }}" method="POST" class="space-y-4">
                 @csrf
                 
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          
                     <div>
                         <label class="block text-xs font-bold uppercase text-gray-400 mb-1">Nome Completo / Nome Fantasia.</label>
                         <input type="text" name="name" required class="w-full border-gray-200 border rounded-lg px-4 py-2.5 focus:border-slate-500 focus:ring-2 focus:ring-slate-200 outline-none transition">
                     </div>
                     
-                    <div>
-                        <label class="block text-xs font-bold uppercase text-gray-400 mb-1">E-mail</label>
-                        <input type="email" name="email" required class="w-full border-gray-200 border rounded-lg px-4 py-2.5 focus:border-slate-500 focus:ring-2 focus:ring-slate-200 outline-none transition">
-                    </div>
-                </div>
+              
 
                 <div>
-                    <label class="block text-xs font-bold uppercase text-gray-400 mb-1">CPF ou CNPJ</label>
-                    <input type="text" name="documento" required class="w-full border-gray-200 border rounded-lg px-4 py-2.5 focus:border-slate-500 focus:ring-2 focus:ring-slate-200 outline-none transition" placeholder="00.000.000/0001-00">
+                    <label class="block text-xs font-bold uppercase text-gray-400 mb-1">E-Mail</label>
+                <input type="email" name="email" required class="w-full border-gray-200 border rounded-lg px-4 py-2.5 focus:border-slate-500 focus:ring-2 focus:ring-slate-200 outline-none transition" placeholder="email@dominio.com">
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">

@@ -10,35 +10,26 @@ use Illuminate\Support\Facades\Auth;
 
 class RegisteredUserController extends Controller
 {
-    // 1. Exibe a tela de cadastro
-    public function create()
-    {
-        return view('auth.register');
-    }
-
-    // 2. Processa o formulário
     public function store(Request $request)
     {
-        // Validação dos dados
+        // 1. Validação
         $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users',
+            'name'     => 'required|string|max:255',
+            'email'    => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|confirmed|min:8',
         ]);
 
-        // Criação do usuário no banco
+        // 2. Criar usuário
         $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
+            'name'     => $request->name,
+            'email'    => $request->email,
             'password' => Hash::make($request->password),
-            // Se você adicionou 'documento' na migration de users, salve aqui também:
-            // 'documento' => $request->documento, 
         ]);
 
-        // Loga o usuário automaticamente após cadastrar
+        // 3. Logar automaticamente
         Auth::login($user);
 
-        // Redireciona para a página inicial ou catálogo
-        return redirect('/')->with('success', 'Conta criada com sucesso!');
+        // 4. Redirecionar
+        return redirect('/')->with('success', 'Cadastro realizado com sucesso!');
     }
 }
