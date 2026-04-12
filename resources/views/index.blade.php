@@ -40,7 +40,38 @@
     flex-shrink: 0; 
 }
 
-       
+       .dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background: #fff;
+    border: 1px solid #ccc;
+    min-width: 150px;
+}
+
+.dropdown-content a,
+.dropdown-content button {
+    display: block;
+    padding: 10px;
+    text-decoration: none;
+    border: none;
+    background: none;
+    width: 100%;
+    text-align: left;
+    color:#424242;
+}
+.dropdown-content a,
+.dropdown-content button:hover {
+    background-color:#ccc;
+}
+
+.dropdown-content.show {
+    display: block;
+}
         
 
 
@@ -97,11 +128,44 @@
         </div>
 
         <div class="flex items-center space-x-4">
+        <!--Codigo para Verificar Usuario Logado -->
+            @auth
+                <div class="dropdown">
+                    <button onclick="toggleMenu()" class="dropbtn">
+                      Olá, {{ auth()->user()->name }} ▼
+                    </button>
+                    <div id="menu" class="dropdown-content">
+                         <a href="./meusdados.blade.php">Meus dados</a>
+                         <form method="POST" action="/logout">
+                        @csrf
+                         <button type="submit">Sair</button>
+                        </form>
+                    </div>
+                </div>
+                <script>
+                    function toggleMenu() {
+                        document.getElementById("menu").classList.toggle("show");
+                    }
+
+                    // fechar ao clicar fora
+                        window.onclick = function(event) {
+                            if (!event.target.matches('.dropbtn')) {
+                                let menu = document.getElementById("menu");
+                                if (menu && menu.classList.contains('show')) {
+                                    menu.classList.remove('show');
+                                }
+                            }
+                        }
+                </script>
+            @endauth
+        <!------------------------------------------------------------>            
             <div class="hidden sm:flex items-center space-x-3 border-r border-slate-400 pr-4 text-xs">
+                @guest
                 <a href="/login" class="hover:text-slate-200 transition">Entrar</a>
                 <a href="/register" class="bg-white text-slate-600 px-3 py-1.5 rounded-lg font-bold hover:bg-slate-100 transition shadow-sm">
                     Cadastrar
                 </a>
+                @endguest
             </div>
 
             <div class="bg-slate-800 px-4 py-2 rounded-full cursor-pointer hover:bg-slate-700 transition flex items-center gap-2">

@@ -6,7 +6,10 @@
   <title> Cadastro • Meus Dados</title>
 
   <!-- Fonte + ícones -->
-  <link rel="stylesheet" href="./meusdados.css">
+  <link rel="stylesheet" href="../css/meusdados.css">
+  <style>
+
+  </style>
 </head>
 <body>
   <div class="page">
