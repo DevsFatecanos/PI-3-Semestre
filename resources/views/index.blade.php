@@ -40,9 +40,20 @@
     flex-shrink: 0; 
 }
 
-       .dropdown {
+.dropdown {
     position: relative;
     display: inline-block;
+    background-color:#1e293b;
+    padding:10px;
+    border-radius:20px;
+    font-size:12px;
+    font-weight:bold;
+}  
+
+
+.dropdown:hover{
+ background-color: #334155;
+ transition:1s;
 }
 
 .dropdown-content {
@@ -132,7 +143,7 @@
             @auth
                 <div class="dropdown">
                     <button onclick="toggleMenu()" class="dropbtn">
-                      Olá, {{ auth()->user()->name }} ▼
+                      Olá, {{ auth()->user()->name }}
                     </button>
                     <div id="menu" class="dropdown-content">
                          <a href="./meusdados.blade.php">Meus dados</a>
