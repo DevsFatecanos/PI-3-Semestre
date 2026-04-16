@@ -1,13 +1,14 @@
 <?php
 
+
+use App\Models\Produto;
+use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\CarrinhoController;
 use App\Http\Controllers\EmpresaController;
 use App\Http\Controllers\UserController;
-use App\Models\Produto;
-use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\Auth;
 
 Route::get('/', function () {
     $destaques = Produto::where('destaque', 1)->get();
@@ -37,10 +38,13 @@ Route::post('/meusdados',[UserController::class, 'meusdados']);
 Route::get('/register', [RegisteredUserController::class, 'create'])->name('register');
 Route::post('/register', [RegisteredUserController::class, 'store']);
 Route::get('/empresa/{cnpj}', [EmpresaController::class, 'consultarCnpj']);
+Route::get('/register', function () { return view('auth.register'); })->name('register');
+Route::post('/register', [RegisteredUserController::class, 'store']);
+
 // Rotas de Login
 Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [LoginController::class, 'login']);
-Route::post('/logout', function () {
+Route::GET('/logout', function () {
     Auth::logout();
     return redirect('/');
 });

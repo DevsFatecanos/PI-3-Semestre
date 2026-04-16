@@ -153,7 +153,7 @@
                     </button>
                     <div id="menu" class="dropdown-content">
                          <a target="_blank" href="/meusdados">Meus dados</a>
-                         <form m  ethod="POST" action="/logout">
+                         <form m  ethod="GET" action="/logout">
                         @csrf
                          <button type="submit">Sair</button>
                         </form>
