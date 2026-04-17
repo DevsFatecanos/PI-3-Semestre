@@ -1,0 +1,40 @@
+services:
+  - type: web
+    name: pi-3-semestre
+    runtime: docker
+    dockerfilePath: ./Dockerfile
+    port: 8080
+    envVars:
+      - key: APP_NAME
+        value: "PI-3-Semestre"
+      - key: APP_ENV
+        value: "production"
+      - key: APP_DEBUG
+        value: "false"
+      - key: APP_LOCALE
+        value: "pt_BR"
+      - key: APP_FALLBACK_LOCALE
+        value: "pt_BR"
+      - key: DB_CONNECTION
+        value: "mysql"
+      - key: RENDER_EXTERNAL_HOSTNAME
+        fromService:
+          name: pi-3-semestre
+          property: host
+      - key: APP_URL
+        value: "https://${RENDER_EXTERNAL_HOSTNAME}"
+      - key: LOG_CHANNEL
+        value: "stack"
+      - key: LOG_LEVEL
+        value: "info"
+
+  - type: mysql
+    name: pi-3-semestre-db
+    ipWhitelist: []
+    version: "8"
+    plan: starter
+    envVars:
+      - key: MYSQL_DATABASE
+        value: "foccus_distribuidora"
+      - key: MYSQL_USER
+        value: "laravel_user"
