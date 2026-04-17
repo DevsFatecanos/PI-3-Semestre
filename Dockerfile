@@ -14,9 +14,9 @@ RUN apt-get update && apt-get install -y \
 # Instalar Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-# Instalar Node.js
+# Instalar Node.js e ferramentas de build
 RUN curl -fsSL https://deb.nodesource.com/setup_18.x | bash - \
-    && apt-get install -y nodejs \
+    && apt-get install -y nodejs build-essential python3 \
     && npm install -g npm@latest \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
@@ -31,7 +31,7 @@ COPY . .
 RUN composer install --no-dev --optimize-autoloader
 
 # Instalar dependências Node e build assets
-RUN npm ci --prefer-offline --no-audit && npm run build
+RUN npm install --no-optional && npm run build
 
 # Estágio 2: Runtime
 FROM php:8.2-fpm
