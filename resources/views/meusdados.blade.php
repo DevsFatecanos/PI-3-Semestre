@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Acessar Portal</title>
+    <title>Meus Dados</title>
     <!-- Tailwind via CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://kit.fontawesome.com/02669f3445.js" crossorigin="anonymous"></script>
@@ -36,34 +36,38 @@
                 <h2 class="text-[24px] font-bold text-[#1a1a1a]">Seus Dados</h2>
                 <p class="text-[13px] text-[#888] mb-[30px]">Atualize ou Adicione seus dados aqui.</p>
 
-                <form>
+                <form method="POST" action="/meusdados/update">
+                      @csrf
                     <div class="mb-[20px]">
                         <label class="block text-[11px] font-bold text-[#aaa] uppercase tracking-[1px] mb-[5px]">Nome Completo</label>
-                        <input type="text" placeholder="Digite seu nome" class="w-full p-[12px] border border-[#e0e0e0] rounded-[8px] text-[14px] outline-none focus:border-[#465367] transition-colors">
+                        <input name="name" type="text" value="{{ auth()->user()->name }}" class="w-full p-[12px] border border-[#e0e0e0] rounded-[8px] text-[14px] outline-none focus:border-[#465367] transition-colors">
                     </div>
 
                     <div class="flex gap-[20px] mb-[20px]">
                         <div class="flex-1">
                             <label class="block text-[11px] font-bold text-[#aaa] uppercase tracking-[1px] mb-[5px]">CPF</label>
-                            <input type="text" placeholder="000.000.000-00" class="w-full p-[12px] border border-[#e0e0e0] rounded-[8px] text-[14px] outline-none focus:border-[#465367] transition-colors">
+                            <input name="cpf" type="text" value="{{ auth()->user()->cpf }}" data-format="999.999.999-99" class="w-full p-[12px] border border-[#e0e0e0] rounded-[8px] text-[14px] outline-none focus:border-[#465367] transition-colors">
                         </div>
                         <div class="flex-1">
                             <label class="block text-[11px] font-bold text-[#aaa] uppercase tracking-[1px] mb-[5px]">Telefone</label>
-                            <input type="text" placeholder="(00) 00000-0000" class="w-full p-[12px] border border-[#e0e0e0] rounded-[8px] text-[14px] outline-none focus:border-[#465367] transition-colors">
+                            <input name="telefone" type="text" value="{{ auth()->user()->telefone }}" data-format="(99) 9999-9999" data-alt-format="(99) 99999-9999"  class="w-full p-[12px] border border-[#e0e0e0] rounded-[8px] text-[14px] outline-none focus:border-[#465367] transition-colors">
                         </div>
                     </div>
 
                     <div class="mb-[20px]">
                         <label class="block text-[11px] font-bold text-[#aaa] uppercase tracking-[1px] mb-[5px]">E-mail</label>
-                        <input type="email" placeholder="seu@email.com" class="w-full p-[12px] border border-[#e0e0e0] rounded-[8px] text-[14px] outline-none focus:border-[#465367] transition-colors">
+                        <input name="email" type="email" value="{{ auth()->user()->email }}" class="w-full p-[12px] border border-[#e0e0e0] rounded-[8px] text-[14px] outline-none focus:border-[#465367] transition-colors">
                     </div>
+                    @if(session('success'))
+                        <p style="color: green;">{{ session('success') }}</p>
+                    @endif
 
                     <!-- Seção de Botões -->
                     <div class="mt-[20px] flex gap-[10px] items-start">
                         <button type="button" class="w-1/2 bg-[#465367] text-white border border-[#ddd] p-[15px] rounded-[8px] text-[14px] font-semibold cursor-pointer transition-all duration-500 hover:bg-[#888888]">
                             Trocar Senha
                         </button>
-                        <button type="submit" class="w-1/2 bg-[#1e293b] text-white p-[15px] rounded-[8px] text-[14px] font-bold cursor-pointer hover:bg-slate-700 transition-colors">
+                        <button id="Submit" type="submit" class="w-1/2 bg-[#1e293b] text-white p-[15px] rounded-[8px] text-[14px] font-bold cursor-pointer hover:bg-slate-700 transition-colors">
                             Salvar Alterações
                         </button>
                     </div>

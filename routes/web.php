@@ -35,8 +35,20 @@ Route::post('/checkout/processar', [CheckoutController::class, 'finalizar'])->na
 Route::get('/checkout/retorno', [CheckoutController::class, 'retorno'])->name('checkout.retorno');
 
 //Rotas de Conta
-Route::get('/meusdados',[UserController::class, 'meusdados']);
-Route::post('/meusdados',[UserController::class, 'meusdados']);
+Route::get('/meusdados',[UserController::class, 'meusdados'])->middleware('auth');;
+Route::post('/meusdados/update', function (\Illuminate\Http\Request $request) {
+    
+    $user = auth()->user();
+
+    $user->update([
+        'name' => $request->name,
+        'email' => $request->email,
+        'cpf' => $request->cpf,
+        'telefone' => $request->telefone
+    ]);
+
+    return back()->with('success', 'Dados atualizados!');
+});
 
 // Rotas de Registro
 Route::get('/register', [RegisteredUserController::class, 'create'])->name('register');

@@ -1,15 +1,16 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html class="scroll-smooth" lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>Distribuidora Foccus | Portal B2B</title>
+    <title>Foccus comercial | Distribuidora</title>
 
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://kit.fontawesome.com/02669f3445.js" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
     <link rel="shortcut icon" href="/favicon.png" type="image/x-icon">
 
     <style>
@@ -194,6 +195,89 @@
         .batch-pill span {
             color: #38bdf8;
         }
+
+.dropdown {
+    position: relative;
+    display: inline-block;
+    background-color:white;
+    padding:10px;
+    border-radius:20px;
+    font-size:12px;
+    font-weight:bold;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}  
+
+
+.dropdown:hover{
+ background-color: #a9abae;
+transform: translateY(-2px);
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background: #fff;
+    border: 1px solid #ccc;
+    min-width: 150px;
+}
+
+.dropdown-content a,
+.dropdown-content button {
+    display: block;
+    padding: 10px;
+    text-decoration: none;
+    border: none;
+    background: none;
+    width: 100%;
+    text-align: left;
+    color:#424242;
+}
+
+.dropdown-content a:hover {
+    background-color:#ccc;
+}
+
+.dropdown-content button:hover {
+    background-color:#ccc;
+}
+
+.dropdown-content.show {
+    display: block;
+}
+
+.conteiner-img{
+    position:absolute;
+    color:white;
+    top:75%;
+    left: 12%;
+    width: 26%;
+    display:flex;
+    justify-content:space-between;
+}
+
+.conteiner-img a{
+padding: 10px;
+font-size: small;
+border-radius:20px;
+background-color:#5f6f86;
+font-weight: 500 ;
+transition: background-color 0.3s ease, transform 0.2s ease;
+text-align: center;
+}
+
+
+.conteiner-img #compre {
+   padding: 10px 100px 10px 100px;
+   justify-self:center;
+   
+}
+
+
+.conteiner-img a:hover{
+transform: translateY(-2px);
+background-color:#a9abae;
+}
+
     </style>
 </head>
 <body class="min-h-screen text-slate-900">
@@ -232,27 +316,64 @@
             $categoriaMeta[$nomeCategoria] = $meta;
         }
     @endphp
-
+    <div class="w-full text-center text-white bg-slate-600 font-sans text-sm"><p>Ofertas imperdíveis de até <strong> 20%OFF! </strong> Você não vai querer perder! 🔥</p></div>
     <nav class="glass sticky top-0 z-50 border-b border-white/10">
         <div class="mx-auto flex max-w-7xl items-center justify-between gap-6 px-4 py-4 md:px-8">
             <a href="/" class="shrink-0">
                 <img src="/LOGO_FOCCUS.png" class="w-36 brightness-0 invert md:w-40" alt="Logo Foccus">
             </a>
 
-            <div class="hidden flex-1 items-center gap-3 lg:flex">
-                <div class="rounded-full bg-white/10 px-4 py-2 text-xs font-bold uppercase tracking-[0.22em] text-slate-200">Portal B2B</div>
-                <div class="rounded-full bg-white/10 px-4 py-2 text-xs text-slate-200">Entrega em todo Brasil</div>
+
+            <div class="flex-1 max-w-md hidden lg:block">
+                <form action="/search" method="GET" class="relative">
+                    <input type="text" 
+                        name="q" 
+                        placeholder="O que você procura hoje?" 
+                        class="w-full bg-slate-600 text-white text-sm rounded-full py-2 px-10 focus:outline-none focus:ring-2 focus:ring-slate-300 placeholder-slate-300 transition-all border border-transparent focus:bg-slate-700">
+                    <div class="absolute left-3 top-2.5 text-slate-300">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                        </svg>
+                    </div>
+                </form>
             </div>
 
             <div class="flex items-center gap-3">
-                @auth
-                    <div class="hidden rounded-full bg-white/10 px-4 py-2 text-xs font-semibold text-slate-100 md:block">Ola, {{ auth()->user()->name }}</div>
-                @endauth
+            @auth
+                <div class="dropdown">
+                    <button onclick="toggleMenu()" class="dropbtn">
+                      Olá, {{ auth()->user()->name }}
+                    </button>
+                    <div id="menu" class="dropdown-content">
+                         <a target="_blank" href="/meusdados">Meus dados</a>
+                         <a target="_blank" href="/">Meus Pedidos</a>
+                         <form method="POST" action="/logout">
+                        @csrf
+                         <button type="submit">Sair</button>
+                        </form>
+                    </div>
+                </div>
+                <script>
+                    function toggleMenu() {
+                        document.getElementById("menu").classList.toggle("show");
+                    }
+
+                    // fechar ao clicar fora
+                        window.onclick = function(event) {
+                            if (!event.target.matches('.dropbtn')) {
+                                let menu = document.getElementById("menu");
+                                if (menu && menu.classList.contains('show')) {
+                                    menu.classList.remove('show');
+                                }
+                            }
+                        }
+                </script>
+            @endauth
                 @guest
                     <a href="/login" class="hidden text-sm font-semibold text-slate-100 transition hover:text-white md:inline">Entrar</a>
                     <a href="/register" class="hidden rounded-full bg-white px-4 py-2 text-sm font-black text-slate-900 transition hover:bg-slate-100 md:inline">Cadastrar</a>
                 @endguest
-
+                <h1 class="text-white">|</h1>
                 <button type="button" class="relative flex items-center gap-2 rounded-full bg-white px-4 py-2 text-sm font-black text-slate-900 transition hover:bg-slate-100" id="btnCart" onclick="openCartModal()">
                     <span>🛒</span>
                     <span class="hidden md:inline">Carrinho</span>
@@ -271,32 +392,41 @@
     @endif
 
     <main class="mx-auto max-w-7xl px-4 py-8 md:px-8 md:py-10">
-        <section class="animated-bg reveal relative mb-14 overflow-hidden rounded-3xl border border-slate-200/80 bg-white/70 p-6 shadow-lg md:p-10">
-            <div class="relative z-10 grid items-center gap-8 lg:grid-cols-[1.2fr_1fr]">
-                <div>
-                    <p class="text-xs font-black uppercase tracking-[0.3em] text-blue-700">Distribuidora Foccus</p>
-                    <h1 class="mt-4 text-3xl font-black leading-tight text-slate-900 md:text-5xl">Compras inteligentes com foco em margem e giro.</h1>
-                    <p class="mt-4 max-w-2xl text-slate-600 md:text-lg">Catálogo segmentado por categorias, ofertas em destaque e experiência otimizada para pedidos rápidos no atacado.</p>
-
-                    <div class="mt-6 flex flex-wrap gap-3">
-                        <a href="#ofertas" class="rounded-full bg-blue-700 px-5 py-3 text-sm font-black text-white transition hover:bg-blue-600">Ver ofertas da semana</a>
-                        <a href="#catalogo" class="rounded-full border border-slate-300 bg-white px-5 py-3 text-sm font-black text-slate-700 transition hover:bg-slate-50">Explorar catálogo</a>
+        <section class=" reveal mb-14  shadow-lg">
+            <div id="carouselExampleInterval" class="carousel slide" data-bs-ride="carousel">
+                <div class="carousel-inner">
+                    <div class="carousel-item active" data-bs-interval="5000">
+                        <img width="100%" class="w-full w-screen" src="{{ asset('carousel/Banner1.png') }}" alt="carrosel 1 imagem" widtch:>
+                            <div class="conteiner-img">
+                                    <a href="#ofertas" class=" ">Ofertas da Semana 🔥</a>
+                                    <a href="#catalogo" class="">Catalogo de produtos</a>
+                            </div>
+                    </div>
+                    <div class="carousel-item" data-bs-interval="5000">
+                        <img src="{{ asset('carousel/Banner2.png') }}" class="d-block w-100" alt="...">
+                    </div>
+                    <div class="carousel-item" data-bs-interval="5000">
+                        <img src="{{ asset('carousel/Banner3.png') }}" class="d-block w-100" alt="...">
+                            <div class="conteiner-img">
+                                 <a id="compre" href="#catalogo" class=" ">Compre Já!</a>
+                           </div>
                     </div>
                 </div>
-
-                <div class="hero-banner-wrap overflow-hidden">
-                    <div class="absolute left-4 top-4 z-10 rounded-full bg-white/15 px-3 py-1 text-[10px] font-black uppercase tracking-[0.24em] text-white backdrop-blur">
-                        Destaque da semana
-                    </div>
-                    <img class="h-[320px] w-full rounded-2xl object-cover md:h-[420px] lg:h-[520px]" src="/Banner1.png" alt="Banner da semana">
-                </div>
+                <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleInterval" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Previous</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleInterval" data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Next</span>
+                </button>
             </div>
         </section>
 
         <section id="ofertas" class="reveal mb-16">
             <div class="mb-6 flex items-center justify-between gap-3">
                 <div class="flex items-center gap-3">
-                    <span class="flex h-10 w-10 items-center justify-center rounded-2xl bg-red-100 text-red-600"><i class="fa-solid fa-fire"></i></span>
+                    <span class="flex h-10 w-10 items-center justify-center rounded-2xl bg-red-100 text-red-600"><i class="fa-solid fa-fire text-4xl"></i></span>
                     <div>
                         <h2 class="text-2xl font-black text-slate-900">Ofertas da semana</h2>
                         <p class="text-sm text-slate-500">Carrossel em rolagem continua, pausado no hover.</p>
@@ -500,9 +630,8 @@
         </section>
     </main>
 
-    <footer class="mt-20 border-t border-slate-200 bg-white/80 p-8 text-center text-sm text-slate-500">
-        &copy; {{ date('Y') }} Distribuidora Foccus - Todos os direitos reservados.
-    </footer>
+
+<!--CARRINHO-->
 
     <div id="cartModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/55 p-4">
         <div class="flex max-h-[80vh] w-full max-w-md flex-col rounded-2xl bg-white shadow-xl">
@@ -529,452 +658,17 @@
             </div>
         </div>
     </div>
+<!----->
+
+    <footer class="mt-20 border-t border-slate-200 bg-white/80 p-8 text-center text-sm text-slate-500">
+        &copy; {{ date('Y') }} Distribuidora Foccus - Todos os direitos reservados.
+    </footer>
+
 
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 
-    <script>
-        document.documentElement.classList.add('js');
-
-        const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') ||
-            document.querySelector('input[name="_token"]')?.value;
-
-        axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
-        if (csrfToken) {
-            axios.defaults.headers.common['X-CSRF-TOKEN'] = csrfToken;
-        }
-
-        document.addEventListener('DOMContentLoaded', function() {
-            initReveals();
-            initSwiper();
-            initCatalogFilters();
-            updateCartBadge();
-        });
-
-        function initReveals() {
-            const blocks = document.querySelectorAll('.reveal');
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach((entry) => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('show');
-                    }
-                });
-            }, { threshold: 0.15 });
-
-            blocks.forEach((block) => observer.observe(block));
-        }
-
-        function initSwiper() {
-            const counterCurrent = document.getElementById('offerCounterCurrent');
-            const counterRoot = document.getElementById('offerCounter');
-            const total = parseInt(counterRoot?.dataset.total || '1', 10);
-
-            const swiper = new Swiper('.mySwiper', {
-                slidesPerView: 1.15,
-                spaceBetween: 18,
-                loop: true,
-                speed: 850,
-                autoplay: {
-                    delay: 3000,
-                    disableOnInteraction: false,
-                },
-                breakpoints: {
-                    640: { slidesPerView: 2, spaceBetween: 18 },
-                    1024: { slidesPerView: 3, spaceBetween: 22 },
-                },
-            });
-
-            function updateOfferCounter() {
-                if (!counterCurrent) return;
-                const current = swiper.realIndex + 1;
-                const pad = (num) => String(Math.max(1, num)).padStart(2, '0');
-                counterCurrent.textContent = pad(current);
-                const totalEl = document.getElementById('offerCounterTotal');
-                if (totalEl) {
-                    totalEl.textContent = pad(total);
-                }
-            }
-
-            updateOfferCounter();
-            swiper.on('slideChange', updateOfferCounter);
-
-            if (swiper.el) {
-                swiper.el.addEventListener('mouseenter', () => swiper.autoplay.stop());
-                swiper.el.addEventListener('mouseleave', () => swiper.autoplay.start());
-            }
-        }
-
-        function initCatalogFilters() {
-            const searchInput = document.getElementById('productSearch');
-            const categoryFilter = document.getElementById('categoryFilter');
-            const minPriceFilter = document.getElementById('minPriceFilter');
-            const maxPriceFilter = document.getElementById('maxPriceFilter');
-            const clearBtn = document.getElementById('clearFilters');
-            const chips = Array.from(document.querySelectorAll('[data-category-chip]'));
-            const sections = Array.from(document.querySelectorAll('[data-category-section]'));
-            const globalEmptyState = document.getElementById('globalEmptyState');
-
-            const VISIBLE_LIMIT = 6;
-            const sectionPages = new Map();
-
-            chips.forEach((chip) => {
-                chip.addEventListener('click', () => {
-                    const slug = chip.dataset.categoryChip;
-                    if (categoryFilter.value === slug) {
-                        categoryFilter.value = '';
-                    } else {
-                        categoryFilter.value = slug;
-                    }
-                    resetPages();
-                    applyFilters();
-                });
-            });
-
-            sections.forEach((section) => {
-                const sectionSlug = section.dataset.categorySection;
-                const nextButton = section.querySelector('[data-show-more]');
-                const prevButton = section.querySelector('[data-prev-lot]');
-                if (nextButton) {
-                    nextButton.addEventListener('click', () => {
-                        const nextPage = (sectionPages.get(sectionSlug) || 0) + 1;
-                        sectionPages.set(sectionSlug, nextPage);
-                        animateSection(section);
-                        window.setTimeout(applyFilters, 140);
-                    });
-                }
-
-                if (prevButton) {
-                    prevButton.addEventListener('click', () => {
-                        const currentPage = sectionPages.get(sectionSlug) || 0;
-                        const prevPage = Math.max(0, currentPage - 1);
-                        sectionPages.set(sectionSlug, prevPage);
-                        animateSection(section);
-                        window.setTimeout(applyFilters, 140);
-                    });
-                }
-            });
-
-            [searchInput, categoryFilter, minPriceFilter, maxPriceFilter].forEach((el) => {
-                el?.addEventListener('input', () => {
-                    resetPages();
-                    applyFilters();
-                });
-                el?.addEventListener('change', () => {
-                    resetPages();
-                    applyFilters();
-                });
-            });
-
-            clearBtn?.addEventListener('click', () => {
-                searchInput.value = '';
-                categoryFilter.value = '';
-                minPriceFilter.value = '';
-                maxPriceFilter.value = '';
-                sectionPages.clear();
-                applyFilters();
-            });
-
-            function resetPages() {
-                sectionPages.clear();
-            }
-
-            function animateSection(section) {
-                const grid = section.querySelector('[data-category-grid]');
-                if (!grid) return;
-
-                grid.classList.add('is-switching');
-                window.setTimeout(() => grid.classList.remove('is-switching'), 220);
-            }
-
-            function normalize(value) {
-                return (value || '').toString().trim().toLowerCase();
-            }
-
-            function applyFilters() {
-                const nameTerm = normalize(searchInput?.value);
-                const selectedCategory = categoryFilter?.value || '';
-                const minPrice = parseFloat(minPriceFilter?.value || '');
-                const maxPrice = parseFloat(maxPriceFilter?.value || '');
-                const hasMinPrice = !Number.isNaN(minPrice);
-                const hasMaxPrice = !Number.isNaN(maxPrice);
-
-                let totalVisible = 0;
-
-                chips.forEach((chip) => {
-                    chip.classList.toggle('active', chip.dataset.categoryChip === selectedCategory && selectedCategory !== '');
-                });
-
-                sections.forEach((section) => {
-                    const sectionSlug = section.dataset.categorySection;
-                    const cards = Array.from(section.querySelectorAll('[data-product-card]'));
-                    const emptyCategory = section.querySelector('[data-empty-category]');
-                    const visibleCountLabel = section.querySelector('[data-visible-count]');
-                    const showMoreBtn = section.querySelector('[data-show-more]');
-                    const prevBtn = section.querySelector('[data-prev-lot]');
-                    const batchLabel = section.querySelector('[data-batch-label]');
-                    const grid = section.querySelector('[data-category-grid]');
-
-                    const matchingCards = cards.filter((card) => {
-                        const productName = normalize(card.dataset.productName);
-                        const productCategory = card.dataset.productCategory;
-                        const productPrice = parseFloat(card.dataset.productPrice || '0');
-
-                        const nameMatch = !nameTerm || productName.includes(nameTerm);
-                        const categoryMatch = !selectedCategory || selectedCategory === productCategory;
-                        const minPriceMatch = !hasMinPrice || productPrice >= minPrice;
-                        const maxPriceMatch = !hasMaxPrice || productPrice <= maxPrice;
-
-                        return nameMatch && categoryMatch && minPriceMatch && maxPriceMatch;
-                    });
-
-                    const filtersActive = Boolean(nameTerm || selectedCategory || hasMinPrice || hasMaxPrice);
-                    const totalPages = Math.max(1, Math.ceil(matchingCards.length / VISIBLE_LIMIT));
-                    const maxPageIndex = Math.max(0, totalPages - 1);
-                    const requestedPage = sectionPages.get(sectionSlug) || 0;
-                    const page = Math.min(requestedPage, maxPageIndex);
-
-                    if (requestedPage !== page) {
-                        sectionPages.set(sectionSlug, page);
-                    }
-
-                    const startIndex = page * VISIBLE_LIMIT;
-                    const endIndex = startIndex + VISIBLE_LIMIT;
-                    const currentBatch = matchingCards.length === 0 ? 0 : page + 1;
-
-                    cards.forEach((card) => {
-                        card.classList.add('hidden');
-                    });
-
-                    const visibleBatch = matchingCards.slice(startIndex, endIndex);
-
-                    visibleBatch.forEach((card) => {
-                        card.classList.remove('hidden');
-                    });
-
-                    const visibleInSection = visibleBatch.length;
-                    totalVisible += visibleInSection;
-
-                    if (visibleCountLabel) {
-                        visibleCountLabel.textContent = visibleInSection.toString();
-                    }
-
-                    if (batchLabel) {
-                        batchLabel.textContent = `${String(currentBatch || 1).padStart(2, '0')}/${String(totalPages).padStart(2, '0')}`;
-                    }
-
-                    if (emptyCategory) {
-                        emptyCategory.classList.toggle('hidden', matchingCards.length > 0);
-                    }
-
-                    if (showMoreBtn) {
-                        const hasMore = endIndex < matchingCards.length;
-                        const showButton = hasMore && matchingCards.length > VISIBLE_LIMIT;
-                        showMoreBtn.classList.toggle('hidden', !showButton);
-                        if (showButton) {
-                            showMoreBtn.textContent = filtersActive ? 'Próximos resultados' : 'Próximo lote';
-                        }
-                    }
-
-                    if (prevBtn) {
-                        const showPrev = page > 0;
-                        prevBtn.classList.toggle('hidden', !showPrev);
-                        if (showPrev) {
-                            prevBtn.textContent = 'Lote anterior';
-                        }
-                    }
-
-                    section.classList.toggle('hidden', filtersActive && matchingCards.length === 0);
-                });
-
-                if (globalEmptyState) {
-                    globalEmptyState.classList.toggle('hidden', totalVisible > 0);
-                }
-            }
-
-            applyFilters();
-        }
-
-        function openCartModal() {
-            loadCart();
-            document.getElementById('cartModal').classList.remove('hidden');
-            document.getElementById('cartModal').classList.add('flex');
-        }
-
-        function closeCartModal() {
-            document.getElementById('cartModal').classList.add('hidden');
-            document.getElementById('cartModal').classList.remove('flex');
-        }
-
-        function addToCart(event) {
-            event.preventDefault();
-
-            const form = event.currentTarget || event.target;
-            const quantidadeInput = form.querySelector('input[name="quantidade"]');
-            const quantidade = quantidadeInput ? quantidadeInput.value : 1;
-            const url = form.getAttribute('action');
-
-            if (!url) {
-                showNotification('Erro ao adicionar ao carrinho', 'error');
-                return false;
-            }
-
-            axios.post(url, { quantidade }, {
-                headers: { 'Accept': 'application/json' }
-            })
-            .then(response => {
-                if (response.data.success) {
-                    showNotification(response.data.message, 'success');
-                    updateCartBadge();
-                    if (!document.getElementById('cartModal').classList.contains('hidden')) {
-                        loadCart();
-                    }
-                }
-            })
-            .catch(error => {
-                const message = error.response?.data?.message
-                    || error.response?.data?.errors?.quantidade?.[0]
-                    || 'Erro ao adicionar ao carrinho';
-                showNotification(message, 'error');
-            });
-
-            return false;
-        }
-
-        function loadCart() {
-            axios.get('/api/carrinho')
-                .then(response => {
-                    renderCart(response.data);
-                })
-                .catch(() => {
-                    document.getElementById('cartContent').innerHTML = '<p class="text-center text-red-500">Erro ao carregar carrinho</p>';
-                });
-        }
-
-        function renderCart(data) {
-            const { carrinho, total } = data;
-            const cartContent = document.getElementById('cartContent');
-
-            if (carrinho.length === 0) {
-                cartContent.innerHTML = '<p class="py-8 text-center text-slate-500">Carrinho vazio</p>';
-                document.getElementById('cartTotal').textContent = 'R$ 0,00';
-                return;
-            }
-
-            let html = '<div class="space-y-4">';
-
-            carrinho.forEach(item => {
-                const produto = item.produto;
-                html += `
-                    <div class="flex items-start justify-between rounded-lg border p-3 hover:bg-slate-50">
-                        <div class="flex-1">
-                            <p class="text-sm font-black">${produto.nome}</p>
-                            <p class="text-xs text-slate-500">${produto.marca ?? ''}</p>
-                            <p class="mt-1 text-sm font-bold">R$ ${formatPrice(produto.preco_atual)}</p>
-                            <div class="mt-2 flex items-center gap-2">
-                                <button onclick="updateQuantity(${produto.id}, ${item.quantidade - 1})" class="rounded bg-slate-200 px-2 py-1 text-xs hover:bg-slate-300">-</button>
-                                <span class="px-2 text-sm font-bold">${item.quantidade}</span>
-                                <button onclick="updateQuantity(${produto.id}, ${item.quantidade + 1})" class="rounded bg-slate-200 px-2 py-1 text-xs hover:bg-slate-300">+</button>
-                            </div>
-                        </div>
-                        <div class="ml-2 text-right">
-                            <p class="text-sm font-black">R$ ${formatPrice(item.subtotal)}</p>
-                            <button onclick="removeFromCart(${produto.id})" class="mt-2 text-xs text-red-500 hover:text-red-700">Remover</button>
-                        </div>
-                    </div>
-                `;
-            });
-
-            html += '</div>';
-            cartContent.innerHTML = html;
-            document.getElementById('cartTotal').textContent = `R$ ${formatPrice(total)}`;
-        }
-
-        function updateQuantity(productId, newQuantidade) {
-            if (newQuantidade < 1) {
-                removeFromCart(productId);
-                return;
-            }
-
-            axios.put(`/carrinho/${productId}`, { quantidade: newQuantidade }, {
-                headers: { 'Accept': 'application/json' }
-            })
-            .then(() => {
-                loadCart();
-                updateCartBadge();
-            })
-            .catch(() => {
-                showNotification('Erro ao atualizar quantidade', 'error');
-            });
-        }
-
-        function removeFromCart(productId) {
-            axios.delete(`/carrinho/${productId}`, {
-                headers: { 'Accept': 'application/json' }
-            })
-            .then(response => {
-                if (response.data && response.data.carrinho) {
-                    renderCart(response.data);
-                    updateCartBadgeValue(response.data.quantidadeTotal || 0);
-                } else {
-                    loadCart();
-                    updateCartBadge();
-                }
-                showNotification(response.data?.message || 'Produto removido do carrinho', 'success');
-            })
-            .catch(() => {
-                showNotification('Erro ao remover produto', 'error');
-            });
-        }
-
-        function updateCartBadgeValue(quantidade) {
-            const badge = document.getElementById('carrinhoCountBadge');
-            if (!badge) return;
-
-            if (quantidade > 0) {
-                badge.textContent = quantidade;
-                badge.classList.remove('hidden');
-                badge.classList.add('flex');
-            } else {
-                badge.classList.remove('flex');
-                badge.classList.add('hidden');
-            }
-        }
-
-        function updateCartBadge() {
-            axios.get('/api/carrinho').then(response => {
-                updateCartBadgeValue(response.data.quantidadeTotal || 0);
-            });
-        }
-
-        function formatPrice(price) {
-            return parseFloat(price).toLocaleString('pt-BR', {
-                minimumFractionDigits: 2,
-                maximumFractionDigits: 2
-            });
-        }
-
-        function showNotification(message, type) {
-            const notification = document.createElement('div');
-            notification.className = `fixed right-4 top-4 z-50 rounded-lg border px-4 py-3 text-sm font-bold ${
-                type === 'success'
-                    ? 'border-emerald-200 bg-emerald-100 text-emerald-700'
-                    : 'border-red-200 bg-red-100 text-red-700'
-            }`;
-            notification.textContent = message;
-            document.body.appendChild(notification);
-
-            setTimeout(() => notification.remove(), 3000);
-        }
-
-        function finalizarPedido() {
-            window.location.href = '/checkout';
-        }
-
-        document.getElementById('cartModal')?.addEventListener('click', function(e) {
-            if (e.target === this) {
-                closeCartModal();
-            }
-        });
-    </script>
+    <script src="{{ asset('js/carrinho.js') }}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
 </body>
 </html>
