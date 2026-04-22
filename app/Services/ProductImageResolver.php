@@ -8,6 +8,16 @@ class ProductImageResolver
 {
     public function resolve(?string $nome, ?string $marca = null, ?string $categoria = null, ?string $codigoBarras = null): string
     {
+        // Try to get image from APIs first (BlueSoft > EanPictures)
+        if (!empty($codigoBarras)) {
+            $aggregator = app(ProdutoApiAggregatorService::class);
+            $imagemUrl = $aggregator->obterImagem($codigoBarras);
+            if ($imagemUrl) {
+                return $imagemUrl;
+            }
+        }
+
+        // Fallback to picsum.photos
         $keywords = array_filter([
             $this->categoryKeyword($categoria),
             $this->brandKeyword($marca),

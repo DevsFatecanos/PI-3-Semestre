@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@yield('title', 'Admin - Loja')</title>
+    <title>@yield('title', 'Distribuidora Foccus | Dashboard')</title>
     
 
       <script src="https://cdn.tailwindcss.com"></script>
@@ -26,11 +26,12 @@
         }
 
         body {
-            background-color: #011931;
+            background-color: #e2e2e4;
         }
 
         .navbar {
-            background: linear-gradient(135deg, #2d50ec 0%, #764ba2 100%);
+            
+            background: linear-gradient(135deg, #2d50ec 50%, #764ba2 50%);
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
 
@@ -200,10 +201,9 @@
 <nav class="glass sticky top-0 z-50 border-b border-white/10">
     <div class="mx-auto flex max-w-7xl items-center justify-between gap-6 px-4 py-4 md:px-8">
         
-        <a href="{{ route('admin.dashboard') }}" class="shrink-0 flex items-center gap-2 no-underline">
-            <i class="fas fa-cogs text-white text-xl"></i>
-            <span class="text-white font-bold tracking-tight text-lg">Admin Loja</span>
-        </a>
+        <a href="/" class="shrink-0">
+                <img src="/LOGO_FOCCUS.png" class="w-36 brightness-0 invert md:w-40" alt="Logo Foccus">
+            </a>
 
         <div class="hidden flex-1 items-center gap-3 lg:flex">
             <div class="rounded-full bg-white/10 px-4 py-2 text-xs font-bold uppercase tracking-[0.22em] text-slate-200">
