@@ -20,3 +20,16 @@ public function buscarProduto($ean)
 
     return view('produtos.show', compact('produto'));
 }
+public function index()
+{
+    // Pega as categorias únicas baseadas no que você importou do CSV
+    $categorias = Produto::distinct()->pluck('categoria');
+
+    // Produtos marcados como destaque (para o Swiper)
+    $destaques = Produto::where('destaque', true)->where('ativo', true)->get();
+
+    // Restante dos produtos
+    $produtosGerais = Produto::where('ativo', true)->paginate(12);
+
+    return view('home', compact('categorias', 'destaques', 'produtosGerais'));
+}

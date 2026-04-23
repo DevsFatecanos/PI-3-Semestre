@@ -1,0 +1,62 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: pi3-app
+    ports:
+      - "8080:8080"
+    environment:
+      - APP_NAME=PI-3-Semestre
+      - APP_ENV=local
+      - APP_DEBUG=true
+      - APP_URL=http://localhost:8080
+      - APP_KEY=base64:// será gerado automaticamente
+      - APP_LOCALE=pt_BR
+      - APP_FALLBACK_LOCALE=pt_BR
+      - DB_CONNECTION=mysql
+      - DB_HOST=db
+      - DB_PORT=3306
+      - DB_DATABASE=foccus_distribuidora
+      - DB_USERNAME=laravel_user
+      - DB_PASSWORD=laravel_password
+      - SESSION_DRIVER=database
+      - CACHE_DRIVER=file
+      - QUEUE_CONNECTION=sync
+      - LOG_CHANNEL=stack
+      - LOG_LEVEL=debug
+    depends_on:
+      - db
+    networks:
+      - pi3-network
+    volumes:
+      - ./storage:/app/storage
+      - ./bootstrap/cache:/app/bootstrap/cache
+
+  db:
+    image: mysql:8.0
+    container_name: pi3-db
+    ports:
+      - "3306:3306"
+    environment:
+      - MYSQL_DATABASE=foccus_distribuidora
+      - MYSQL_USER=laravel_user
+      - MYSQL_PASSWORD=laravel_password
+      - MYSQL_ROOT_PASSWORD=root_password
+    volumes:
+      - db-data:/var/lib/mysql
+    networks:
+      - pi3-network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      timeout: 20s
+      retries: 10
+
+networks:
+  pi3-network:
+    driver: bridge
+
+volumes:
+  db-data:

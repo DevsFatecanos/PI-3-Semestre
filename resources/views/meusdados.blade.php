@@ -67,6 +67,9 @@
                         <button type="button" class="w-1/2 bg-[#465367] text-white border border-[#ddd] p-[15px] rounded-[8px] text-[14px] font-semibold cursor-pointer transition-all duration-500 hover:bg-[#888888]">
                             Trocar Senha
                         </button>
+                        <a href="{{ route('change-password.form') }}" class="w-1/2 bg-[#465367] text-white border border-[#ddd] p-[15px] rounded-[8px] text-[14px] font-semibold cursor-pointer transition-all duration-500 hover:bg-[#888888] text-center no-underline">
+                            <i class="fas fa-lock"></i> Trocar Senha
+                        </a>
                         <button id="Submit" type="submit" class="w-1/2 bg-[#1e293b] text-white p-[15px] rounded-[8px] text-[14px] font-bold cursor-pointer hover:bg-slate-700 transition-colors">
                             Salvar Alterações
                         </button>

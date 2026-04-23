@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title', 'Admin - Loja')</title>
+    <title>@yield('title', 'Distribuidora Foccus | Dashboard')</title>
     
 
       <script src="https://cdn.tailwindcss.com"></script>
@@ -26,11 +27,24 @@
         }
 
         body {
+<<<<<<< HEAD
             background-color: #011931;
         }
 
         .navbar {
             background: linear-gradient(135deg, #2d50ec 0%, #764ba2 100%);
+=======
+<<<<<<< HEAD
+            background-color: #ffffff;
+=======
+            background-color: #e2e2e4;
+>>>>>>> 62475914fce611c9e905ed2b7df19cd29106ef51
+        }
+
+        .navbar {
+            
+            background: linear-gradient(135deg, #2d50ec 50%, #764ba2 50%);
+>>>>>>> origin/main
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
 
@@ -195,6 +209,7 @@
         backdrop-filter: blur(10px);
         -webkit-backdrop-filter: blur(10px);
     }
+<<<<<<< HEAD
 </style>
 
 <nav class="glass sticky top-0 z-50 border-b border-white/10">
@@ -204,6 +219,29 @@
             <i class="fas fa-cogs text-white text-xl"></i>
             <span class="text-white font-bold tracking-tight text-lg">Admin Loja</span>
         </a>
+=======
+    .navbar-dashboard {
+        display: flex;
+        justify-content: space-between;
+        align-items: space-between;
+        background: linear-gradient(135deg, #000000 0%, #00397f 100%);
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+</style>
+
+<nav class="navbar navbar-dashboard">
+    <div class="mx-auto flex max-w-7xl items-center justify-between gap-6 px-4 py-4 md:px-8">
+        
+<<<<<<< HEAD
+        <a href="{{ route('admin.dashboard') }}" class="shrink-0 flex items-center gap-2 no-underline">
+           <img src="/LOGO_FOCCUS.png" class="w-36 brightness-0 invert md:w-40" alt="Logo Foccus">
+        </a>
+=======
+        <a href="/" class="shrink-0">
+                <img src="/LOGO_FOCCUS.png" class="w-36 brightness-0 invert md:w-40" alt="Logo Foccus">
+            </a>
+>>>>>>> 62475914fce611c9e905ed2b7df19cd29106ef51
+>>>>>>> origin/main
 
         <div class="hidden flex-1 items-center gap-3 lg:flex">
             <div class="rounded-full bg-white/10 px-4 py-2 text-xs font-bold uppercase tracking-[0.22em] text-slate-200">
@@ -216,6 +254,7 @@
 
         <div class="flex items-center gap-3">
             @auth
+<<<<<<< HEAD
                 <div class="hidden rounded-full bg-white/10 px-4 py-2 text-xs font-semibold text-slate-100 md:block">
                     <i class="fas fa-user-circle me-1"></i> {{ Auth::user()->name }}
                 </div>
@@ -228,6 +267,51 @@
                 </a>
 
                 <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+=======
+                <!-- Menu Dropdown do Usuário -->
+                <div class="relative group hidden md:block">
+                    <button type="button" class="flex items-center gap-2 rounded-full bg-white/10 px-4 py-2 text-xs font-semibold text-slate-100 hover:bg-white/20 transition cursor-pointer">
+                        <i class="fas fa-user-circle me-1"></i> {{ Auth::user()->name }}
+                        <i class="fas fa-chevron-down text-xs"></i>
+                    </button>
+                    
+                    <!-- Dropdown Menu -->
+                    <div class="absolute right-0 top-full mt-2 w-48 bg-white rounded-lg shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
+                        <!-- Dashboard Link -->
+                        <a href="{{ route('admin.dashboard') }}" class="flex items-center gap-2 px-4 py-3 text-slate-800 hover:bg-slate-100 border-b border-slate-200 no-underline">
+                            <i class="fas fa-tachometer-alt"></i> Dashboard
+                        </a>
+                        
+                        <!-- Meus Dados Link -->
+                        <a href="/meusdados" class="flex items-center gap-2 px-4 py-3 text-slate-800 hover:bg-slate-100 border-b border-slate-200 no-underline">
+                            <i class="fas fa-user"></i> Meus Dados
+                        </a>
+                        
+                        <!-- Trocar Senha Link -->
+                        <a href="{{ route('change-password.form') }}" class="flex items-center gap-2 px-4 py-3 text-slate-800 hover:bg-slate-100 border-b border-slate-200 no-underline">
+                            <i class="fas fa-lock"></i> Trocar Senha
+                        </a>
+                        
+                        <!-- Logout Link -->
+                        <form id="logout-form" action="{{ route('logout') }}" method="POST" class="m-0">
+                            @csrf
+                            <button type="submit" class="w-full text-left flex items-center gap-2 px-4 py-3 text-red-600 hover:bg-red-50 border-0 bg-transparent cursor-pointer font-semibold">
+                                <i class="fas fa-sign-out-alt"></i> Sair
+                            </button>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Botão Sair (Mobile) -->
+                <a href="{{ route('logout') }}" 
+                   onclick="event.preventDefault(); document.getElementById('logout-form-mobile').submit();"
+                   class="flex items-center gap-2 rounded-full bg-white px-4 py-2 text-sm font-black text-slate-900 transition hover:bg-slate-100 no-underline md:hidden">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>Sair</span>
+                </a>
+
+                <form id="logout-form-mobile" action="{{ route('logout') }}" method="POST" class="d-none">
+>>>>>>> origin/main
                     @csrf
                 </form>
             @endauth
@@ -252,6 +336,19 @@
                         </a>
                     </li>
                     <li class="nav-item">
+<<<<<<< HEAD
+=======
+                        <a class="nav-link" href="/meusdados">
+                            <i class="fas fa-user"></i> Meus Dados
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ route('change-password.form') }}">
+                            <i class="fas fa-lock"></i> Trocar Senha
+                        </a>
+                    </li>
+                    <li class="nav-item">
+>>>>>>> origin/main
                         <a class="nav-link" href="/">
                             <i class="fas fa-store"></i> Ver Loja
                         </a>
@@ -262,7 +359,11 @@
                 
                 <div class="px-3">
                     <small class="text-muted d-block">Versão 1.0</small>
+<<<<<<< HEAD
                     <small class="text-muted">© 2026 Admin Loja</small>
+=======
+                    <small class="text-muted">© 2026 Foccus</small>
+>>>>>>> origin/main
                 </div>
             </nav>
 
@@ -271,7 +372,11 @@
                 @yield('content')
                 
                 <footer>
+<<<<<<< HEAD
                     <p>&copy; 2026 Sistema de Administração. Todos os direitos reservados.</p>
+=======
+                    <p>&copy; 2026 Foccus Comercial. Todos os direitos reservados.</p>
+>>>>>>> origin/main
                 </footer>
             </main>
         </div>

@@ -35,4 +35,10 @@ return [
         ],
     ],
 
+    'mercado_pago' => [
+        'access_token' => env('MERCADO_PAGO_ACCESS_TOKEN'),
+        'sandbox' => env('MERCADO_PAGO_SANDBOX', true),
+        'webhook_url' => env('MERCADO_PAGO_WEBHOOK_URL'),
+    ],
+
 ];

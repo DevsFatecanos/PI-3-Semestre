@@ -12,7 +12,7 @@
         <div class="mb-8">
             <h1 class="text-9xl font-black text-slate-200">404</h1>
             <div class="relative -mt-16">
-                <img src="{{ asset('LOGO_FOCCUS.png') }}" class="mx-auto w-48 opacity-20 grayscale" alt="Foccus">
+                <img src="/LOGO_FOCCUS.png" class="mx-auto w-48 opacity-20 grayscale" alt="Foccus">
             </div>
         </div>
 
