@@ -322,7 +322,7 @@ background-color:#a9abae;
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
     $(window).on("load",function(){
-        $(".barra").animate({width:"100%"},1000,function(){
+        $(".barra").animate({width:"100%"},500,function(){
             $(".carregando").fadeOut(500);
         });
     });
