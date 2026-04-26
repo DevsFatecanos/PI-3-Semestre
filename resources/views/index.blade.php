@@ -468,8 +468,8 @@ background-color:#a9abae;
                             $img = $item->url_imagem ?? $item->imagem ?? 'https://via.placeholder.com/500x320';
                         @endphp
                         <article class="swiper-slide promo-card {{ $temDesconto ? 'has-discount' : '' }} overflow-hidden rounded-3xl border bg-white shadow-md {{ $temDesconto ? 'border-red-200' : 'border-slate-100' }}">
-                            <div class="relative">
-                                <img src="{{ $img }}" class="h-52 w-full object-cover">
+                            <div class="relative aspect-square">
+                                <img src="{{ $img }}" class="h-full w-full object-contain p-2">
                                 @if($temDesconto)
                                     <span class="absolute left-3 top-3 inline-flex items-center gap-2 rounded-full bg-red-600 px-3 py-1 text-xs font-black text-white shadow-lg">
                                         <i class="fa-solid fa-bolt"></i>
@@ -491,7 +491,14 @@ background-color:#a9abae;
 
                                 <form action="{{ route('carrinho.add', $item, false) }}" method="POST" class="mt-4 add-to-cart-form" onsubmit="return addToCart(event)">
                                     @csrf
-                                    <input type="hidden" name="quantidade" value="1">
+                                    <div class="mb-3 flex items-center justify-center gap-2">
+                                        <label class="text-xs font-bold uppercase tracking-wider text-slate-500">Qtd:</label>
+                                        <div class="inline-flex items-center rounded-xl border border-slate-200 bg-slate-50">
+                                            <button type="button" class="px-3 py-1.5 text-slate-600 hover:bg-slate-200 transition" onclick="this.nextElementSibling.stepDown()">−</button>
+                                            <input type="number" name="quantidade" value="1" min="1" max="{{ $item->quantidade }}" class="w-14 border-0 bg-transparent text-center text-sm font-bold text-slate-800 outline-none [-moz-appearance:_textfield] [&::-webkit-inner-spin-button]:m-0 [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:m-0 [&::-webkit-outer-spin-button]:appearance-none">
+                                            <button type="button" class="px-3 py-1.5 text-slate-600 hover:bg-slate-200 transition" onclick="this.previousElementSibling.stepUp()">+</button>
+                                        </div>
+                                    </div>
                                     <button type="submit" class="w-full rounded-xl px-4 py-2 text-sm font-black text-white transition {{ $temDesconto ? 'bg-red-600 hover:bg-red-500' : 'bg-slate-800 hover:bg-slate-700' }} disabled:cursor-not-allowed disabled:bg-slate-300" {{ $item->quantidade <= 0 ? 'disabled' : '' }}>
                                         {{ $item->quantidade > 0 ? 'Adicionar ao pedido' : 'Esgotado' }}
                                     </button>
@@ -598,8 +605,18 @@ background-color:#a9abae;
                                     data-product-price="{{ $preco }}"
                                     data-product-category="{{ $slug }}"
                                     data-product-card-index="{{ $loop->index }}">
-                                    <div class="relative mb-4 overflow-hidden rounded-xl bg-slate-100">
-                                        <img src="{{ $produto->url_imagem }}" class="h-44 w-full object-cover transition duration-300 hover:scale-105" alt="{{ $produto->nome }}">
+                                    @php
+                                        $eanCat = preg_replace('/\D/', '', $produto->codigo_barras ?? '');
+                                        $eanPicturesCat = $eanCat ? "http://www.eanpictures.com.br:9000/api/gtin/{$eanCat}" : '';
+                                    @endphp
+                                    <div class="relative mb-4 overflow-hidden rounded-xl bg-slate-100 aspect-square">
+                                        <img src="{{ $produto->url_imagem }}"
+                                             @if($eanPicturesCat)
+                                             onerror="if(this.src!=='{{ $eanPicturesCat }}'){this.src='{{ $eanPicturesCat }}';}else{this.onerror=null;this.src='{{ asset('/LOGO_FOCCUS.png') }}';}"
+                                             @else
+                                             onerror="this.onerror=null;this.src='{{ asset('/LOGO_FOCCUS.png') }}';"
+                                             @endif
+                                             class="h-full w-full object-contain p-2 transition duration-300 hover:scale-105" alt="{{ $produto->nome }}">
                                         @if($temDesconto)
                                             <span class="absolute left-2 top-2 rounded-full bg-red-600 px-2 py-1 text-[11px] font-black text-white">-{{ $percentual }}%</span>
                                         @endif
