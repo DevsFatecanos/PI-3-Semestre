@@ -8,6 +8,30 @@
 </head>
 <body class="bg-gray-100 min-h-screen flex items-center justify-center p-4">
 
+
+<!---ANIMAÇÃO DE CARREGAMENTO --->
+
+<div class="carregando fixed inset-0 z-[1002] flex flex-col items-center justify-center overflow-hidden bg-slate-600">
+<div class="mb-8 flex justify-center w-full">
+    <img class="w-1/4 h-auto object-contain brightness-0 invert" src="{{asset('LOGO_FOCCUS.png')}}" alt="Logo">
+</div>
+    <!-- Barra de Progresso (progresso) -->
+    <div class="w-1/2 overflow-hidden rounded-full bg-white/20">
+        <div class="barra h-[5px] w-0 bg-white"></div>
+    </div>
+</div>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+    $(window).on("load",function(){
+        $(".barra").animate({width:"100%"},500,function(){
+            $(".carregando").fadeOut(400);
+        });
+    });
+    </script>
+
+<!-------------------------------->
+
+
     <div class="max-w-4xl w-full bg-white rounded-2xl shadow-xl overflow-hidden flex flex-col md:row-reverse md:flex-row">
         
         <div class="md:w-1/3 bg-slate-600 p-8 text-white flex flex-col justify-center text-center md:text-left">

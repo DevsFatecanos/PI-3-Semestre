@@ -76,8 +76,32 @@
                     </div>
                 </form>
             </div>
-
         </div>
-    </section>     
+    </section>   
+     <script>
+
+            //  MASCARA DE DADOS DO FORMULARIO
+                var cpf = document.querySelector("#cpf");
+                    cpf.addEventListener("blur", function(){
+                if(cpf.value) cpf.value = cpf.value.match(/.{1,3}/g).join(".").replace(/\.(?=[^.]*$)/,"-");});
+
+                var tel = document.querySelector("#tel");
+
+                tel.addEventListener("blur", function() {
+                    if (tel.value) {
+
+                        let v = tel.value.replace(/\D/g, "");
+                        
+                        if (v.length === 11) {
+                            // Celular: (XX) XXXXX-XXXX
+                            tel.value = v.replace(/^(\d{2})(\d{5})(\d{4})$/, "($1) $2-$3");
+                        } else if (v.length === 10) {
+                            // Fixo: (XX) XXXX-XXXX
+                            tel.value = v.replace(/^(\d{2})(\d{4})(\d{4})$/, "($1) $2-$3");
+                        }
+                    }
+                });
+            //  MASCARA DE DADOS DO FORMULARIO    
+        </script>  
 </body>
 </html>
