@@ -313,12 +313,9 @@ background-color:#a9abae;
 <!---LOGO NO LOADING --->
 
 <div class="carregando fixed inset-0 z-[1002] flex flex-col items-center justify-center overflow-hidden bg-slate-600/90">
-<div class="mb-8 flex justify-center w-full">
-    <picture>
-        <source srcset="{{asset('LOGO_FOCCUS.webp')}}" type="image/webp">
-        <img class="w-1/4 h-auto object-contain brightness-0 invert" src="{{asset('LOGO_FOCCUS.png')}}" alt="Logo" decoding="async">
-    </picture>
-</div>
+    <div class="mb-8 flex justify-center w-screen">
+        <img class="w-1/4  h-auto object-contain brightness-0 invert" src="{{asset('LOGO_FOCCUS.png')}}" alt="Logo" decoding="async">
+    </div>
     <!-- Barra de Progresso (progresso) -->
     <div class="w-1/2 overflow-hidden rounded-full bg-white/20">
         <div class="barra h-[5px] w-0 bg-white"></div>
