@@ -6,11 +6,10 @@ git clone https://github.com/DevsFatecanos/PI-3-Semestre
 e configurar a .env: Copiar o env.exemple e descomentar as entradas do banco de dados
 logo após na pasta do projeto
 1 - "composer install"
-2 - "php artisan migrate"
+2- Config Env. descomentar os dados de entrada do Supabase (Postgres) e colocar a senha
 3 - "php artisan key:generate"
-4 - "php artisan db:seed"  
+4- Abrir pasta /xampp/php/php.ini (Parâmetros de configuração ) --> Control + F ==  extension=pdo_pgsql E extension=pgsql --> Remover a ; de cada um e depois salvar
 5 - para rodar o projeto "php artisan serve"
-6 - caso nao funcione tente "composer global require laravel/installer" e tente o item 4
 
 ## Como rodar no GitHub Codespaces
 
