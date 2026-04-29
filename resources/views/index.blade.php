@@ -365,11 +365,10 @@ background-color:#a9abae;
                     <div id="menu" class="dropdown-content">
                          <a target="_blank" href="/meusdados">Meus dados</a>
                          <a target="_blank" href="/">Meus Pedidos</a>
+                         <button type="button" data-bs-toggle="modal" data-bs-target="#exampleModalCenter">
+                            Sair
+                        </button>
                          <a target="_blank" href="/admin/dashboard">Dashboard</a>
-                         <form method="POST" action="/logout">
-                        @csrf
-                         <button type="submit">Sair</button>
-                        </form>
                     </div>
                 </div>
                 <script>
@@ -854,11 +853,30 @@ background-color:#a9abae;
         transition: 0.3s;
     }
 </style>
-
+     <!-- Modal -->
+    <div class="modal fade" id="exampleModalCenter" tabindex="-1" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalCenterTitle">Deseja Realmente Sair?</h5>
+            <!-- CORREÇÃO: Classe btn-close e data-bs-dismiss -->
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+                <form method="POST" action="/logout">
+                    @csrf
+                 <button class="btn btn-secondary" type="button" data-bs-dismiss="modal">Close</button>
+                <button class="btn btn-secondary"  type="submit">Sair</button>
+                </form>
+          </div>
+        </div>
+      </div>
+    </div>                           
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 
     <script src="{{ asset('js/carrinho.js') }}"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.min.js" integrity="sha384-G/EV+4j2dNv+tEPo3++6LCgdCROaejBqfUeNjuKAiuXbjrxilcCdDz6ZAVfHWe1Y" crossorigin="anonymous"></script>
 </body>
 </html>
