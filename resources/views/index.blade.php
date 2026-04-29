@@ -689,12 +689,166 @@ background-color:#a9abae;
             </div>
         </div>
     </div>
-<!----->
 
-    <footer class="mt-20 border-t border-slate-200 bg-white/80 p-8 text-center text-sm text-slate-500">
+<!--FOOTER-->
+
+<!--    <footer class="mt-20 border-t border-slate-200 bg-white/80 p-8 text-center text-sm text-slate-500">
         &copy; {{ date('Y') }} Distribuidora Foccus - Todos os direitos reservados.
     </footer>
+-->
 
+<!--
+
+    <footer class="bg-dark text-white pt-4 pb-2 mt-5">
+    <div class="container text-center text-md-left">
+        <div class="row">
+            <div class="col-md-4 col-lg-4 col-xl-4 mx-auto mt-3">
+                <h5 class="text-uppercase mb-4 font-weight-bold text-warning">Foccus Comercial</h5>
+                <p>Sua parceira em soluções de comercialização e distribuição na região de São Paulo.</p>
+            </div>
+
+            <div class="col-md-3 col-lg-2 col-xl-2 mx-auto mt-3">
+                <h5 class="text-uppercase mb-4 font-weight-bold text-warning">Links úteis</h5>
+                <p><a href="/" class="text-white" style="text-decoration: none;">Início</a></p>
+                <p><a href="/carrinho" class="text-white" style="text-decoration: none;">Meu Carrinho</a></p>
+            </div>
+
+            <div class="col-md-4 col-lg-3 col-xl-3 mx-auto mt-3">
+                <h5 class="text-uppercase mb-4 font-weight-bold text-warning">Contato</h5>
+                <p><i class="fas fa-home mr-3"></i> São Paulo, SP</p>
+                <p><i class="fas fa-envelope mr-3"></i> contato@foccus.com.br</p>
+            </div>
+        </div>
+
+        <hr class="mb-4">
+
+        <div class="row align-items-center">
+            <div class="col-md-12 text-center">
+                <p>© 2026 Copyright: <strong>Equipe DSM FATEC-ZL</strong></p>
+            </div>
+        </div>
+    </div>
+</footer>
+-->
+
+<!-- 
+<footer class="mt-5 border-t border-white/10 bg-[#011931] pt-10 pb-4 text-slate-300">
+    <div class="container-fluid px-md-5">
+        <div class="row g-4">
+            
+            <div class="col-12 col-md-3">
+                <h5 class="text-white font-bold mb-3">Foccus Distribuidora</h5>
+                <ul class="list-unstyled small">
+                    <li class="mb-2"><i class="fas fa-map-marker-alt me-2 text-warning"></i> R. Cembira, 922 - Vila Curuçá Velha, São Paulo - SP, 08032-010</li>
+                    <li class="mb-2"><i class="fas fa-phone me-2 text-warning"></i> (11) 99999-9999</li>
+                    <li class="mb-2"><i class="fas fa-envelope me-2 text-warning"></i> contato@foccus.com.br</li>
+                </ul>
+            </div>
+
+            <div class="col-6 col-md-2">
+                <h6 class="text-white font-bold mb-3 uppercase text-xs tracking-widest">Institucional</h6>
+                <ul class="list-unstyled small">
+                    <li class="mb-2"><a href="#" class="hover:text-white no-underline transition">Sobre Nós</a></li>
+                    <li class="mb-2"><a href="#" class="hover:text-white no-underline transition">Privacidade</a></li>
+                    <li class="mb-2"><a href="#" class="hover:text-white no-underline transition">Termos de Uso</a></li>
+                </ul>
+            </div>
+
+            <div class="col-6 col-md-3">
+                <h6 class="text-white font-bold mb-3 uppercase text-xs tracking-widest">Atendimento</h6>
+                <p class="small mb-1">Segunda a Sexta: 08h às 18h</p>
+                <p class="small">Sábado: 08h às 12h</p>
+                
+                <div class="flex gap-3 mt-3">
+                    <a href="#" class="text-slate-300 hover:text-warning text-lg"><i class="fab fa-instagram"></i></a>
+                    <a href="#" class="text-slate-300 hover:text-warning text-lg"><i class="fab fa-facebook"></i></a>
+                    <a href="#" class="text-slate-300 hover:text-warning text-lg"><i class="fab fa-whatsapp"></i></a>
+                </div>
+            </div>
+
+            <div class="col-12 col-md-4">
+                <h6 class="text-white font-bold mb-3 uppercase text-xs tracking-widest">Localização</h6>
+                <div class="rounded overflow-hidden" style="height: 100px; background: #022c54;">
+                    <div class="flex items-center justify-center h-full border border-white/5">
+                        <span class="text-xs italic">Mapa (<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3658.7870939569584!2d-46.431374424969384!3d-23.504176959493332!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x94ce630002734029%3A0xe4812c4e53dd6b8b!2sFOCCUS%20COMERCIAL%20LTDA!5e0!3m2!1spt-BR!2sbr!4v1777247422401!5m2!1spt-BR!2sbr" width="400" height="300" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>)</span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <hr class="my-5 border-white/10">
+
+        <div class="flex flex-col md:flex-row justify-between items-center gap-3 text-xs uppercase tracking-widest">
+            <p class="mb-0">© 2026 DSM Fatec ZL | Equipe DevsFatecanos</p>
+            <div class="flex gap-4">
+                <i class="fab fa-laravel" title="Laravel"></i>
+                <i class="fab fa-docker" title="Docker"></i>
+                <i class="fab fa-php" title="PHP 8"></i>
+            </div>
+        </div>
+    </div>
+</footer>
+-->
+
+<footer class="bg-dark text-white pt-5 pb-3 mt-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4 col-lg-3 mx-auto mt-3">
+                <h5 class="text-uppercase mb-4 font-weight-bold text-warning">Foccus Comercial</h5>
+                <p>Sua parceira em soluções de comercialização e distribuição na região de São Paulo.</p>
+                <div class="d-flex gap-3 mt-3">
+                    <a href="#" class="text-white hover-warning" style="font-size: 1.2rem;"><i class="fab fa-instagram"></i></a>
+                    <a href="#" class="text-white hover-warning" style="font-size: 1.2rem;"><i class="fab fa-facebook"></i></a>
+                    <a href="#" class="text-white hover-warning" style="font-size: 1.2rem;"><i class="fab fa-whatsapp"></i></a>
+                </div>
+            </div>
+
+            <div class="col-md-2 col-lg-2 mx-auto mt-3">
+                <h5 class="text-uppercase mb-4 font-weight-bold text-warning">Links úteis</h5>
+                <p><a href="/" class="text-white" style="text-decoration: none;">Início</a></p>
+                <p><a href="/carrinho" class="text-white" style="text-decoration: none;">Meu Carrinho</a></p>
+            </div>
+
+            <div class="col-md-3 col-lg-3 mx-auto mt-3">
+                <h5 class="text-uppercase mb-4 font-weight-bold text-warning">Contato</h5>
+                <p class="small"><i class="fas fa-home mr-3 text-warning"></i> R. Cembira, 922 - Vila Curuçá Velha, SP</p>
+                <p class="small"><i class="fas fa-envelope mr-3 text-warning"></i> contato@foccus.com.br</p>
+                <p class="small"><i class="fas fa-phone mr-3 text-warning"></i> (11) 99999-9999</p>
+            </div>
+
+            <div class="col-md-3 col-lg-4 mx-auto mt-3">
+                <h5 class="text-uppercase mb-4 font-weight-bold text-warning">Localização</h5>
+                <div class="rounded overflow-hidden border border-secondary" style="height: 150px;">
+                    <iframe 
+                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3659.182283038676!2d-46.42557612386127!3d-23.49001375902123!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x94ce63e9f4560417%3A0xc00570b55ec90013!2sR.%20Cembira%2C%20922%20-%20Vila%20Curu%C3%A7%C3%A1%20Velha%2C%20S%C3%A3o%20Paulo%20-%20SP%2C%2008032-010!5e0!3m2!1spt-BR!2sbr!4v1715000000000!5m2!1spt-BR!2sbr" 
+                        width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade">
+                    </iframe>
+                </div>
+            </div>
+        </div>
+
+        <hr class="mb-4 mt-5 border-secondary">
+
+        <div class="row">
+            <div class="col-md-12 text-center">
+                <p class="mb-2 small">© 2026 Copyright: <strong>Equipe DSM FATEC-ZL | DevsFatecanos</strong></p>
+                <div class="d-flex justify-content-center gap-3 mt-2">
+                    <i class="fab fa-laravel text-secondary" title="Laravel"></i>
+                    <i class="fab fa-docker text-secondary" title="Docker"></i>
+                    <i class="fab fa-php text-secondary" title="PHP 8"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<style>
+    .hover-warning:hover {
+        color: #ffc107 !important;
+        transition: 0.3s;
+    }
+</style>
 
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
