@@ -12,6 +12,8 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
     <link rel="shortcut icon" href="/favicon.png" type="image/x-icon">
+    <link rel="preload" href="/LOGO_FOCCUS.webp" as="image" type="image/webp">
+    <link rel="preload" href="/LOGO_FOCCUS.png" as="image">
 
     <style>
         :root {
@@ -308,11 +310,14 @@ background-color:#a9abae;
             $categoriaMeta[$nomeCategoria] = $meta;
         }
     @endphp
-<!---ANIMAÇÃO DE CARREGAMENTO --->
+<!---LOGO NO LOADING --->
 
 <div class="carregando fixed inset-0 z-[1002] flex flex-col items-center justify-center overflow-hidden bg-slate-600/90">
 <div class="mb-8 flex justify-center w-full">
-    <img class="w-1/4 h-auto object-contain brightness-0 invert" src="{{asset('LOGO_FOCCUS.png')}}" alt="Logo">
+    <picture>
+        <source srcset="{{asset('LOGO_FOCCUS.webp')}}" type="image/webp">
+        <img class="w-1/4 h-auto object-contain brightness-0 invert" src="{{asset('LOGO_FOCCUS.png')}}" alt="Logo" decoding="async">
+    </picture>
 </div>
     <!-- Barra de Progresso (progresso) -->
     <div class="w-1/2 overflow-hidden rounded-full bg-white/20">
@@ -333,7 +338,10 @@ background-color:#a9abae;
     <nav class="glass sticky top-0 z-50 border-b border-white/10">
         <div class="mx-auto flex max-w-7xl items-center justify-between gap-6 px-4 py-4 md:px-8">
             <a href="/" class="shrink-0">
-                <img src="/LOGO_FOCCUS.png" class="w-36 brightness-0 invert md:w-40" alt="Logo Foccus">
+                <picture>
+                    <source srcset="/LOGO_FOCCUS.webp" type="image/webp">
+                    <img src="/LOGO_FOCCUS.png" class="w-36 brightness-0 invert md:w-40" alt="Logo Foccus" decoding="async">
+                </picture>
             </a>
 
 
@@ -410,17 +418,17 @@ background-color:#a9abae;
             <div id="carouselExampleInterval" class="carousel slide" data-bs-ride="carousel">
                 <div class="carousel-inner">
                     <div class="carousel-item active" data-bs-interval="5000">
-                        <img width="100%" class="w-full w-screen" src="{{ asset('carousel/Banner1.png') }}" alt="carrosel 1 imagem" widtch:>
+                        <img fetchpriority="high" src="{{ asset('carousel/Banner1.png') }}" class="w-full w-screen" alt="carrosel 1 imagem">
                             <div class="conteiner-img">
                                     <a href="#ofertas" class=" ">Ofertas da Semana 🔥</a>
                                     <a href="#catalogo" class="">Catalogo de produtos</a>
                             </div>
                     </div>
                     <div class="carousel-item" data-bs-interval="5000">
-                        <img src="{{ asset('carousel/Banner2.png') }}" class="d-block w-100" alt="...">
+                        <img loading="lazy" src="{{ asset('carousel/Banner2.png') }}" class="d-block w-100" alt="...">
                     </div>
                     <div class="carousel-item" data-bs-interval="5000">
-                        <img src="{{ asset('carousel/Banner3.png') }}" class="d-block w-100" alt="...">
+                        <img loading="lazy" src="{{ asset('carousel/Banner3.png') }}" class="d-block w-100" alt="...">
                             <div class="conteiner-img">
                                  <a id="compre" href="#catalogo" class=" ">Compre Já!</a>
                            </div>
@@ -465,11 +473,11 @@ background-color:#a9abae;
                             $precoAtual = (float) ($item->preco_atual ?? 0);
                             $temDesconto = $precoAntigo > 0 && $precoAtual > 0 && $precoAtual < $precoAntigo;
                             $percentualDesconto = $temDesconto ? max(1, (int) round((1 - ($precoAtual / $precoAntigo)) * 100)) : 0;
-                            $img = $item->url_imagem ?? $item->imagem ?? 'https://via.placeholder.com/500x320';
+                            $img = $item->url_imagem ?? $item->imagem ?? asset('/LOGO_FOCCUS.png');
                         @endphp
                         <article class="swiper-slide promo-card {{ $temDesconto ? 'has-discount' : '' }} overflow-hidden rounded-3xl border bg-white shadow-md {{ $temDesconto ? 'border-red-200' : 'border-slate-100' }}">
                             <div class="relative aspect-square">
-                                <img src="{{ $img }}" class="h-full w-full object-contain p-2">
+                                <img loading="lazy" decoding="async" src="{{ $img }}" class="h-full w-full object-contain p-2" alt="{{ $item->nome }}">
                                 @if($temDesconto)
                                     <span class="absolute left-3 top-3 inline-flex items-center gap-2 rounded-full bg-red-600 px-3 py-1 text-xs font-black text-white shadow-lg">
                                         <i class="fa-solid fa-bolt"></i>
@@ -610,7 +618,7 @@ background-color:#a9abae;
                                         $eanPicturesCat = $eanCat ? "http://www.eanpictures.com.br:9000/api/gtin/{$eanCat}" : '';
                                     @endphp
                                     <div class="relative mb-4 overflow-hidden rounded-xl bg-slate-100 aspect-square">
-                                        <img src="{{ $produto->url_imagem }}"
+                                        <img loading="lazy" decoding="async" src="{{ $produto->url_imagem }}"
                                              @if($eanPicturesCat)
                                              onerror="if(this.src!=='{{ $eanPicturesCat }}'){this.src='{{ $eanPicturesCat }}';}else{this.onerror=null;this.src='{{ asset('/LOGO_FOCCUS.png') }}';}"
                                              @else

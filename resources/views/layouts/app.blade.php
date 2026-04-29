@@ -208,7 +208,10 @@
     <div class="mx-auto flex max-w-7xl items-center justify-between gap-6 px-4 py-4 md:px-8">
         
         <a href="{{ route('admin.dashboard') }}" class="shrink-0 flex items-center gap-2 no-underline">
-           <img src="/LOGO_FOCCUS.png" class="w-36 brightness-0 invert md:w-40" alt="Logo Foccus">
+           <picture>
+                <source srcset="/LOGO_FOCCUS.webp" type="image/webp">
+                <img src="/LOGO_FOCCUS.png" class="w-36 brightness-0 invert md:w-40" alt="Logo Foccus" decoding="async">
+           </picture>
         </a>
 
         <div class="hidden flex-1 items-center gap-3 lg:flex">
@@ -235,7 +238,9 @@
                         <a href="{{ route('admin.dashboard') }}" class="flex items-center gap-2 px-4 py-3 text-slate-800 hover:bg-slate-100 border-b border-slate-200 no-underline">
                             <i class="fas fa-tachometer-alt"></i> Dashboard
                         </a>
-                        
+                        <a href="{{ route('admin.dashboard') }}" class="flex items-center gap-2 px-4 py-3 text-slate-800 hover:bg-slate-100 border-b border-slate-200 no-underline">
+                            <i class="fas fa-tachometer-alt"></i> Pedidos
+                        </a>
                         <!-- Meus Dados Link -->
                         <a href="/meusdados" class="flex items-center gap-2 px-4 py-3 text-slate-800 hover:bg-slate-100 border-b border-slate-200 no-underline">
                             <i class="fas fa-user"></i> Meus Dados

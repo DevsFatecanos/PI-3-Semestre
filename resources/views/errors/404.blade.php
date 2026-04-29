@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>404 - Página não encontrada | Foccus</title>
+    <link rel="preload" href="{{ asset('LOGO_FOCCUS.webp') }}" as="image" type="image/webp">
+    <link rel="preload" href="{{ asset('LOGO_FOCCUS.png') }}" as="image">
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-gray-50 flex items-center justify-center min-h-screen border-t-8 border-slate-500">
@@ -12,7 +14,10 @@
         <div class="mb-8">
             <h1 class="text-9xl font-black text-slate-200">404</h1>
             <div class="relative -mt-16">
-                <img src="/LOGO_FOCCUS.png" class="mx-auto w-48 opacity-20 grayscale" alt="Foccus">
+                <picture>
+                    <source srcset="/LOGO_FOCCUS.webp" type="image/webp">
+                    <img src="/LOGO_FOCCUS.png" class="mx-auto w-48 opacity-20 grayscale" alt="Foccus" decoding="async">
+                </picture>
             </div>
         </div>
 

@@ -7,6 +7,8 @@
 
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="shortcut icon" href="/favicon.png" type="image/x-icon">
+    <link rel="preload" href="{{ asset('LOGO_FOCCUS.webp') }}" as="image" type="image/webp">
+    <link rel="preload" href="{{ asset('LOGO_FOCCUS.png') }}" as="image">
     <style>
         body {
             background:
@@ -19,7 +21,10 @@
     <nav class="bg-slate-500 text-white p-4 shadow-lg sticky top-0 z-50">
         <div class="max-w-7xl mx-auto flex justify-between items-center gap-8">
             <a href="/" class="flex-shrink-0">
-                <img src="/LOGO_FOCCUS.png" class="w-40 brightness-0 invert" alt="Logo Foccus">
+                <picture>
+                <source srcset="/LOGO_FOCCUS.webp" type="image/webp">
+                <img src="/LOGO_FOCCUS.png" class="w-40 brightness-0 invert" alt="Logo Foccus" decoding="async">
+            </picture>
             </a>
 
             <div class="flex items-center gap-3">
@@ -55,7 +60,7 @@
                     <article class="rounded-3xl border border-slate-100 bg-white p-4 shadow-sm md:p-5">
                         <div class="flex flex-col gap-4 md:flex-row md:items-center">
                             <div class="h-24 w-24 overflow-hidden rounded-2xl bg-slate-100 shrink-0">
-                                <img src="{{ $item['produto']->url_imagem }}" alt="{{ $item['produto']->nome }}" class="h-full w-full object-cover">
+                                <img loading="lazy" decoding="async" src="{{ $item['produto']->url_imagem }}" alt="{{ $item['produto']->nome }}" class="h-full w-full object-cover" onerror="this.onerror=null;this.src='{{ asset('/LOGO_FOCCUS.png') }}'">
                             </div>
 
                             <div class="flex-1">

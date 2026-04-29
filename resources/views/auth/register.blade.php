@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Criar Conta | Distribuidora Foccus</title>
+    <link rel="preload" href="{{ asset('LOGO_FOCCUS.webp') }}" as="image" type="image/webp">
+    <link rel="preload" href="{{ asset('LOGO_FOCCUS.png') }}" as="image">
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-gray-100 min-h-screen flex items-center justify-center p-4">
@@ -11,7 +13,10 @@
     <div class="max-w-4xl w-full bg-white rounded-2xl shadow-xl overflow-hidden flex flex-col md:flex-row">
         
         <div class="md:w-1/3 bg-slate-600 p-8 text-white flex flex-col justify-center">
-            <img src="/LOGO_FOCCUS.png" class="w-40 mb-8 brightness-0 invert" alt="Logo Foccus">
+            <picture>
+                <source srcset="/LOGO_FOCCUS.webp" type="image/webp">
+                <img src="/LOGO_FOCCUS.png" class="w-40 mb-8 brightness-0 invert" alt="Logo Foccus" decoding="async">
+            </picture>
             <h2 class="text-2xl font-bold mb-4">Seja um cliente Foccus</h2>
             <ul class="space-y-4 text-sm text-slate-100">
                 <li class="flex items-center gap-2">

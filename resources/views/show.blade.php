@@ -6,9 +6,10 @@
         
         <div class="card-body text-center">
             {{-- Exibindo a imagem que vem da API --}}
-            <img src="{{ $produto['thumbnail'] }}" 
-                 alt="{{ $produto['description'] }}" 
-                 style="max-width: 200px; border: 1px solid #ddd; padding: 10px;">
+            <img loading="lazy" decoding="async" src="{{ $produto['thumbnail'] }}"
+                 alt="{{ $produto['description'] }}"
+                 style="max-width: 200px; border: 1px solid #ddd; padding: 10px;"
+                 onerror="this.onerror=null;this.src='{{ asset('/LOGO_FOCCUS.png') }}'">
 
             <ul class="list-group mt-3">
                 <li class="list-group-item"><strong>EAN:</strong> {{ $produto['gtin'] }}</li>

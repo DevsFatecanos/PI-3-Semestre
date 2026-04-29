@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login | Distribuidora Foccus</title>
+    <link rel="preload" href="{{ asset('LOGO_FOCCUS.webp') }}" as="image" type="image/webp">
+    <link rel="preload" href="{{ asset('LOGO_FOCCUS.png') }}" as="image">
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-gray-100 min-h-screen flex items-center justify-center p-4">
@@ -13,7 +15,10 @@
 
 <div class="carregando fixed inset-0 z-[1002] flex flex-col items-center justify-center overflow-hidden bg-slate-600">
 <div class="mb-8 flex justify-center w-full">
-    <img class="w-1/4 h-auto object-contain brightness-0 invert" src="{{asset('LOGO_FOCCUS.png')}}" alt="Logo">
+    <picture>
+        <source srcset="{{asset('LOGO_FOCCUS.webp')}}" type="image/webp">
+        <img class="w-1/4 h-auto object-contain brightness-0 invert" src="{{asset('LOGO_FOCCUS.png')}}" alt="Logo" decoding="async">
+    </picture>
 </div>
     <!-- Barra de Progresso (progresso) -->
     <div class="w-1/2 overflow-hidden rounded-full bg-white/20">
@@ -35,7 +40,10 @@
     <div class="max-w-4xl w-full bg-white rounded-2xl shadow-xl overflow-hidden flex flex-col md:row-reverse md:flex-row">
         
         <div class="md:w-1/3 bg-slate-600 p-8 text-white flex flex-col justify-center text-center md:text-left">
-            <img src="/LOGO_FOCCUS.png" class="w-32 mb-8 mx-auto md:mx-0 brightness-0 invert" alt="Logo Foccus">
+            <picture>
+                <source srcset="/LOGO_FOCCUS.webp" type="image/webp">
+                <img src="/LOGO_FOCCUS.png" class="w-32 mb-8 mx-auto md:mx-0 brightness-0 invert" alt="Logo Foccus" decoding="async">
+            </picture>
             <h2 class="text-2xl font-bold mb-4">Bem-vindo de volta!</h2>
             <p class="text-slate-200 text-sm leading-relaxed">
                 Acesse sua conta para conferir seus pedidos, preços exclusivos e o estoque atualizado em tempo real.
