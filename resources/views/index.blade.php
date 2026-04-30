@@ -470,7 +470,7 @@ background-color:#a9abae;
                             $precoAtual = (float) ($item->preco_atual ?? 0);
                             $temDesconto = $precoAntigo > 0 && $precoAtual > 0 && $precoAtual < $precoAntigo;
                             $percentualDesconto = $temDesconto ? max(1, (int) round((1 - ($precoAtual / $precoAntigo)) * 100)) : 0;
-                            $img = $item->url_imagem ?? $item->imagem ?? asset('/LOGO_FOCCUS.png');
+                            $img = $item->url_imagem ?? $item->imagem ?? asset('/https://wgrqhvzrakgnvksakerd.supabase.co/storage/v1/object/sign/publicimg/LOGO_FOCCUS.webp?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtlZXl9.eyJ1cmwiOiJwdWJsaWNpbWcvTE9HT19GT0NDVVMud2VicCIsImlhdCI6MTc3NzQ3MzI1MCwiZXhwIjoxODA5MDA5MjUwfQ.oAuhK3I4JWpBqT2xxht3gAjf7eG2tMOmoKtZkrlAhVU');
                         @endphp
                         <article class="swiper-slide promo-card {{ $temDesconto ? 'has-discount' : '' }} overflow-hidden rounded-3xl border bg-white shadow-md {{ $temDesconto ? 'border-red-200' : 'border-slate-100' }}">
                             <div class="relative aspect-square">
@@ -619,7 +619,7 @@ background-color:#a9abae;
                                              @if($eanPicturesCat)
                                              onerror="if(this.src!=='{{ $eanPicturesCat }}'){this.src='{{ $eanPicturesCat }}';}else{this.onerror=null;this.src='{{ asset('/LOGO_FOCCUS.png') }}';}"
                                              @else
-                                             onerror="this.onerror=null;this.src='{{ asset('/LOGO_FOCCUS.png') }}';"
+                                             onerror="this.onerror=null;this.src='{{ asset('https://wgrqhvzrakgnvksakerd.supabase.co/storage/v1/object/sign/publicimg/LOGO_FOCCUS.webp?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV9hMzNkYmQzMC05ZTEwLTQwZjQtOGQ1Yi1iMWNjODY4YmY1ZjEiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJwdWJsaWNpbWcvTE9HT19GT0NDVVMud2VicCIsImlhdCI6MTc3NzQ3MzI1MCwiZXhwIjoxODA5MDA5MjUwfQ.oAuhK3I4JWpBqT2xxht3gAjf7eG2tMOmoKtZkrlAhVU') }}';"
                                              @endif
                                              class="h-full w-full object-contain p-2 transition duration-300 hover:scale-105" alt="{{ $produto->nome }}">
                                         @if($temDesconto)
