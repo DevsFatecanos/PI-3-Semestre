@@ -14,12 +14,9 @@
 <!---ANIMAÇÃO DE CARREGAMENTO --->
 
 <div class="carregando fixed inset-0 z-[1002] flex flex-col items-center justify-center overflow-hidden bg-slate-600">
-<div class="mb-8 flex justify-center w-full">
-    <picture>
-        <source srcset="{{asset('LOGO_FOCCUS.webp')}}" type="image/webp">
-        <img class="w-1/4 h-auto object-contain brightness-0 invert" src="{{asset('LOGO_FOCCUS.png')}}" alt="Logo" decoding="async">
-    </picture>
-</div>
+    <div class="mb-8 flex justify-center w-screen">
+        <img class="w-1/6  h-auto object-contain brightness-0 invert" src="{{asset('LOGO_FOCCUS.png')}}" alt="Logo" decoding="async">
+    </div>
     <!-- Barra de Progresso (progresso) -->
     <div class="w-1/2 overflow-hidden rounded-full bg-white/20">
         <div class="barra h-[5px] w-0 bg-white"></div>
@@ -28,7 +25,7 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
     $(window).on("load",function(){
-        $(".barra").animate({width:"100%"},500,function(){
+        $(".barra").animate({width:"100%"},1000,function(){
             $(".carregando").fadeOut(400);
         });
     });

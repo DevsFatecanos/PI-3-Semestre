@@ -32,7 +32,7 @@
                     <img src="{{ asset('LOGO_FOCCUS.png') }}" class="w-40 brightness-0 invert" alt="Logo Foccus" decoding="async">
                 </picture>
                 </div>
-                <h1 class="text-[28px] font-bold mt-[30px] mb-[15px] leading-tight">Bem-vindo ao seus dados!</h1>
+                <h1 class="text-[28px] font-bold mt-[30px] mb-[15px] leading-tight">Seus dados</h1>
                 <p class="text-[14px] leading-[1.6] opacity-80">Acesse sua conta para ver ou alterar seus dados cadastrados.</p>
             </div>
 

@@ -314,7 +314,7 @@ background-color:#a9abae;
 
 <div class="carregando fixed inset-0 z-[1002] flex flex-col items-center justify-center overflow-hidden bg-slate-600/90">
     <div class="mb-8 flex justify-center w-screen">
-        <img class="w-1/4  h-auto object-contain brightness-0 invert" src="{{asset('LOGO_FOCCUS.png')}}" alt="Logo" decoding="async">
+        <img class="w-1/6  h-auto object-contain brightness-0 invert" src="{{asset('LOGO_FOCCUS.png')}}" alt="Logo" decoding="async">
     </div>
     <!-- Barra de Progresso (progresso) -->
     <div class="w-1/2 overflow-hidden rounded-full bg-white/20">
@@ -358,18 +358,17 @@ background-color:#a9abae;
 
             <div class="flex items-center gap-3">
             @auth
-                <div class="dropdown">
+                <div class="dropdown z-[1000]">
                     <button onclick="toggleMenu()" class="dropbtn">
                       Olá, {{ auth()->user()->name }}
                     </button>
                     <div id="menu" class="dropdown-content">
                          <a target="_blank" href="/meusdados">Meus dados</a>
                          <a target="_blank" href="/">Meus Pedidos</a>
+                         <button type="button" data-bs-toggle="modal" data-bs-target="#exampleModalCenter">
+                            Sair
+                        </button>
                          <a target="_blank" href="/admin/dashboard">Dashboard</a>
-                         <form method="POST" action="/logout">
-                        @csrf
-                         <button type="submit">Sair</button>
-                        </form>
                     </div>
                 </div>
                 <script>
@@ -854,11 +853,28 @@ background-color:#a9abae;
         transition: 0.3s;
     }
 </style>
-
+     <!-- Modal -->
+    <div class="modal fade" id="exampleModalCenter" tabindex="-1" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title text-sm font-semibold text-black" id="exampleModalCenterTitle">Deseja Realmente Sair?</h5>
+          </div>
+          <div class="modal-body">
+                <form class="w-full flex justify-center gap-2" method="POST" action="/logout">
+                    @csrf
+                <button class=" w-1/4 bg-[#465367] text-white border border-[#ddd] p-[15px] rounded-[8px] text-[15px] font-semibold cursor-pointer transition-all duration-500 hover:bg-[#888888] text-center no-underline" type="button" data-bs-dismiss="modal">Close</button>
+                <button class="w-1/2 bg-[#465367] text-white border border-[#ddd] p-[15px] rounded-[8px] text-[15px] font-semibold cursor-pointer transition-all duration-500 hover:bg-[red] text-center no-underline"  type="submit">Sair da conta</button>
+                </form>
+          </div>
+        </div>
+      </div>
+    </div>                           
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 
     <script src="{{ asset('js/carrinho.js') }}"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.min.js" integrity="sha384-G/EV+4j2dNv+tEPo3++6LCgdCROaejBqfUeNjuKAiuXbjrxilcCdDz6ZAVfHWe1Y" crossorigin="anonymous"></script>
 </body>
 </html>
