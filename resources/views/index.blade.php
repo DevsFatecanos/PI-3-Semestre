@@ -314,7 +314,7 @@ background-color:#a9abae;
 
 <div class="carregando fixed inset-0 z-[1002] flex flex-col items-center justify-center overflow-hidden bg-slate-600/90">
     <div class="mb-8 flex justify-center w-screen">
-        <img class="w-1/4  h-auto object-contain brightness-0 invert" src="{{asset('LOGO_FOCCUS.png')}}" alt="Logo" decoding="async">
+        <img class="w-1/6  h-auto object-contain brightness-0 invert" src="{{asset('LOGO_FOCCUS.png')}}" alt="Logo" decoding="async">
     </div>
     <!-- Barra de Progresso (progresso) -->
     <div class="w-1/2 overflow-hidden rounded-full bg-white/20">
@@ -358,7 +358,7 @@ background-color:#a9abae;
 
             <div class="flex items-center gap-3">
             @auth
-                <div class="dropdown">
+                <div class="dropdown z-[1000]">
                     <button onclick="toggleMenu()" class="dropbtn">
                       Olá, {{ auth()->user()->name }}
                     </button>
@@ -858,15 +858,13 @@ background-color:#a9abae;
       <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalCenterTitle">Deseja Realmente Sair?</h5>
-            <!-- CORREÇÃO: Classe btn-close e data-bs-dismiss -->
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            <h5 class="modal-title text-sm font-semibold text-black" id="exampleModalCenterTitle">Deseja Realmente Sair?</h5>
           </div>
           <div class="modal-body">
-                <form method="POST" action="/logout">
+                <form class="w-full flex justify-center gap-2" method="POST" action="/logout">
                     @csrf
-                 <button class="btn btn-secondary" type="button" data-bs-dismiss="modal">Close</button>
-                <button class="btn btn-secondary"  type="submit">Sair</button>
+                <button class=" w-1/4 bg-[#465367] text-white border border-[#ddd] p-[15px] rounded-[8px] text-[15px] font-semibold cursor-pointer transition-all duration-500 hover:bg-[#888888] text-center no-underline" type="button" data-bs-dismiss="modal">Close</button>
+                <button class="w-1/2 bg-[#465367] text-white border border-[#ddd] p-[15px] rounded-[8px] text-[15px] font-semibold cursor-pointer transition-all duration-500 hover:bg-[red] text-center no-underline"  type="submit">Sair da conta</button>
                 </form>
           </div>
         </div>
