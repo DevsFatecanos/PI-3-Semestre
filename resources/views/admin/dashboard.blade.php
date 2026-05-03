@@ -134,17 +134,21 @@
                             @endif
                         </td>
                         <td>
-                            <div class="btn-group btn-group-sm" role="group">
-                                <a href="{{ route('admin.produtos.edit', $produto->id) }}" 
-                                   class="btn btn-outline-primary" title="Editar">
+                            <div class="d-inline-flex align-items-center">
+                                <a href="{{ route('admin.produtos.edit', $produto->id) }}"
+                                   class="btn btn-sm btn-outline-primary"
+                                   title="Editar"
+                                   style="border-radius: 0.375rem 0 0 0.375rem; margin-right: -1px;">
                                     <i class="fas fa-edit"></i>
                                 </a>
-                                
+
                                 <form action="{{ route('admin.produtos.toggle', $produto->id) }}" method="POST" style="display: inline;">
                                     @csrf
                                     @method('PATCH')
-                                    <button type="submit" class="btn btn-outline-warning" 
-                                            title="{{ $produto->ativo ? 'Desativar' : 'Ativar' }}">
+                                    <button type="submit"
+                                            class="btn btn-sm btn-outline-success"
+                                            title="{{ $produto->ativo ? 'Desativar' : 'Ativar' }}"
+                                            style="border-radius: 0; margin-right: -1px;">
                                         <i class="fas fa-{{ $produto->ativo ? 'eye-slash' : 'eye' }}"></i>
                                     </button>
                                 </form>
@@ -152,8 +156,10 @@
                                 <form action="{{ route('admin.produtos.toggleDestaque', $produto->id) }}" method="POST" style="display: inline;">
                                     @csrf
                                     @method('PATCH')
-                                    <button type="submit" class="btn btn-outline-info" 
-                                            title="{{ $produto->destaque ? 'Remover de destaque' : 'Marcar como destaque' }}">
+                                    <button type="submit"
+                                            class="btn btn-sm btn-outline-warning"
+                                            title="{{ $produto->destaque ? 'Remover de destaque' : 'Marcar como destaque' }}"
+                                            style="border-radius: 0; margin-right: -1px;">
                                         <i class="fas fa-star"></i>
                                     </button>
                                 </form>
@@ -162,7 +168,10 @@
                                       onsubmit="return confirm('Tem certeza que deseja deletar este produto?');">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" class="btn btn-outline-danger" title="Deletar">
+                                    <button type="submit"
+                                            class="btn btn-sm btn-outline-danger"
+                                            title="Deletar"
+                                            style="border-radius: 0 0.375rem 0.375rem 0;">
                                         <i class="fas fa-trash"></i>
                                     </button>
                                 </form>

@@ -69,7 +69,7 @@ Route::post('/logout', function () {
 })->name('logout');
 
 // Rotas de Admin (Painel de Administração)
-Route::prefix('admin')->name('admin.')->middleware('auth')->group(function () {
+Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(function () {
     // Dashboard
     Route::get('/dashboard', [AdminProdutoController::class, 'dashboard'])->name('dashboard');
     Route::get('/produtos/search', [AdminProdutoController::class, 'search'])->name('produtos.search');
