@@ -365,9 +365,12 @@ background-color:#a9abae;
                     <div id="menu" class="dropdown-content">
                          <a target="_blank" href="/meusdados">Meus dados</a>
                          <a target="_blank" href="/">Meus Pedidos</a>
-                         <button type="button" data-bs-toggle="modal" data-bs-target="#exampleModalCenter">
+                         <button type="button" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                             Sair
                         </button>
+                        <form id="logout-form" method="POST" action="/logout" class="hidden">
+                            @csrf
+                        </form>
                          @if(Auth::user()->is_admin)
                          <a target="_blank" href="/admin/dashboard">Dashboard</a>
                          @endif
@@ -856,22 +859,6 @@ background-color:#a9abae;
     }
 </style>
      <!-- Modal -->
-    <div class="modal fade" id="exampleModalCenter" tabindex="-1" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-      <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title text-sm font-semibold text-black" id="exampleModalCenterTitle">Deseja Realmente Sair?</h5>
-          </div>
-          <div class="modal-body">
-                <form class="w-full flex justify-center gap-2" method="POST" action="/logout">
-                    @csrf
-                <button class=" w-1/4 bg-[#465367] text-white border border-[#ddd] p-[15px] rounded-[8px] text-[15px] font-semibold cursor-pointer transition-all duration-500 hover:bg-[#888888] text-center no-underline" type="button" data-bs-dismiss="modal">Close</button>
-                <button class="w-1/2 bg-[#465367] text-white border border-[#ddd] p-[15px] rounded-[8px] text-[15px] font-semibold cursor-pointer transition-all duration-500 hover:bg-[red] text-center no-underline"  type="submit">Sair da conta</button>
-                </form>
-          </div>
-        </div>
-      </div>
-    </div>                           
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 

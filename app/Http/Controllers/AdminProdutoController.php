@@ -13,7 +13,7 @@ class AdminProdutoController extends Controller
      */
     public function dashboard()
     {
-        $produtos = Produto::paginate(15);
+        $produtos = Produto::orderBy('nome')->paginate(15);
         $totalProdutos = Produto::count();
         $produtosAtivos = Produto::where('ativo', true)->count();
         $produtosInativos = Produto::where('ativo', false)->count();

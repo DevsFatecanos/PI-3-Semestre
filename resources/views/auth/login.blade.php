@@ -6,32 +6,12 @@
     <title>Login | Distribuidora Foccus</title>
     <link rel="preload" href="{{ asset('LOGO_FOCCUS.webp') }}" as="image" type="image/webp">
     <link rel="preload" href="{{ asset('LOGO_FOCCUS.png') }}" as="image">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-gray-100 min-h-screen flex items-center justify-center p-4">
 
 
-<!---ANIMAÇÃO DE CARREGAMENTO --->
-
-<div class="carregando fixed inset-0 z-[1002] flex flex-col items-center justify-center overflow-hidden bg-slate-600">
-    <div class="mb-8 flex justify-center w-screen">
-        <img class="w-1/6  h-auto object-contain brightness-0 invert" src="{{asset('LOGO_FOCCUS.png')}}" alt="Logo" decoding="async">
-    </div>
-    <!-- Barra de Progresso (progresso) -->
-    <div class="w-1/2 overflow-hidden rounded-full bg-white/20">
-        <div class="barra h-[5px] w-0 bg-white"></div>
-    </div>
-</div>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script>
-    $(window).on("load",function(){
-        $(".barra").animate({width:"100%"},1000,function(){
-            $(".carregando").fadeOut(400);
-        });
-    });
-    </script>
-
-<!-------------------------------->
 
 
     <div class="max-w-4xl w-full bg-white rounded-2xl shadow-xl overflow-hidden flex flex-col md:row-reverse md:flex-row">
@@ -75,8 +55,13 @@
                         <label class="block text-xs font-bold uppercase text-gray-400">Senha</label>
                         <a href="#" class="text-[10px] text-slate-500 hover:underline">Esqueceu a senha?</a>
                     </div>
-                    <input type="password" name="password" required 
-                           class="w-full border-gray-200 border rounded-lg px-4 py-3 focus:border-slate-500 focus:ring-2 focus:ring-slate-200 outline-none transition @error('email') border-red-400 @enderror">
+                    <div class="relative">
+                        <input type="password" name="password" id="password" required
+                               class="w-full border-gray-200 border rounded-lg px-4 py-3 focus:border-slate-500 focus:ring-2 focus:ring-slate-200 outline-none transition @error('email') border-red-400 @enderror">
+                        <button type="button" onclick="togglePassword('password', 'eyeIconLogin')" class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600">
+                            <i class="fas fa-eye" id="eyeIconLogin"></i>
+                        </button>
+                    </div>
                 </div>
 
                 <div class="flex items-center">
@@ -96,6 +81,22 @@
             </form>
         </div>
     </div>
+
+<script>
+    function togglePassword(fieldId, iconId) {
+        const field = document.getElementById(fieldId);
+        const icon = document.getElementById(iconId);
+        if (field.type === 'password') {
+            field.type = 'text';
+            icon.classList.remove('fa-eye');
+            icon.classList.add('fa-eye-slash');
+        } else {
+            field.type = 'password';
+            icon.classList.remove('fa-eye-slash');
+            icon.classList.add('fa-eye');
+        }
+    }
+</script>
 
 </body>
 </html>
