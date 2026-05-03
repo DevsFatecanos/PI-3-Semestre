@@ -368,7 +368,9 @@ background-color:#a9abae;
                          <button type="button" data-bs-toggle="modal" data-bs-target="#exampleModalCenter">
                             Sair
                         </button>
+                         @if(Auth::user()->is_admin)
                          <a target="_blank" href="/admin/dashboard">Dashboard</a>
+                         @endif
                     </div>
                 </div>
                 <script>
