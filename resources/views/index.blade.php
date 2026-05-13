@@ -337,9 +337,9 @@ background-color:#a9abae;
     </script>
 
 <!-------------------------------->
-    <div class="w-full text-center text-white bg-slate-600 font-sans text-sm"><p>Ofertas imperdíveis de até <strong> 20%OFF! </strong> Você não vai querer perder! 🔥</p></div>
     <nav class="glass sticky top-0 z-50 border-b border-white/10">
-        <div class="mx-auto flex max-w-7xl items-center justify-between gap-6 px-4 py-4 md:px-8">
+        <div class="w-full fixed top-0 left-0 z-20 text-center text-white bg-slate-600 font-sans text-sm py-0.5"><p>Ofertas imperdíveis de até <strong> 20%OFF! </strong> Você não vai querer perder! 🔥</p></div>
+        <div class="mx-auto flex max-w-7xl items-center justify-between gap-6 px-4 pb-4 pt-12 md:px-8">
             <a href="/" class="shrink-0">
                 <picture>
                     <source srcset="/LOGO_FOCCUS.webp" type="image/webp">
@@ -420,6 +420,18 @@ background-color:#a9abae;
         </div>
     @endif
 
+<!--NAVBAR DE CATEGORIAS DE PRODUTOS ABAIXO DO HEADER-->
+    <section class="Nav-catalogo bg-slate-100 w-full flex fixed justify-center z-40  ">
+        <div class="flex w-1/2 justify-between p-2 ">
+                <p class="text-slate-600 font-bold" >Compre por Categoria! :</p>
+                <a class="hover:text-slate-600 hover:font-bold" href="">Limpeza</a>
+                <a class="hover:text-slate-600 hover:font-bold" href="">Higiene</a>
+                <a class="hover:text-slate-600 hover:font-bold" href="">Mercearia</a>
+                <a class="hover:text-slate-600 hover:font-bold" href="">Bebidas</a>
+                <a class="text-red-600 hover:text-slate-600 font-bold"  href="">Ofertas</a>
+            <div>
+        </div>
+    </section>
     <main class="mx-auto max-w-7xl px-4 py-8 md:px-8 md:py-10">
         <section class=" reveal mb-14  shadow-lg">
             <div id="carouselExampleInterval" class="carousel slide" data-bs-ride="carousel">
@@ -458,7 +470,7 @@ background-color:#a9abae;
                     <span class="flex h-10 w-10 items-center justify-center rounded-2xl bg-red-100 text-red-600"><i class="fa-solid fa-fire text-4xl"></i></span>
                     <div>
                         <h2 class="text-2xl font-black text-slate-900">Ofertas da semana</h2>
-                        <p class="text-sm text-slate-500">Carrossel em rolagem continua, pausado no hover.</p>
+                        <p class="text-sm text-slate-500">Produtos Selecionados </p>
                     </div>
                 </div>
                 <div class="flex items-center gap-2">
