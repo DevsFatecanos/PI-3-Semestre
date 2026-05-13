@@ -14,7 +14,6 @@
     <link rel="preload" href="{{ asset('LOGO_FOCCUS.png') }}" as="image">
 </head>
 <body class="bg-[#f4f4f4] flex items-center justify-center min-h-screen font-sans">
-
     <section class="main">
         <!-- Container Principal -->
         <div class="flex w-[950px] h-[600px] bg-white rounded-[20px] shadow-2xl overflow-hidden">
