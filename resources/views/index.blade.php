@@ -12,6 +12,8 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
     <link rel="shortcut icon" href="/favicon.png" type="image/x-icon">
+    <link rel="preload" href="/LOGO_FOCCUS.webp" as="image" type="image/webp">
+    <link rel="preload" href="/LOGO_FOCCUS.png" as="image">
 
     <style>
         :root {
@@ -270,9 +272,15 @@ text-align: center;
 transform: translateY(-2px);
 background-color:#a9abae;
 }
-    </style>
+
+#userwayAccessibilityIcon {
+    margin-top: 500px;
+}
+
+ </style>
 </head>
 <body class="min-h-screen text-slate-900">
+    
     @php
         $quantidadeCarrinho = array_sum(session('carrinho', []));
 
@@ -308,12 +316,12 @@ background-color:#a9abae;
             $categoriaMeta[$nomeCategoria] = $meta;
         }
     @endphp
-<!---ANIMAÇÃO DE CARREGAMENTO --->
+<!---LOGO NO LOADING --->
 
 <div class="carregando fixed inset-0 z-[1002] flex flex-col items-center justify-center overflow-hidden bg-slate-600/90">
-<div class="mb-8 flex justify-center w-full">
-    <img class="w-1/4 h-auto object-contain brightness-0 invert" src="{{asset('LOGO_FOCCUS.png')}}" alt="Logo">
-</div>
+    <div class="mb-8 flex justify-center w-screen">
+        <img class="w-1/6  h-auto object-contain brightness-0 invert" src="{{asset('LOGO_FOCCUS.png')}}" alt="Logo" decoding="async">
+    </div>
     <!-- Barra de Progresso (progresso) -->
     <div class="w-1/2 overflow-hidden rounded-full bg-white/20">
         <div class="barra h-[5px] w-0 bg-white"></div>
@@ -322,18 +330,32 @@ background-color:#a9abae;
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
     $(window).on("load",function(){
-        $(".barra").animate({width:"100%"},1000,function(){
+        $(".barra").animate({width:"100%"},500,function(){
             $(".carregando").fadeOut(500);
         });
     });
     </script>
 
 <!-------------------------------->
-    <div class="w-full text-center text-white bg-slate-600 font-sans text-sm"><p>Ofertas imperdíveis de até <strong> 20%OFF! </strong> Você não vai querer perder! 🔥</p></div>
-    <nav class="glass sticky top-0 z-50 border-b border-white/10">
-        <div class="mx-auto flex max-w-7xl items-center justify-between gap-6 px-4 py-4 md:px-8">
+    <nav style="padding: 10px;" class="glass sticky top-0 z-50 border-b border-white/10">
+        <div class="w-full fixed top-0 left-0 z-20 text-center text-white bg-slate-600 font-sans text-sm py-0.5"><!--NAVBAR DE CATEGORIAS DE PRODUTOS ABAIXO DO HEADER-->
+    <section class="Nav-catalogo bg-slate-100 w-full flex fixed justify-center z-40  ">
+        <div class="flex w-1/2 justify-between p-2 ">
+                <p class="text-slate-600 font-bold" >Compre por Categoria!</p>
+                <a class="text-slate-600 hover:text-slate-600 hover:font-bold" href="">Limpeza</a>
+                <a class="text-slate-600 hover:text-slate-600 hover:font-bold" href="">Higiene</a>
+                <a class="text-slate-600 hover:text-slate-600 hover:font-bold" href="">Mercearia</a>
+                <a class="text-slate-600 hover:text-slate-600 hover:font-bold" href="">Bebidas</a>
+                <a class="text-red-600 hover:text-slate-600 font-bold"  href="">Ofertas</a>
+            <div>
+        </div>
+    </section></div>
+        <div class="mx-auto flex max-w-7xl items-center justify-between gap-6 px-4 pb-4 pt-14 md:px-8">
             <a href="/" class="shrink-0">
-                <img src="/LOGO_FOCCUS.png" class="w-36 brightness-0 invert md:w-40" alt="Logo Foccus">
+                <picture>
+                    <source srcset="/LOGO_FOCCUS.webp" type="image/webp">
+                    <img src="/LOGO_FOCCUS.png" class="w-36 brightness-0 invert md:w-40" alt="Logo Foccus" decoding="async">
+                </picture>
             </a>
 
 
@@ -353,18 +375,22 @@ background-color:#a9abae;
 
             <div class="flex items-center gap-3">
             @auth
-                <div class="dropdown">
+                <div class="dropdown z-[1000]">
                     <button onclick="toggleMenu()" class="dropbtn">
                       Olá, {{ auth()->user()->name }}
                     </button>
                     <div id="menu" class="dropdown-content">
                          <a target="_blank" href="/meusdados">Meus dados</a>
                          <a target="_blank" href="/">Meus Pedidos</a>
-                         <a target="_blank" href="/admin/dashboard">Dashboard</a>
-                         <form method="POST" action="/logout">
-                        @csrf
-                         <button type="submit">Sair</button>
+                         <button type="button" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                            Sair
+                        </button>
+                        <form id="logout-form" method="POST" action="/logout" class="hidden">
+                            @csrf
                         </form>
+                         @if(Auth::user()->is_admin)
+                         <a target="_blank" href="/admin/dashboard">Dashboard</a>
+                         @endif
                     </div>
                 </div>
                 <script>
@@ -405,22 +431,23 @@ background-color:#a9abae;
         </div>
     @endif
 
+
     <main class="mx-auto max-w-7xl px-4 py-8 md:px-8 md:py-10">
         <section class=" reveal mb-14  shadow-lg">
             <div id="carouselExampleInterval" class="carousel slide" data-bs-ride="carousel">
                 <div class="carousel-inner">
                     <div class="carousel-item active" data-bs-interval="5000">
-                        <img width="100%" class="w-full w-screen" src="{{ asset('carousel/Banner1.png') }}" alt="carrosel 1 imagem" widtch:>
+                        <img fetchpriority="high" src="{{ asset('carousel/Banner1.png') }}" class="w-full w-screen" alt="carrosel 1 imagem">
                             <div class="conteiner-img">
                                     <a href="#ofertas" class=" ">Ofertas da Semana 🔥</a>
                                     <a href="#catalogo" class="">Catalogo de produtos</a>
                             </div>
                     </div>
                     <div class="carousel-item" data-bs-interval="5000">
-                        <img src="{{ asset('carousel/Banner2.png') }}" class="d-block w-100" alt="...">
+                        <img loading="lazy" src="{{ asset('carousel/Banner2.png') }}" class="d-block w-100" alt="...">
                     </div>
                     <div class="carousel-item" data-bs-interval="5000">
-                        <img src="{{ asset('carousel/Banner3.png') }}" class="d-block w-100" alt="...">
+                        <img loading="lazy" src="{{ asset('carousel/Banner3.png') }}" class="d-block w-100" alt="...">
                             <div class="conteiner-img">
                                  <a id="compre" href="#catalogo" class=" ">Compre Já!</a>
                            </div>
@@ -443,7 +470,7 @@ background-color:#a9abae;
                     <span class="flex h-10 w-10 items-center justify-center rounded-2xl bg-red-100 text-red-600"><i class="fa-solid fa-fire text-4xl"></i></span>
                     <div>
                         <h2 class="text-2xl font-black text-slate-900">Ofertas da semana</h2>
-                        <p class="text-sm text-slate-500">Carrossel em rolagem continua, pausado no hover.</p>
+                        <p class="text-sm text-slate-500">Produtos Selecionados </p>
                     </div>
                 </div>
                 <div class="flex items-center gap-2">
@@ -465,11 +492,11 @@ background-color:#a9abae;
                             $precoAtual = (float) ($item->preco_atual ?? 0);
                             $temDesconto = $precoAntigo > 0 && $precoAtual > 0 && $precoAtual < $precoAntigo;
                             $percentualDesconto = $temDesconto ? max(1, (int) round((1 - ($precoAtual / $precoAntigo)) * 100)) : 0;
-                            $img = $item->url_imagem ?? $item->imagem ?? 'https://via.placeholder.com/500x320';
+                            $img = $item->url_imagem ?? $item->imagem ?? asset('/https://wgrqhvzrakgnvksakerd.supabase.co/storage/v1/object/sign/publicimg/LOGO_FOCCUS.webp?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtlZXl9.eyJ1cmwiOiJwdWJsaWNpbWcvTE9HT19GT0NDVVMud2VicCIsImlhdCI6MTc3NzQ3MzI1MCwiZXhwIjoxODA5MDA5MjUwfQ.oAuhK3I4JWpBqT2xxht3gAjf7eG2tMOmoKtZkrlAhVU');
                         @endphp
                         <article class="swiper-slide promo-card {{ $temDesconto ? 'has-discount' : '' }} overflow-hidden rounded-3xl border bg-white shadow-md {{ $temDesconto ? 'border-red-200' : 'border-slate-100' }}">
                             <div class="relative aspect-square">
-                                <img src="{{ $img }}" class="h-full w-full object-contain p-2">
+                                <img loading="lazy" decoding="async" src="{{ $img }}" class="h-full w-full object-contain p-2" alt="{{ $item->nome }}">
                                 @if($temDesconto)
                                     <span class="absolute left-3 top-3 inline-flex items-center gap-2 rounded-full bg-red-600 px-3 py-1 text-xs font-black text-white shadow-lg">
                                         <i class="fa-solid fa-bolt"></i>
@@ -559,10 +586,6 @@ background-color:#a9abae;
                 </div>
             </div>
 
-            <div id="globalEmptyState" class="hidden rounded-2xl border border-dashed border-slate-300 bg-white p-8 text-center text-slate-500">
-                Nenhum produto encontrado com os filtros atuais.
-            </div>
-
             <div class="space-y-10" id="catalogSections">
                 @foreach($categoriaLista as $nomeCategoria)
                     @php
@@ -571,91 +594,156 @@ background-color:#a9abae;
                         $produtosCategoria = $produtosPorCategoria->get($nomeCategoria, collect())->values();
                     @endphp
 
-                    <section class="categoria-bloco" data-category-section="{{ $slug }}" data-category-name="{{ Illuminate\Support\Str::lower($nomeCategoria) }}">
-                        <div class="mb-4 flex items-center justify-between gap-3">
-                            <div class="flex items-center gap-3">
-                                <div class="flex h-11 w-11 items-center justify-center rounded-2xl bg-gradient-to-br {{ $meta['cores'] }} text-white shadow">
-                                    <i class="fa-solid {{ $meta['icone'] }}"></i>
+<section class="categoria-bloco">
+
+    <div class="mb-4 flex items-center justify-between">
+        <h3 class="text-xl font-black text-slate-900">
+            {{ $nomeCategoria }}
+        </h3>
+    </div>
+
+    @php
+        $produtosPorSlide = 3;
+        $lotes = $produtosCategoria->chunk($produtosPorSlide);
+    @endphp
+
+    <div id="carousel-{{ $slug }}" class="carousel slide" data-bs-ride="false">
+
+        <div class="carousel-inner">
+
+            @foreach($lotes as $index => $lote)
+
+                <div class="carousel-item {{ $index == 0 ? 'active' : '' }}">
+
+                    <div class="grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
+
+                        @foreach($lote as $produto)
+
+                            @php
+                                $preco = (float) ($produto->preco_atual ?? 0);
+                                $precoAntigo = (float) ($produto->preco_antigo ?? 0);
+
+                                $temDesconto = $precoAntigo > 0
+                                    && $preco > 0
+                                    && $preco < $precoAntigo;
+
+                                $percentual = $temDesconto
+                                    ? max(1, (int) round((1 - ($preco / $precoAntigo)) * 100))
+                                    : 0;
+                            @endphp
+
+                            <article class="product-card overflow-hidden rounded-2xl border border-slate-100 bg-white p-4 shadow-sm">
+
+                                <div class="relative mb-4 overflow-hidden rounded-xl bg-slate-100 aspect-square">
+
+                                    <img
+                                        src="{{ $produto->url_imagem }}"
+                                        class="h-full w-full object-contain p-2"
+                                        alt="{{ $produto->nome }}"
+                                    >
+
+                                    @if($temDesconto)
+                                        <span class="absolute left-2 top-2 rounded-full bg-red-600 px-2 py-1 text-[11px] font-black text-white">
+                                            -{{ $percentual }}%
+                                        </span>
+                                    @endif
+
                                 </div>
-                                <div>
-                                    <h3 class="text-xl font-black text-slate-900">{{ $nomeCategoria }}</h3>
-                                    <div class="mt-1 flex flex-wrap items-center gap-2">
-                                        <p class="text-sm text-slate-500"><span data-visible-count>0</span> itens visiveis</p>
-                                        <span class="batch-pill">Lote <span data-batch-label>01/01</span></span>
-                                    </div>
+
+                                <div class="mb-3">
+                                    <h4 class="line-clamp-2 text-base font-black text-slate-900">
+                                        {{ $produto->nome }}
+                                    </h4>
+
+                                    <p class="text-xs text-slate-500">
+                                        {{ $produto->marca ?? 'Marca não informada' }}
+                                    </p>
                                 </div>
-                            </div>
-                            <div class="flex flex-wrap gap-2">
-                                <button type="button" class="prev-more-btn hidden rounded-full border border-slate-300 px-3 py-1.5 text-xs font-black uppercase tracking-[0.15em] text-slate-700 hover:bg-slate-100" data-prev-lot="{{ $slug }}">Lote Anterior</button>
-                                <button type="button" class="show-more-btn hidden rounded-full border border-slate-300 px-3 py-1.5 text-xs font-black uppercase tracking-[0.15em] text-slate-700 hover:bg-slate-100" data-show-more="{{ $slug }}">Próximo lote</button>
-                            </div>
-                        </div>
 
-                        <div class="category-grid grid gap-5 sm:grid-cols-2 xl:grid-cols-3" data-category-grid>
-                            @foreach($produtosCategoria as $produto)
-                                @php
-                                    $preco = (float) ($produto->preco_atual ?? 0);
-                                    $precoAntigo = (float) ($produto->preco_antigo ?? 0);
-                                    $temDesconto = $precoAntigo > 0 && $preco > 0 && $preco < $precoAntigo;
-                                    $percentual = $temDesconto ? max(1, (int) round((1 - ($preco / $precoAntigo)) * 100)) : 0;
-                                @endphp
-                                <article class="product-card overflow-hidden rounded-2xl border border-slate-100 bg-white p-4 shadow-sm"
-                                    data-product-card
-                                    data-product-name="{{ Illuminate\Support\Str::lower($produto->nome) }}"
-                                    data-product-price="{{ $preco }}"
-                                    data-product-category="{{ $slug }}"
-                                    data-product-card-index="{{ $loop->index }}">
-                                    @php
-                                        $eanCat = preg_replace('/\D/', '', $produto->codigo_barras ?? '');
-                                        $eanPicturesCat = $eanCat ? "http://www.eanpictures.com.br:9000/api/gtin/{$eanCat}" : '';
-                                    @endphp
-                                    <div class="relative mb-4 overflow-hidden rounded-xl bg-slate-100 aspect-square">
-                                        <img src="{{ $produto->url_imagem }}"
-                                             @if($eanPicturesCat)
-                                             onerror="if(this.src!=='{{ $eanPicturesCat }}'){this.src='{{ $eanPicturesCat }}';}else{this.onerror=null;this.src='{{ asset('/LOGO_FOCCUS.png') }}';}"
-                                             @else
-                                             onerror="this.onerror=null;this.src='{{ asset('/LOGO_FOCCUS.png') }}';"
-                                             @endif
-                                             class="h-full w-full object-contain p-2 transition duration-300 hover:scale-105" alt="{{ $produto->nome }}">
-                                        @if($temDesconto)
-                                            <span class="absolute left-2 top-2 rounded-full bg-red-600 px-2 py-1 text-[11px] font-black text-white">-{{ $percentual }}%</span>
-                                        @endif
+                                <div class="mb-3">
+
+                                    @if($temDesconto)
+                                        <p class="text-xs text-slate-400 line-through">
+                                            R$ {{ number_format($precoAntigo, 2, ',', '.') }}
+                                        </p>
+                                    @endif
+
+                                    <p class="text-2xl font-black text-blue-700">
+                                        R$ {{ number_format($preco, 2, ',', '.') }}
+                                    </p>
+
+                                </div>
+                                {{-- FORM --}}
+                                <form
+                                    action="{{ route('carrinho.add', $produto, false) }}"
+                                    method="POST"
+                                    onsubmit="return addToCart(event)"
+                                >
+                                    @csrf
+
+                                    {{-- QUANTIDADE --}}
+                                    <div class="mb-3 flex items-center gap-2">
+
+                                        <label class="text-xs font-bold text-slate-500">
+                                            Qtd
+                                        </label>
+
+                                        <input
+                                            type="number"
+                                            name="quantidade"
+                                            value="1"
+                                            min="1"
+                                            max="{{ $produto->quantidade }}"
+                                            class="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm outline-none focus:border-blue-500"
+                                        >
+
                                     </div>
 
-                                    <div class="mb-3 flex items-start justify-between gap-2">
-                                        <div>
-                                            <h4 class="line-clamp-2 text-base font-black text-slate-900">{{ $produto->nome }}</h4>
-                                            <p class="text-xs text-slate-500">{{ $produto->marca ?? 'Marca nao informada' }}</p>
-                                        </div>
-                                        <span class="rounded-full px-2 py-1 text-[10px] font-black uppercase tracking-wide {{ $meta['bg'] }}">{{ $nomeCategoria }}</span>
-                                    </div>
+                                    {{-- BOTÃO ADICIONAR AO CARRINHO --}}
+                                    <button
+                                        type="submit"
+                                        class="w-full rounded-xl bg-blue-700 py-3 text-sm font-black text-white transition hover:bg-blue-600 disabled:cursor-not-allowed disabled:bg-slate-300"
+                                        {{ $produto->quantidade <= 0 ? 'disabled' : '' }}
+                                    >
+                                        {{ $produto->quantidade > 0 ? 'Adicionar ao carrinho' : 'Esgotado' }}
+                                    </button>
 
-                                    <div class="mb-3">
-                                        @if($temDesconto)
-                                            <p class="text-xs text-slate-400 line-through">R$ {{ number_format($precoAntigo, 2, ',', '.') }}</p>
-                                        @endif
-                                        <p class="text-2xl font-black text-blue-700">R$ {{ number_format($preco, 2, ',', '.') }}</p>
-                                        <p class="text-xs {{ $produto->quantidade > 0 ? 'text-emerald-600' : 'text-red-600' }}">Estoque: {{ $produto->quantidade }} un.</p>
-                                    </div>
+                                </form>
+                            </article>
 
-                                    <form action="{{ route('carrinho.add', $produto, false) }}" method="POST" onsubmit="return addToCart(event)">
-                                        @csrf
-                                        <div class="mb-2 flex items-center gap-2">
-                                            <label class="text-xs font-black uppercase text-slate-400">Qtd</label>
-                                            <input type="number" name="quantidade" value="1" min="1" max="{{ $produto->quantidade }}" class="w-full rounded-lg border border-slate-200 px-2 py-1.5 text-sm outline-none focus:border-blue-500">
-                                        </div>
-                                        <button type="submit" class="w-full rounded-xl bg-blue-700 py-2 text-sm font-black text-white transition hover:bg-blue-600 disabled:cursor-not-allowed disabled:bg-slate-300" {{ $produto->quantidade <= 0 ? 'disabled' : '' }}>
-                                            {{ $produto->quantidade > 0 ? 'Adicionar ao pedido' : 'Esgotado' }}
-                                        </button>
-                                    </form>
-                                </article>
-                            @endforeach
-                        </div>
+                        @endforeach
 
-                        <div class="hidden rounded-xl border border-dashed border-slate-300 bg-white p-4 text-center text-sm text-slate-500" data-empty-category>
-                            Nenhum produto desta categoria corresponde ao filtro atual.
-                        </div>
-                    </section>
+                    </div>
+
+                </div>
+
+            @endforeach
+
+        </div>
+
+        {{-- BOTÃO ANTERIOR --}}
+        <button
+            class="carousel-control-prev  left-[-20px] top-1/2 z-20 flex h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full bg-slate-700 text-white shadow-xl transition hover:scale-110 hover:bg-slate-600 "
+            type="button"
+            data-bs-target="#carousel-{{ $slug }}"
+            data-bs-slide="prev"
+        >
+            <span class="carousel-control-prev-icon"></span>
+        </button>
+
+        {{-- BOTÃO PRÓXIMO --}}
+        <button
+            class="carousel-control-next right-[-20px] top-1/2 z-20 flex h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full bg-slate-700 text-white shadow-xl transition hover:scale-110 hover:bg-slate-600"
+            type="button"
+            data-bs-target="#carousel-{{ $slug }}"
+            data-bs-slide="next"
+        >
+            <span class="carousel-control-next-icon"></span>
+        </button>
+
+    </div>
+
+</section>
                 @endforeach
             </div>
         </section>
@@ -689,17 +777,72 @@ background-color:#a9abae;
             </div>
         </div>
     </div>
-<!----->
-
-    <footer class="mt-20 border-t border-slate-200 bg-white/80 p-8 text-center text-sm text-slate-500">
-        &copy; {{ date('Y') }} Distribuidora Foccus - Todos os direitos reservados.
-    </footer>
 
 
+<footer class="bg-dark text-white pt-5 pb-3 mt-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4 col-lg-3 mx-auto mt-3">
+                <h5 class="text-uppercase mb-4 font-weight-bold text-warning">Foccus Comercial</h5>
+                <p>Sua parceira em soluções de comercialização e distribuição na região de São Paulo.</p>
+                <div class="d-flex gap-3 mt-3">
+                    <a href="https://www.instagram.com/foccus.dist/" target="_blank" class="text-white hover-warning" style="font-size: 1.2rem;"><i class="fab fa-instagram"></i></a>
+                    <a href="https://www.facebook.com/foccus.dist/" target="_blank" class="text-white hover-warning" style="font-size: 1.2rem;"><i class="fab fa-facebook"></i></a>
+                    <a href="https://wa.me/5511937530312" target="_blank" class="text-white hover-warning" style="font-size: 1.2rem;"><i class="fab fa-whatsapp"></i></a>
+                </div>
+            </div>
+
+            <div class="col-md-2 col-lg-2 mx-auto mt-3">
+                <h5 class="text-uppercase mb-4 font-weight-bold text-warning">Links úteis</h5>
+                <p><a href="/" class="text-white" style="text-decoration: none;">Início</a></p>
+                <p><a href="/carrinho" class="text-white" style="text-decoration: none;">Meu Carrinho</a></p>
+            </div>
+
+            <div class="col-md-3 col-lg-3 mx-auto mt-3">
+                <h5 class="text-uppercase mb-4 font-weight-bold text-warning">Contato</h5>
+                <p class="small"><i class="fas fa-home mr-3 text-warning"></i> R. Cembira, 922 - Vila Curuçá Velha, SP</p>
+                <p class="small"><i class="fas fa-envelope mr-3 text-warning"></i> contato@foccus.com.br</p>
+                <p class="small"><i class="fas fa-phone mr-3 text-warning"></i> (11) 93753-0312</p>
+            </div>
+
+            <div class="col-md-3 col-lg-4 mx-auto mt-3">
+                <h5 class="text-uppercase mb-4 font-weight-bold text-warning">Localização</h5>
+                <div class="rounded overflow-hidden border border-secondary" style="height: 150px;">
+                    <iframe 
+                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3659.182283038676!2d-46.42557612386127!3d-23.49001375902123!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x94ce63e9f4560417%3A0xc00570b55ec90013!2sR.%20Cembira%2C%20922%20-%20Vila%20Curu%C3%A7%C3%A1%20Velha%2C%20S%C3%A3o%20Paulo%20-%20SP%2C%2008032-010!5e0!3m2!1spt-BR!2sbr!4v1715000000000!5m2!1spt-BR!2sbr" 
+                        width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade">
+                    </iframe>
+                </div>
+            </div>
+        </div>
+
+        <hr class="mb-4 mt-5 border-secondary">
+
+        <div class="row">
+            <div class="col-md-12 text-center">
+                <p class="mb-2 small">© 2026 Copyright: <strong>Equipe DSM FATEC-ZL | DevsFatecanos</strong></p>
+                <div class="d-flex justify-content-center gap-3 mt-2">
+                    <i class="fab fa-laravel text-secondary" title="Laravel"></i>
+                    <i class="fab fa-docker text-secondary" title="Docker"></i>
+                    <i class="fab fa-php text-secondary" title="PHP 8"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<style>
+    .hover-warning:hover {
+        color: #ffc107 !important;
+        transition: 0.3s;
+    }
+</style>
+     <!-- Modal -->
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-
+<script id="#userwayAccessibilityIcon" src = " https://cdn.userway.org/widget.js "  data-account = " wHedvuvp49 " ></script>
     <script src="{{ asset('js/carrinho.js') }}"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.min.js" integrity="sha384-G/EV+4j2dNv+tEPo3++6LCgdCROaejBqfUeNjuKAiuXbjrxilcCdDz6ZAVfHWe1Y" crossorigin="anonymous"></script>
 </body>
 </html>

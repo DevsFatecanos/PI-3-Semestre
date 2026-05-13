@@ -4,6 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Criar Conta | Distribuidora Foccus</title>
+    <link rel="preload" href="{{ asset('LOGO_FOCCUS.webp') }}" as="image" type="image/webp">
+    <link rel="preload" href="{{ asset('LOGO_FOCCUS.png') }}" as="image">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-gray-100 min-h-screen flex items-center justify-center p-4">
@@ -11,7 +14,10 @@
     <div class="max-w-4xl w-full bg-white rounded-2xl shadow-xl overflow-hidden flex flex-col md:flex-row">
         
         <div class="md:w-1/3 bg-slate-600 p-8 text-white flex flex-col justify-center">
-            <img src="/LOGO_FOCCUS.png" class="w-40 mb-8 brightness-0 invert" alt="Logo Foccus">
+            <picture>
+                <source srcset="/LOGO_FOCCUS.webp" type="image/webp">
+                <img src="/LOGO_FOCCUS.png" class="w-40 mb-8 brightness-0 invert" alt="Logo Foccus" decoding="async">
+            </picture>
             <h2 class="text-2xl font-bold mb-4">Seja um cliente Foccus</h2>
             <ul class="space-y-4 text-sm text-slate-100">
                 <li class="flex items-center gap-2">
@@ -49,7 +55,7 @@
             <input type="text" name="name" value="{{ old('name') }}" required 
                    class="w-full border-gray-200 border rounded-lg px-4 py-2.5 focus:border-slate-500 focus:ring-2 focus:ring-slate-200 outline-none transition @error('name') border-red-500 @enderror">
             @error('name')
-                <span class="text-red-500 text-[10px] font-bold uppercase mt-1">{{ $message }}</span>
+                <span class="text-red-500 text-[10px] font-bold uppercase mt-1">O campo nome é obrigatório.</span>
             @enderror
         </div>
         
@@ -59,24 +65,34 @@
                    class="w-full border-gray-200 border rounded-lg px-4 py-2.5 focus:border-slate-500 focus:ring-2 focus:ring-slate-200 outline-none transition @error('email') border-red-500 @enderror" 
                    placeholder="email@dominio.com">
             @error('email')
-                <span class="text-red-500 text-[10px] font-bold uppercase mt-1">{{ $message }}</span>
+                <span class="text-red-500 text-[10px] font-bold uppercase mt-1">Este e-mail já está cadastrado ou é inválido.</span>
             @enderror
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
                 <label class="block text-xs font-bold uppercase text-gray-400 mb-1">Senha</label>
-                <input type="password" name="password" required 
-                       class="w-full border-gray-200 border rounded-lg px-4 py-2.5 focus:border-slate-500 focus:ring-2 focus:ring-slate-200 outline-none transition @error('password') border-red-500 @enderror">
+                <div class="relative">
+                    <input type="password" name="password" id="password" required
+                           class="w-full border-gray-200 border rounded-lg px-4 py-2.5 focus:border-slate-500 focus:ring-2 focus:ring-slate-200 outline-none transition @error('password') border-red-500 @enderror">
+                    <button type="button" onclick="togglePassword('password', 'eyeIcon1')" class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600">
+                        <i class="fas fa-eye" id="eyeIcon1"></i>
+                    </button>
+                </div>
                 @error('password')
-                    <span class="text-red-500 text-[10px] font-bold uppercase mt-1">{{ $message }}</span>
+                    <span class="text-red-500 text-[10px] font-bold uppercase mt-1">A senha deve ter pelo menos 8 caracteres e ser confirmada.</span>
                 @enderror
             </div>
-            
+
             <div>
                 <label class="block text-xs font-bold uppercase text-gray-400 mb-1">Confirmar Senha</label>
-                <input type="password" name="password_confirmation" required 
-                       class="w-full border-gray-200 border rounded-lg px-4 py-2.5 focus:border-slate-500 focus:ring-2 focus:ring-slate-200 outline-none transition">
+                <div class="relative">
+                    <input type="password" name="password_confirmation" id="password_confirmation" required
+                           class="w-full border-gray-200 border rounded-lg px-4 py-2.5 focus:border-slate-500 focus:ring-2 focus:ring-slate-200 outline-none transition">
+                    <button type="button" onclick="togglePassword('password_confirmation', 'eyeIcon2')" class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600">
+                        <i class="fas fa-eye" id="eyeIcon2"></i>
+                    </button>
+                </div>
             </div>
         </div>
 
@@ -92,6 +108,22 @@
     </form>
 </div>
     </div>
+
+<script>
+    function togglePassword(fieldId, iconId) {
+        const field = document.getElementById(fieldId);
+        const icon = document.getElementById(iconId);
+        if (field.type === 'password') {
+            field.type = 'text';
+            icon.classList.remove('fa-eye');
+            icon.classList.add('fa-eye-slash');
+        } else {
+            field.type = 'password';
+            icon.classList.remove('fa-eye-slash');
+            icon.classList.add('fa-eye');
+        }
+    }
+</script>
 
 </body>
 </html>

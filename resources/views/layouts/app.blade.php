@@ -234,7 +234,10 @@
         
 <<<<<<< HEAD
         <a href="{{ route('admin.dashboard') }}" class="shrink-0 flex items-center gap-2 no-underline">
-           <img src="/LOGO_FOCCUS.png" class="w-36 brightness-0 invert md:w-40" alt="Logo Foccus">
+           <picture>
+                <source srcset="/LOGO_FOCCUS.webp" type="image/webp">
+                <img src="/LOGO_FOCCUS.png" class="w-36 brightness-0 invert md:w-40" alt="Logo Foccus" decoding="async">
+           </picture>
         </a>
 =======
         <a href="/" class="shrink-0">
@@ -277,11 +280,15 @@
                     
                     <!-- Dropdown Menu -->
                     <div class="absolute right-0 top-full mt-2 w-48 bg-white rounded-lg shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
-                        <!-- Dashboard Link -->
+                        <!-- Dashboard Link - Only for Admin -->
+                        @if(Auth::user()->is_admin)
                         <a href="{{ route('admin.dashboard') }}" class="flex items-center gap-2 px-4 py-3 text-slate-800 hover:bg-slate-100 border-b border-slate-200 no-underline">
                             <i class="fas fa-tachometer-alt"></i> Dashboard
                         </a>
-                        
+                        <a href="{{ route('admin.dashboard') }}" class="flex items-center gap-2 px-4 py-3 text-slate-800 hover:bg-slate-100 border-b border-slate-200 no-underline">
+                            <i class="fas fa-tachometer-alt"></i> Pedidos
+                        </a>
+                        @endif
                         <!-- Meus Dados Link -->
                         <a href="/meusdados" class="flex items-center gap-2 px-4 py-3 text-slate-800 hover:bg-slate-100 border-b border-slate-200 no-underline">
                             <i class="fas fa-user"></i> Meus Dados
@@ -323,18 +330,20 @@
             <!-- Sidebar -->
             <nav class="col-md-2 sidebar">
                 <ul class="nav flex-column">
+                    @if(Auth::user()->is_admin)
                     <li class="nav-item">
-                        <a class="nav-link {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}" 
+                        <a class="nav-link {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}"
                            href="{{ route('admin.dashboard') }}">
                             <i class="fas fa-home"></i> Dashboard
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link {{ request()->routeIs('admin.produtos.*') ? 'active' : '' }}" 
+                        <a class="nav-link {{ request()->routeIs('admin.produtos.*') ? 'active' : '' }}"
                            href="{{ route('admin.dashboard') }}">
                             <i class="fas fa-box"></i> Produtos
                         </a>
                     </li>
+                    @endif
                     <li class="nav-item">
 <<<<<<< HEAD
 =======

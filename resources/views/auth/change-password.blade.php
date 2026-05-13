@@ -9,6 +9,8 @@
     <script src="https://kit.fontawesome.com/02669f3445.js" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.min.js" defer></script>
     <link rel="shortcut icon" href="{{ asset('favicon.png') }}" type="image/x-icon">
+    <link rel="preload" href="{{ asset('LOGO_FOCCUS.webp') }}" as="image" type="image/webp">
+    <link rel="preload" href="{{ asset('LOGO_FOCCUS.png') }}" as="image">
 </head>
 <body class="bg-[#f4f4f4] flex items-center justify-center min-h-screen font-sans">
 
@@ -24,7 +26,10 @@
                 </a>
 
                 <div class="logo">
-                    <img src="{{ asset('LOGO_FOCCUS.png') }}" class="w-40 brightness-0 invert" alt="Logo Foccus">
+                    <picture>
+                    <source srcset="{{ asset('LOGO_FOCCUS.webp') }}" type="image/webp">
+                    <img src="{{ asset('LOGO_FOCCUS.png') }}" class="w-40 brightness-0 invert" alt="Logo Foccus" decoding="async">
+                </picture>
                 </div>
                 <h1 class="text-[28px] font-bold mt-[30px] mb-[15px] leading-tight">Segurança da Conta</h1>
                 <p class="text-[14px] leading-[1.6] opacity-80">Altere sua senha para manter sua conta segura. Escolha uma senha forte e única.</p>

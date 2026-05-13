@@ -99,7 +99,7 @@
                     @forelse($produtos as $produto)
                     <tr>
                         <td>
-                            <img src="{{ $produto->url_imagem }}" alt="{{ $produto->nome }}" 
+                            <img src="{{ $produto->url_imagem }}" alt="{{ $produto->nome }}"
                                  style="max-width: 50px; height: auto; border-radius: 4px;">
                         </td>
                         <td>
@@ -134,38 +134,41 @@
                             @endif
                         </td>
                         <td>
-                            <div class="btn-group btn-group-sm" role="group">
-                                <a href="{{ route('admin.produtos.edit', $produto->id) }}" 
-                                   class="btn btn-outline-primary" title="Editar">
+                            <div class="d-inline-flex align-items-center">
+                                <button type="button"
+                                        class="btn btn-sm btn-outline-primary"
+                                        title="Editar"
+                                        style="border-radius: 0.375rem 0 0 0.375rem; margin-right: -1px;"
+                                        onclick="document.location='{{ route('admin.produtos.edit', $produto->id) }}'">
                                     <i class="fas fa-edit"></i>
-                                </a>
-                                
-                                <form action="{{ route('admin.produtos.toggle', $produto->id) }}" method="POST" style="display: inline;">
-                                    @csrf
-                                    @method('PATCH')
-                                    <button type="submit" class="btn btn-outline-warning" 
-                                            title="{{ $produto->ativo ? 'Desativar' : 'Ativar' }}">
-                                        <i class="fas fa-{{ $produto->ativo ? 'eye-slash' : 'eye' }}"></i>
-                                    </button>
-                                </form>
+                                </button>
 
-                                <form action="{{ route('admin.produtos.toggleDestaque', $produto->id) }}" method="POST" style="display: inline;">
-                                    @csrf
-                                    @method('PATCH')
-                                    <button type="submit" class="btn btn-outline-info" 
-                                            title="{{ $produto->destaque ? 'Remover de destaque' : 'Marcar como destaque' }}">
-                                        <i class="fas fa-star"></i>
-                                    </button>
-                                </form>
+                                <button type="button"
+                                        class="btn btn-sm btn-outline-success"
+                                        title="{{ $produto->ativo ? 'Desativar' : 'Ativar' }}"
+                                        style="border-radius: 0; margin-right: -1px;"
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#toggleModal{{ $produto->id }}">
+                                    <i class="fas fa-{{ $produto->ativo ? 'eye-slash' : 'eye' }}"></i>
+                                </button>
 
-                                <form action="{{ route('admin.produtos.destroy', $produto->id) }}" method="POST" style="display: inline;"
-                                      onsubmit="return confirm('Tem certeza que deseja deletar este produto?');">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="btn btn-outline-danger" title="Deletar">
-                                        <i class="fas fa-trash"></i>
-                                    </button>
-                                </form>
+                                <button type="button"
+                                        class="btn btn-sm btn-outline-warning"
+                                        title="{{ $produto->destaque ? 'Remover de destaque' : 'Marcar como destaque' }}"
+                                        style="border-radius: 0; margin-right: -1px;"
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#destaqueModal{{ $produto->id }}">
+                                    <i class="fas fa-star"></i>
+                                </button>
+
+                                <button type="button"
+                                        class="btn btn-sm btn-outline-danger"
+                                        title="Deletar"
+                                        style="border-radius: 0 0.375rem 0.375rem 0;"
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#deleteModal{{ $produto->id }}">
+                                    <i class="fas fa-trash"></i>
+                                </button>
                             </div>
                         </td>
                     </tr>
@@ -189,14 +192,100 @@
     @endif
 </div>
 
-<style>
-    .btn-group-sm .btn {
-        padding: 0.25rem 0.5rem;
-        font-size: 0.75rem;
-    }
-    
-    .table-hover tbody tr:hover {
-        background-color: #f8f9fa;
-    }
-</style>
+<!-- Modais personalizados para cada produto -->
+@foreach($produtos as $produto)
+    <!-- Modal Toggle (Ativar/Desativar) -->
+    <div class="modal fade" id="toggleModal{{ $produto->id }}" tabindex="-1" aria-labelledby="toggleModalLabel{{ $produto->id }}" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header bg-secondary text-white">
+                    <h5 class="modal-title" id="toggleModalLabel{{ $produto->id }}">
+                        <i class="fas fa-{{ $produto->ativo ? 'eye-slash' : 'eye' }}"></i>
+                        Confirmar {{ $produto->ativo ? 'Desativação' : 'Ativação' }}
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Fechar"></button>
+                </div>
+                <div class="modal-body">
+                    Tem certeza que deseja <strong>{{ $produto->ativo ? 'desativar' : 'ativar' }}</strong> o produto
+                    <strong>{{ $produto->nome }}</strong>?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <form action="{{ route('admin.produtos.toggle', $produto->id) }}" method="POST" style="display: inline;">
+                        @csrf
+                        @method('PATCH')
+                        <button type="submit" class="btn btn-{{ $produto->ativo ? 'warning' : 'success' }}">
+                            <i class="fas fa-{{ $produto->ativo ? 'eye-slash' : 'eye' }}"></i>
+                            Sim, {{ $produto->ativo ? 'desativar' : 'ativar' }}
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Destaque -->
+    <div class="modal fade" id="destaqueModal{{ $produto->id }}" tabindex="-1" aria-labelledby="destaqueModalLabel{{ $produto->id }}" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header bg-warning text-white">
+                    <h5 class="modal-title" id="destaqueModalLabel{{ $produto->id }}">
+                        <i class="fas fa-star"></i>
+                        Confirmar {{ $produto->destaque ? 'Remoção de Destaque' : 'Destaque' }}
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Fechar"></button>
+                </div>
+                <div class="modal-body">
+                    Tem certeza que deseja <strong>{{ $produto->destaque ? 'remover o destaque de' : 'marcar como destaque o' }}</strong> produto
+                    <strong>{{ $produto->nome }}</strong>?
+                    @if(!$produto->destaque)
+                    <p class="text-muted small mt-2 mb-0">Produtos em destaque aparecem na seção principal da loja.</p>
+                    @endif
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <form action="{{ route('admin.produtos.toggleDestaque', $produto->id) }}" method="POST" style="display: inline;">
+                        @csrf
+                        @method('PATCH')
+                        <button type="submit" class="btn btn-warning">
+                            <i class="fas fa-star"></i>
+                            Sim, {{ $produto->destaque ? 'remover destaque' : 'marcar como destaque' }}
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Deletar -->
+    <div class="modal fade" id="deleteModal{{ $produto->id }}" tabindex="-1" aria-labelledby="deleteModalLabel{{ $produto->id }}" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header bg-danger text-white">
+                    <h5 class="modal-title" id="deleteModalLabel{{ $produto->id }}">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        Confirmar Exclusão
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Fechar"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Tem certeza que deseja <strong class="text-danger">deletar permanentemente</strong> o produto:</p>
+                    <p class="fw-bold">{{ $produto->nome }}</p>
+                    <p class="text-muted small mb-0">Esta ação não pode ser desfeita.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <form action="{{ route('admin.produtos.destroy', $produto->id) }}" method="POST" style="display: inline;">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="btn btn-danger">
+                            <i class="fas fa-trash"></i> Sim, deletar
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+@endforeach
+
 @endsection

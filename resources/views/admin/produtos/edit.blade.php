@@ -192,8 +192,9 @@
                     <h6 class="mb-0">Prévia da Imagem</h6>
                 </div>
                 <div class="card-body text-center">
-                    <img src="{{ $produto->url_imagem }}" alt="{{ $produto->nome }}" 
-                         class="img-fluid" style="max-width: 100%; height: auto; border-radius: 8px;">
+                    <img src="{{ $produto->imagem_url ?: asset('/LOGO_FOCCUS.png') }}" alt="{{ $produto->nome }}"
+                         class="img-fluid" style="max-width: 100%; height: auto; border-radius: 8px;"
+                         onerror="this.onerror=null;this.src='{{ asset('/LOGO_FOCCUS.png') }}'">
                 </div>
             </div>
 
@@ -234,17 +235,80 @@
                     <h6 class="mb-0 text-white">Zona de Risco</h6>
                 </div>
                 <div class="card-body">
-                    <form action="{{ route('admin.produtos.destroy', $produto->id) }}" method="POST"
-                          onsubmit="return confirm('Tem certeza que deseja deletar este produto? Esta ação é irreversível!');">
-                        @csrf
-                        @method('DELETE')
-                        <button type="submit" class="btn btn-danger w-100">
-                            <i class="fas fa-trash"></i> Deletar Produto
-                        </button>
-                    </form>
+                    <!-- Botão para abrir modal de delete -->
+                    <button type="button" class="btn btn-danger w-100" data-bs-toggle="modal" data-bs-target="#deleteModal{{ $produto->id }}">
+                        <i class="fas fa-trash"></i> Deletar Produto
+                    </button>
+
+                    <!-- Botão para alternar ativo via modal -->
+                    <button type="button" class="btn btn-{{ $produto->ativo ? 'warning' : 'success' }} w-100 mt-2"
+                            data-bs-toggle="modal" data-bs-target="#toggleAtivoModal{{ $produto->id }}">
+                        <i class="fas fa-{{ $produto->ativo ? 'eye-slash' : 'eye' }}"></i>
+                        {{ $produto->ativo ? 'Desativar Produto' : 'Ativar Produto' }}
+                    </button>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+<!-- Modal Deletar -->
+<div class="modal fade" id="deleteModal{{ $produto->id }}" tabindex="-1" aria-labelledby="deleteModalLabel{{ $produto->id }}" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-danger text-white">
+                <h5 class="modal-title" id="deleteModalLabel{{ $produto->id }}">
+                    <i class="fas fa-exclamation-triangle"></i> Confirmar Exclusão
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Fechar"></button>
+            </div>
+            <div class="modal-body">
+                <p>Tem certeza que deseja <strong class="text-danger">deletar permanentemente</strong> o produto:</p>
+                <p class="fw-bold">{{ $produto->nome }}</p>
+                <p class="text-muted small mb-0">Esta ação não pode ser desfeita.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <form action="{{ route('admin.produtos.destroy', $produto->id) }}" method="POST" style="display: inline;">
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit" class="btn btn-danger">
+                        <i class="fas fa-trash"></i> Sim, deletar
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Ativar/Desativar com cor verde para combinar com o botão -->
+<div class="modal fade" id="toggleAtivoModal{{ $produto->id }}" tabindex="-1" aria-labelledby="toggleAtivoModalLabel{{ $produto->id }}" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-secondary text-white">
+                <h5 class="modal-title" id="toggleAtivoModalLabel{{ $produto->id }}">
+                    <i class="fas fa-{{ $produto->ativo ? 'eye-slash' : 'eye' }}"></i>
+                    Confirmar {{ $produto->ativo ? 'Desativação' : 'Ativação' }}
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Fechar"></button>
+            </div>
+            <div class="modal-body">
+                Tem certeza que deseja <strong>{{ $produto->ativo ? 'desativar' : 'ativar' }}</strong> o produto
+                <strong>{{ $produto->nome }}</strong>?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <form action="{{ route('admin.produtos.toggle', $produto->id) }}" method="POST" style="display: inline;">
+                    @csrf
+                    @method('PATCH')
+                    <button type="submit" class="btn btn-{{ $produto->ativo ? 'warning' : 'success' }}">
+                        <i class="fas fa-{{ $produto->ativo ? 'eye-slash' : 'eye' }}"></i>
+                        Sim, {{ $produto->ativo ? 'desativar' : 'ativar' }}
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
 @endsection
