@@ -774,9 +774,9 @@ background-color:#a9abae;
                 <h5 class="text-uppercase mb-4 font-weight-bold text-warning">Foccus Comercial</h5>
                 <p>Sua parceira em soluções de comercialização e distribuição na região de São Paulo.</p>
                 <div class="d-flex gap-3 mt-3">
-                    <a href="#" class="text-white hover-warning" style="font-size: 1.2rem;"><i class="fab fa-instagram"></i></a>
-                    <a href="#" class="text-white hover-warning" style="font-size: 1.2rem;"><i class="fab fa-facebook"></i></a>
-                    <a href="#" class="text-white hover-warning" style="font-size: 1.2rem;"><i class="fab fa-whatsapp"></i></a>
+                    <a href="https://www.instagram.com/foccus.dist/" target="_blank" class="text-white hover-warning" style="font-size: 1.2rem;"><i class="fab fa-instagram"></i></a>
+                    <a href="https://www.facebook.com/foccus.dist/" target="_blank" class="text-white hover-warning" style="font-size: 1.2rem;"><i class="fab fa-facebook"></i></a>
+                    <a href="https://wa.me/5511937530312" target="_blank" class="text-white hover-warning" style="font-size: 1.2rem;"><i class="fab fa-whatsapp"></i></a>
                 </div>
             </div>
 
@@ -790,7 +790,7 @@ background-color:#a9abae;
                 <h5 class="text-uppercase mb-4 font-weight-bold text-warning">Contato</h5>
                 <p class="small"><i class="fas fa-home mr-3 text-warning"></i> R. Cembira, 922 - Vila Curuçá Velha, SP</p>
                 <p class="small"><i class="fas fa-envelope mr-3 text-warning"></i> contato@foccus.com.br</p>
-                <p class="small"><i class="fas fa-phone mr-3 text-warning"></i> (11) 99999-9999</p>
+                <p class="small"><i class="fas fa-phone mr-3 text-warning"></i> (11) 93753-0312</p>
             </div>
 
             <div class="col-md-3 col-lg-4 mx-auto mt-3">
