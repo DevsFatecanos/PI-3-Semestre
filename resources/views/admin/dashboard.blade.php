@@ -17,6 +17,13 @@
             <a href="{{ route('admin.produtos.create') }}" class="btn btn-success">
                 <i class="fas fa-plus"></i> Novo Produto
             </a>
+            @if(isset($lowCount) && $lowCount > 0)
+            <a href="{{ route('admin.dashboard', ['filter' => 'low']) }}" class="btn btn-outline-danger ms-2">
+                <i class="fas fa-exclamation-triangle"></i>
+                Estoque baixo
+                <span class="badge bg-danger ms-1">{{ $lowCount }}</span>
+            </a>
+            @endif
         </div>
     </div>
 
@@ -80,6 +87,19 @@
     </div>
 
     <!-- Tabela de Produtos -->
+    @if(isset($lowStockProducts) && $lowStockProducts->count() > 0)
+    <div class="alert alert-warning">
+        <strong>Atenção:</strong> Produtos com baixo estoque:
+        <ul class="mb-0">
+            @foreach($lowStockProducts as $p)
+                <li style="font-size:0.95rem;">{{ $p->nome }} — <strong>{{ $p->quantidade }}</strong> unidades</li>
+            @endforeach
+        </ul>
+        <div class="mt-2">
+            <a href="{{ route('admin.dashboard', ['filter' => 'low']) }}" class="btn btn-sm btn-outline-primary">Ver todos com baixo estoque</a>
+        </div>
+    </div>
+    @endif
     <div class="card">
         <div class="table-responsive">
             <table class="table table-hover mb-0">
@@ -112,9 +132,24 @@
                             <small class="text-muted">Custo: R$ {{ number_format($produto->preco_de_custo ?? 0, 2, ',', '.') }}</small>
                         </td>
                         <td>
-                            <span class="badge bg-{{ $produto->quantidade > 0 ? 'success' : 'danger' }}">
-                                {{ $produto->quantidade }}
-                            </span>
+                            @php $status = $produto->stock_status; @endphp
+                            @if($status === 'out')
+                                <span class="badge bg-danger" title="Sem estoque">
+                                    <i class="fas fa-times-circle"></i> {{ $produto->quantidade }}
+                                </span>
+                            @elseif($status === 'critical')
+                                <span class="badge bg-danger" title="Estoque crítico">
+                                    <i class="fas fa-exclamation-circle"></i> {{ $produto->quantidade }}
+                                </span>
+                            @elseif($status === 'low')
+                                <span class="badge bg-warning text-dark" title="Baixo estoque">
+                                    <i class="fas fa-exclamation-triangle"></i> {{ $produto->quantidade }}
+                                </span>
+                            @else
+                                <span class="badge bg-success" title="Estoque ok">
+                                    {{ $produto->quantidade }}
+                                </span>
+                            @endif
                         </td>
                         <td>
                             @if($produto->ativo)

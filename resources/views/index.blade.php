@@ -200,7 +200,7 @@
     font-size:12px;
     font-weight:bold;
     transition: background-color 0.3s ease, transform 0.2s ease;
-}  
+}
 
 
 .dropdown:hover{
@@ -264,7 +264,7 @@ text-align: center;
 .conteiner-img #compre {
    padding: 10px 100px 10px 100px;
    justify-self:center;
-   
+
 }
 
 
@@ -280,7 +280,7 @@ background-color:#a9abae;
  </style>
 </head>
 <body class="min-h-screen text-slate-900">
-    
+
     @php
         $quantidadeCarrinho = array_sum(session('carrinho', []));
 
@@ -361,9 +361,9 @@ background-color:#a9abae;
 
             <div class="flex-1 max-w-md hidden lg:block">
                 <form action="/search" method="GET" class="relative">
-                    <input type="text" 
-                        name="q" 
-                        placeholder="O que você procura hoje?" 
+                    <input type="text"
+                        name="q"
+                        placeholder="O que você procura hoje?"
                         class="w-full bg-slate-600 text-white text-sm rounded-full py-2 px-10 focus:outline-none focus:ring-2 focus:ring-slate-300 placeholder-slate-300 transition-all border border-transparent focus:bg-slate-700">
                     <div class="absolute left-3 top-2.5 text-slate-300">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -636,11 +636,13 @@ background-color:#a9abae;
 
                                 <div class="relative mb-4 overflow-hidden rounded-xl bg-slate-100 aspect-square">
 
-                                    <img
-                                        src="{{ $produto->url_imagem }}"
-                                        class="h-full w-full object-contain p-2"
-                                        alt="{{ $produto->nome }}"
-                                    >
+                                    <a href="{{ route('produtos.show', $produto->id) }}">
+                                        <img
+                                            src="{{ $produto->url_imagem }}"
+                                            class="h-full w-full object-contain p-2"
+                                            alt="{{ $produto->nome }}"
+                                        >
+                                    </a>
 
                                     @if($temDesconto)
                                         <span class="absolute left-2 top-2 rounded-full bg-red-600 px-2 py-1 text-[11px] font-black text-white">
@@ -652,7 +654,7 @@ background-color:#a9abae;
 
                                 <div class="mb-3">
                                     <h4 class="line-clamp-2 text-base font-black text-slate-900">
-                                        {{ $produto->nome }}
+                                        <a href="{{ route('produtos.show', $produto->id) }}" class="text-inherit text-decoration-none">{{ $produto->nome }}</a>
                                     </h4>
 
                                     <p class="text-xs text-slate-500">
@@ -808,8 +810,8 @@ background-color:#a9abae;
             <div class="col-md-3 col-lg-4 mx-auto mt-3">
                 <h5 class="text-uppercase mb-4 font-weight-bold text-warning">Localização</h5>
                 <div class="rounded overflow-hidden border border-secondary" style="height: 150px;">
-                    <iframe 
-                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3659.182283038676!2d-46.42557612386127!3d-23.49001375902123!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x94ce63e9f4560417%3A0xc00570b55ec90013!2sR.%20Cembira%2C%20922%20-%20Vila%20Curu%C3%A7%C3%A1%20Velha%2C%20S%C3%A3o%20Paulo%20-%20SP%2C%2008032-010!5e0!3m2!1spt-BR!2sbr!4v1715000000000!5m2!1spt-BR!2sbr" 
+                    <iframe
+                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3659.182283038676!2d-46.42557612386127!3d-23.49001375902123!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x94ce63e9f4560417%3A0xc00570b55ec90013!2sR.%20Cembira%2C%20922%20-%20Vila%20Curu%C3%A7%C3%A1%20Velha%2C%20S%C3%A3o%20Paulo%20-%20SP%2C%2008032-010!5e0!3m2!1spt-BR!2sbr!4v1715000000000!5m2!1spt-BR!2sbr"
                         width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade">
                     </iframe>
                 </div>

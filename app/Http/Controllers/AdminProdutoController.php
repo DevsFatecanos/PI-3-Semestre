@@ -11,15 +11,46 @@ class AdminProdutoController extends Controller
     /**
      * Exibe o painel de admin com listagem de produtos
      */
-    public function dashboard()
+    public function dashboard(Request $request)
     {
-        $produtos = Produto::orderBy('nome')->paginate(15);
+        $filter = $request->get('filter');
+
+        $query = Produto::query();
+
+        if ($filter === 'low') {
+            $low = config('stock.low_threshold', 5);
+            $query->where('quantidade', '<=', $low)->orderBy('quantidade', 'asc');
+        } else {
+            $query->orderBy('nome');
+        }
+
+        $produtos = $query->paginate(15)->withQueryString();
         $totalProdutos = Produto::count();
         $produtosAtivos = Produto::where('ativo', true)->count();
         $produtosInativos = Produto::where('ativo', false)->count();
         $destaque = Produto::where('destaque', true)->count();
 
-        return view('admin.dashboard', compact('produtos', 'totalProdutos', 'produtosAtivos', 'produtosInativos', 'destaque'));
+        // Contagem de produtos com baixo estoque para notificações
+        $lowCount = Produto::where('quantidade', '<=', config('stock.low_threshold', 5))->count();
+        $criticalCount = Produto::where('quantidade', '<=', config('stock.critical_threshold', 1))->count();
+
+        // Produtos em baixo estoque (lista curta para exibir alertas)
+        $lowStockProducts = Produto::where('quantidade', '<=', config('stock.low_threshold', 5))
+                                  ->orderBy('quantidade', 'asc')
+                                  ->limit(5)
+                                  ->get();
+
+        return view('admin.dashboard', compact(
+            'produtos',
+            'totalProdutos',
+            'produtosAtivos',
+            'produtosInativos',
+            'destaque',
+            'lowCount',
+            'criticalCount',
+            'lowStockProducts',
+            'filter'
+        ));
     }
 
     /**
@@ -110,7 +141,7 @@ class AdminProdutoController extends Controller
     public function toggle(Produto $produto)
     {
         $produto->update(['ativo' => !$produto->ativo]);
-        
+
         $status = $produto->ativo ? 'ativado' : 'desativado';
 
         return redirect()->back()
@@ -123,7 +154,7 @@ class AdminProdutoController extends Controller
     public function toggleDestaque(Produto $produto)
     {
         $produto->update(['destaque' => !$produto->destaque]);
-        
+
         $status = $produto->destaque ? 'marcado' : 'desmarcado';
 
         return redirect()->back()
@@ -136,7 +167,7 @@ class AdminProdutoController extends Controller
     public function search(Request $request)
     {
         $termo = $request->get('termo', '');
-        
+
         $produtos = Produto::where('nome', 'like', "%{$termo}%")
                           ->orWhere('categoria', 'like', "%{$termo}%")
                           ->orWhere('codigo_barras', 'like', "%{$termo}%")

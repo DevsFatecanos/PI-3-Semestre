@@ -21,6 +21,10 @@ Route::get('/', function () {
 });
 
 Route::get('/carrinho', [CarrinhoController::class, 'index'])->name('carrinho.index');
+
+// Página pública de produto
+use App\Http\Controllers\PublicProdutoController;
+Route::get('/produtos/{produto}', [PublicProdutoController::class, 'show'])->name('produtos.show');
 Route::get('/api/carrinho', [CarrinhoController::class, 'getCarrinho'])->name('carrinho.get');
 Route::post('/carrinho/{produto}', [CarrinhoController::class, 'store'])->name('carrinho.add');
 Route::put('/carrinho/{produto}', [CarrinhoController::class, 'update'])->name('carrinho.update');
@@ -34,7 +38,7 @@ Route::get('/checkout/retorno', [CheckoutController::class, 'retorno'])->name('c
 //Rotas de Conta
 Route::get('/meusdados',[UserController::class, 'meusdados'])->middleware('auth');;
 Route::post('/meusdados/update', function (\Illuminate\Http\Request $request) {
-    
+
     $user = auth()->user();
 
     $user->update([

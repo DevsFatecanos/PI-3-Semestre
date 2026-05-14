@@ -23,7 +23,7 @@ class Produto extends Model
         'ativo',
     ];
 
-    protected $appends = ['url_imagem'];
+    protected $appends = ['url_imagem', 'stock_status'];
 
     public function getUrlImagemAttribute()
     {
@@ -42,7 +42,33 @@ class Produto extends Model
             $this->codigo_barras,
         );
     }
-   
+
+    /**
+     * Retorna o status do estoque com base em thresholds configuráveis
+     * Valores retornados: 'critical' (quase esgotado), 'low', 'ok', 'out'
+     */
+    public function getStockStatusAttribute()
+    {
+        $qty = (int) ($this->attributes['quantidade'] ?? 0);
+
+        if ($qty <= 0) {
+            return 'out';
+        }
+
+        $critical = config('stock.critical_threshold', 1);
+        $low = config('stock.low_threshold', 5);
+
+        if ($qty <= $critical) {
+            return 'critical';
+        }
+
+        if ($qty <= $low) {
+            return 'low';
+        }
+
+        return 'ok';
+    }
+
     protected $casts = [
         'preco_antigo' => 'decimal:2',
         'preco_atual' => 'decimal:2',
