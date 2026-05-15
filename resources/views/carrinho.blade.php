@@ -60,7 +60,8 @@
                     <article class="rounded-3xl border border-slate-100 bg-white p-4 shadow-sm md:p-5">
                         <div class="flex flex-col gap-4 md:flex-row md:items-center">
                             <div class="h-24 w-24 overflow-hidden rounded-2xl bg-slate-100 shrink-0">
-                                <img loading="lazy" decoding="async" src="{{ $item['produto']->url_imagem }}" alt="{{ $item['produto']->nome }}" class="h-full w-full object-cover" onerror="this.onerror=null;this.src='{{ asset('/LOGO_FOCCUS.png') }}'">
+                                <img loading="lazy" decoding="async" src="{{ $item['produto']->url_imagem }}" alt="{{ $item['produto']->nome }}" class="h-full w-full object-cover"
+                                onerror="if(this.src!='{{ $item['produto']->ean_pictures_url ?? '' }}'){this.src='{{ $item['produto']->ean_pictures_url ?? asset('/LOGO_FOCCUS.png') }}';}else{this.onerror=null;this.src='{{ asset('/LOGO_FOCCUS.png') }}';}">
                             </div>
 
                             <div class="flex-1">

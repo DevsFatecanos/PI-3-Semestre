@@ -127,6 +127,15 @@
                             <span class="invalid-feedback">{{ $message }}</span>
                         @enderror
                     </div>
+                    <div class="col-md-3">
+                        <label for="codigo_barras" class="form-label">Código de Barras (EAN)</label>
+                        <input type="text" class="form-control @error('codigo_barras') is-invalid @enderror"
+                               id="codigo_barras" name="codigo_barras" value="{{ old('codigo_barras') }}"
+                               placeholder="Ex: 7891234567890">
+                        @error('codigo_barras')
+                            <span class="invalid-feedback">{{ $message }}</span>
+                        @enderror
+                    </div>
                 </div>
 
                 <div class="row mb-3">

@@ -26,17 +26,13 @@
             <!-- Imagem do Produto -->
             <div class="flex flex-col gap-4">
                 <div class="overflow-hidden rounded-3xl border border-slate-200 bg-slate-50 p-6 shadow-sm" style="aspect-ratio: 1;">
-                    <img
-                        src="{{ $produto->url_imagem }}"
-                        alt="{{ $produto->nome }}"
-                        class="h-full w-full object-contain"
-                    >
+                    <x-product-image :url="$produto->url_imagem" :ean="$produto->codigo_barras" alt="{{ $produto->nome }}" class="h-full w-full object-contain" />
                 </div>
 
                 <!-- Thumbnails Placeholder -->
                 <div class="hidden md:flex gap-3">
                     <div class="h-20 w-20 rounded-lg border border-slate-200 bg-slate-50 p-2 cursor-pointer hover:border-blue-500 transition">
-                        <img src="{{ $produto->url_imagem }}" alt="thumbnail" class="h-full w-full object-contain">
+                        <x-product-image :url="$produto->url_imagem" :ean="$produto->codigo_barras" alt="thumbnail" class="h-full w-full object-contain" />
                     </div>
                 </div>
             </div>
@@ -230,6 +226,7 @@
                                         src="{{ $related->url_imagem }}"
                                         alt="{{ $related->nome }}"
                                         class="h-full w-full object-contain p-2 transition hover:scale-105"
+                                        onerror="if(this.src!='{{ $related->ean_pictures_url ?? '' }}'){this.src='{{ $related->ean_pictures_url ?? asset('/LOGO_FOCCUS.png') }}';}else{this.onerror=null;this.src='{{ asset('/LOGO_FOCCUS.png') }}';}"
                                     >
                                 </a>
 

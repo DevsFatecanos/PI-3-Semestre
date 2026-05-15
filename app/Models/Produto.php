@@ -23,7 +23,7 @@ class Produto extends Model
         'ativo',
     ];
 
-    protected $appends = ['url_imagem', 'stock_status'];
+    protected $appends = ['url_imagem', 'ean_pictures_url', 'stock_status'];
 
     public function getUrlImagemAttribute()
     {
@@ -41,6 +41,14 @@ class Produto extends Model
             $this->categoria,
             $this->codigo_barras,
         );
+    }
+
+    /**
+     * Retorna a URL da API EAN Pictures para fallback de imagem.
+     */
+    public function getEanPicturesUrlAttribute(): ?string
+    {
+        return app(ProductImageResolver::class)->fallbackUrl($this->codigo_barras);
     }
 
     /**

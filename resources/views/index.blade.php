@@ -492,11 +492,10 @@ background-color:#a9abae;
                             $precoAtual = (float) ($item->preco_atual ?? 0);
                             $temDesconto = $precoAntigo > 0 && $precoAtual > 0 && $precoAtual < $precoAntigo;
                             $percentualDesconto = $temDesconto ? max(1, (int) round((1 - ($precoAtual / $precoAntigo)) * 100)) : 0;
-                            $img = $item->url_imagem ?? $item->imagem ?? asset('/https://wgrqhvzrakgnvksakerd.supabase.co/storage/v1/object/sign/publicimg/LOGO_FOCCUS.webp?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtlZXl9.eyJ1cmwiOiJwdWJsaWNpbWcvTE9HT19GT0NDVVMud2VicCIsImlhdCI6MTc3NzQ3MzI1MCwiZXhwIjoxODA5MDA5MjUwfQ.oAuhK3I4JWpBqT2xxht3gAjf7eG2tMOmoKtZkrlAhVU');
                         @endphp
                         <article class="swiper-slide promo-card {{ $temDesconto ? 'has-discount' : '' }} overflow-hidden rounded-3xl border bg-white shadow-md {{ $temDesconto ? 'border-red-200' : 'border-slate-100' }}">
                             <div class="relative aspect-square">
-                                <img loading="lazy" decoding="async" src="{{ $img }}" class="h-full w-full object-contain p-2" alt="{{ $item->nome }}">
+                                <x-product-image :url="$item->url_imagem" :ean="$item->codigo_barras" alt="{{ $item->nome }}" class="h-full w-full object-contain p-2" />
                                 @if($temDesconto)
                                     <span class="absolute left-3 top-3 inline-flex items-center gap-2 rounded-full bg-red-600 px-3 py-1 text-xs font-black text-white shadow-lg">
                                         <i class="fa-solid fa-bolt"></i>
@@ -637,11 +636,7 @@ background-color:#a9abae;
                                 <div class="relative mb-4 overflow-hidden rounded-xl bg-slate-100 aspect-square">
 
                                     <a href="{{ route('produtos.show', $produto->id) }}">
-                                        <img
-                                            src="{{ $produto->url_imagem }}"
-                                            class="h-full w-full object-contain p-2"
-                                            alt="{{ $produto->nome }}"
-                                        >
+                                        <x-product-image :url="$produto->url_imagem" :ean="$produto->codigo_barras" alt="{{ $produto->nome }}" class="h-full w-full object-contain p-2" />
                                     </a>
 
                                     @if($temDesconto)
