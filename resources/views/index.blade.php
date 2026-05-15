@@ -786,7 +786,7 @@ background-color:#a9abae;
         <div class="row">
             <div class="col-md-4 col-lg-3 mx-auto mt-3">
                 <h5 class="text-uppercase mb-4 font-weight-bold text-warning">Foccus Comercial</h5>
-                <p>Sua parceira em soluções de comercialização e distribuição na região de São Paulo.</p>
+                <p>Desde 2024 sendo sua parceira em soluções de comercialização e distribuição na região de São Paulo.</p>
                 <div class="d-flex gap-3 mt-3">
                     <a href="https://www.instagram.com/foccus.dist/" target="_blank" class="text-white hover-warning" style="font-size: 1.2rem;"><i class="fab fa-instagram"></i></a>
                     <a href="https://www.facebook.com/foccus.dist/" target="_blank" class="text-white hover-warning" style="font-size: 1.2rem;"><i class="fab fa-facebook"></i></a>

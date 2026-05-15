@@ -1,4 +1,6 @@
-@extends('layouts.app')
+@extends('layouts.store')
+
+@section('title', 'Produto - ' . $produto->nome)
 
 @section('content')
     @php
@@ -10,15 +12,14 @@
         $stockStatus = $produto->stock_status ?? 'ok';
     @endphp
 
-    <main class="mx-auto max-w-7xl px-4 py-8 md:px-8 md:py-10">
-        <!-- Breadcrumb -->
-        <nav class="mb-6 flex items-center gap-2 text-sm text-slate-600">
-            <a href="/" class="text-slate-500 hover:text-slate-700">Home</a>
-            <span>/</span>
-            <a href="/#catalogo" class="text-slate-500 hover:text-slate-700">Catálogo</a>
-            <span>/</span>
-            <span class="text-slate-900 font-semibold">{{ $produto->nome }}</span>
-        </nav>
+    <!-- Breadcrumb -->
+    <nav class="mb-6 flex items-center gap-2 text-sm text-slate-600">
+        <a href="/" class="text-slate-500 hover:text-slate-700">Home</a>
+        <span>/</span>
+        <a href="/#catalogo" class="text-slate-500 hover:text-slate-700">Catálogo</a>
+        <span>/</span>
+        <span class="text-slate-900 font-semibold">{{ $produto->nome }}</span>
+    </nav>
 
         <!-- Produto Container -->
         <div class="grid gap-8 md:grid-cols-2 lg:gap-12">
@@ -269,7 +270,6 @@
                 </div>
             </section>
         @endif
-    </main>
 
     <script>
         function addToCart(event) {
