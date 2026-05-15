@@ -3,7 +3,7 @@
     'ean' => null,
     'alt' => '',
     'class' => 'h-full w-full object-contain',
-    'wrapperClass' => 'relative overflow-hidden rounded-xl bg-slate-100',
+    'wrapperClass' => 'relative grid place-items-center overflow-hidden rounded-xl bg-slate-100',
     'lazy' => true,
 ])
 

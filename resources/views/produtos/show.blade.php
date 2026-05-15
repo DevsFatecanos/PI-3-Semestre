@@ -221,13 +221,8 @@
 
                         <article class="overflow-hidden rounded-2xl border border-slate-100 bg-white p-4 shadow-sm transition hover:shadow-lg hover:border-blue-200">
                             <div class="relative mb-4 overflow-hidden rounded-xl bg-slate-100 aspect-square">
-                                <a href="{{ route('produtos.show', $related->id) }}">
-                                    <img
-                                        src="{{ $related->url_imagem }}"
-                                        alt="{{ $related->nome }}"
-                                        class="h-full w-full object-contain p-2 transition hover:scale-105"
-                                        onerror="if(this.src!='{{ $related->ean_pictures_url ?? '' }}'){this.src='{{ $related->ean_pictures_url ?? asset('/LOGO_FOCCUS.png') }}';}else{this.onerror=null;this.src='{{ asset('/LOGO_FOCCUS.png') }}';}"
-                                    >
+                                <a href="{{ route('produtos.show', $related->id) }}" class="block h-full">
+                                    <x-product-image :url="$related->url_imagem" :ean="$related->codigo_barras" alt="{{ $related->nome }}" class="h-full w-full object-contain p-2 transition hover:scale-105" />
                                 </a>
 
                                 @if($temDesc)

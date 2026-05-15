@@ -192,11 +192,10 @@
                     <h6 class="mb-0">Prévia da Imagem</h6>
                 </div>
                 <div class="card-body text-center">
-                    <img src="{{ $produto->url_imagem }}"
-                             alt="{{ $produto->nome }}"
-                             class="img-fluid" style="max-width: 100%; height: auto; border-radius: 8px;"
-                             decoding="async"
-                             onerror="if(this.src!='{{ $produto->ean_pictures_url ?? '' }}'){this.src='{{ $produto->ean_pictures_url ?? asset('/LOGO_FOCCUS.png') }}';}else{this.onerror=null;this.src='{{ asset('/LOGO_FOCCUS.png') }}';}">
+                    <x-product-image :url="$produto->url_imagem" :ean="$produto->codigo_barras"
+                              class="img-fluid"
+                              wrapper-class="overflow-hidden rounded-lg bg-slate-100"
+                              style="max-width: 100%; height: auto; border-radius: 8px;" />
                 </div>
             </div>
 

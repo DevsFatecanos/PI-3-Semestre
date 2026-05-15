@@ -119,12 +119,9 @@
                     @forelse($produtos as $produto)
                     <tr>
                         <td>
-                            <img src="{{ $produto->url_imagem }}"
-                                alt="{{ $produto->nome }}"
-                                class="h-full w-full object-contain"
-                                decoding="async"
-                                onerror="if(this.src!='{{ $produto->ean_pictures_url ?? '' }}'){this.src='{{ $produto->ean_pictures_url ?? asset('/LOGO_FOCCUS.png') }}';}else{this.onerror=null;this.src='{{ asset('/LOGO_FOCCUS.png') }}';}"
-                                style="max-width: 50px; height: auto; border-radius: 4px;">
+                            <figure class="w-12 h-12 overflow-hidden rounded-lg bg-slate-100">
+                                <x-product-image :url="$produto->url_imagem" :ean="$produto->codigo_barras" class="h-full w-full object-contain" />
+                            </figure>
                         </td>
                         <td>
                             <strong>{{ $produto->nome }}</strong><br>
