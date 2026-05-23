@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Services\CartService;
 use App\Services\CheckoutPaymentService;
+use App\Services\PedidoService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -14,6 +15,7 @@ class CheckoutController extends Controller
     public function __construct(
         private readonly CartService $cartService,
         private readonly CheckoutPaymentService $checkoutPaymentService,
+        private readonly PedidoService $pedidoService,
     ) {
     }
 
@@ -29,6 +31,7 @@ class CheckoutController extends Controller
             'itens' => $resumo['itens'],
             'total' => $resumo['total'],
             'quantidadeTotal' => $resumo['quantidadeTotal'],
+            'somenteTeste' => (bool) config('services.mercado_pago.test_mode_only', true),
         ]);
     }
 
@@ -66,6 +69,18 @@ class CheckoutController extends Controller
                 $validated['metodo_preferido'],
             );
 
+            $pedido = $this->pedidoService->criarPedido(
+                $resumo['itens'],
+                [
+                    'nome' => $validated['nome'],
+                    'email' => $validated['email'],
+                    'telefone' => $validated['telefone'] ?? null,
+                ],
+                $validated['metodo_preferido'],
+                $pagamento,
+                $validated['observacoes'] ?? null,
+            );
+
             if (($pagamento['tipo'] ?? '') === 'redirect' && ! empty($pagamento['checkout_url'])) {
                 session()->put('checkout_cliente', [
                     'nome' => $validated['nome'],
@@ -87,7 +102,7 @@ class CheckoutController extends Controller
 
             $retornoUrl = '/checkout/retorno?' . http_build_query([
                 'status' => 'approved',
-                'external_reference' => $pagamento['referencia'] ?? null,
+                'external_reference' => $pedido->referencia,
                 'provedor' => $pagamento['provedor'] ?? 'simulador_local',
             ]);
 
@@ -97,7 +112,7 @@ class CheckoutController extends Controller
                     'message' => $pagamento['mensagem'] ?? 'Pedido finalizado com sucesso.',
                     'redirect_url' => route('checkout.retorno', [
                         'status' => 'approved',
-                        'external_reference' => $pagamento['referencia'] ?? null,
+                        'external_reference' => $pedido->referencia,
                         'provedor' => $pagamento['provedor'] ?? 'simulador_local',
                     ], false),
                 ]);
@@ -121,6 +136,15 @@ class CheckoutController extends Controller
     public function retorno(Request $request): View
     {
         $status = $request->string('status')->toString();
+        $referencia = (string) (
+            $request->get('external_reference')
+            ?? $request->get('merchant_order_id')
+            ?? ''
+        );
+
+        if ($status === 'approved' && $referencia !== '') {
+            $this->pedidoService->marcarComoAprovadoPorReferencia($referencia);
+        }
 
         if ($status === 'approved') {
             $this->cartService->limpar();
@@ -135,10 +159,11 @@ class CheckoutController extends Controller
         return view('checkout-retorno', [
             'status' => $status ?: 'pending',
             'mensagemStatus' => $mensagens[$status] ?? 'Retorno recebido. Estamos validando seu pedido.',
-            'referencia' => $request->get('external_reference')
-                ?? $request->get('merchant_order_id')
-                ?? 'N/A',
-            'provedor' => $request->get('provedor', 'mercado_pago'),
+            'referencia' => $referencia !== '' ? $referencia : 'N/A',
+            'provedor' => $request->get(
+                'provedor',
+                (bool) config('services.mercado_pago.test_mode_only', true) ? 'simulador_local' : 'mercado_pago',
+            ),
         ]);
     }
 }

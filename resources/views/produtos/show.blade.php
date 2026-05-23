@@ -25,8 +25,21 @@
         <div class="grid gap-8 md:grid-cols-2 lg:gap-12">
             <!-- Imagem do Produto -->
             <div class="flex flex-col gap-4">
-                <div class="overflow-hidden rounded-3xl border border-slate-200 bg-slate-50 p-6 shadow-sm" style="aspect-ratio: 1;">
+                <div class="overflow-hidden rounded-3xl border border-slate-200 bg-slate-50 p-6 shadow-sm relative" style="aspect-ratio: 1;">
                     <x-product-image :url="$produto->url_imagem" :ean="$produto->codigo_barras" alt="{{ $produto->nome }}" class="h-full w-full object-contain" />
+
+                    @auth
+                        @php $isFavorito = in_array($produto->id, $favoritosIds ?? [], true); @endphp
+                        <form action="{{ $isFavorito ? route('favoritos.destroy', $produto) : route('favoritos.store', $produto) }}" method="POST" class="absolute right-4 top-4 z-30">
+                            @csrf
+                            @if ($isFavorito)
+                                @method('DELETE')
+                            @endif
+                            <button type="submit" aria-label="{{ $isFavorito ? 'Remover dos favoritos' : 'Adicionar aos favoritos' }}" class="h-12 w-12 rounded-full shadow-lg flex items-center justify-center transition focus:outline-none {{ $isFavorito ? 'bg-red-600 text-white' : 'bg-white text-amber-500 border border-slate-200' }}">
+                                <i class="fa-solid fa-heart text-lg"></i>
+                            </button>
+                        </form>
+                    @endauth
                 </div>
 
                 <!-- Thumbnails Placeholder -->
@@ -140,6 +153,21 @@
                     </button>
                 </form>
 
+                @auth
+                    @php
+                        $isFavorito = $produto->favoritos->contains('user_id', auth()->id());
+                    @endphp
+                    <form action="{{ $isFavorito ? route('favoritos.destroy', $produto) : route('favoritos.store', $produto) }}" method="POST">
+                        @csrf
+                        @if ($isFavorito)
+                            @method('DELETE')
+                        @endif
+                        <button type="submit" class="w-full rounded-xl border border-amber-200 px-6 py-3 text-sm font-black text-amber-700 transition hover:bg-amber-50">
+                            {{ $isFavorito ? 'Remover dos favoritos' : 'Favoritar produto' }}
+                        </button>
+                    </form>
+                @endauth
+
                 <!-- Info Rápida -->
                 <div class="grid grid-cols-2 gap-3 rounded-2xl border border-slate-200 bg-white p-4">
                     <div class="text-center">
@@ -230,6 +258,18 @@
                                         -{{ $percentual }}%
                                     </span>
                                 @endif
+                                @auth
+                                    @php $isFavorito = in_array($related->id, $favoritosIds ?? [], true); @endphp
+                                    <form action="{{ $isFavorito ? route('favoritos.destroy', $related) : route('favoritos.store', $related) }}" method="POST" class="absolute right-3 top-3 z-20">
+                                        @csrf
+                                        @if ($isFavorito)
+                                            @method('DELETE')
+                                        @endif
+                                        <button type="submit" aria-label="{{ $isFavorito ? 'Remover dos favoritos' : 'Adicionar aos favoritos' }}" class="h-10 w-10 rounded-full shadow flex items-center justify-center transition focus:outline-none {{ $isFavorito ? 'bg-red-600 text-white' : 'bg-white text-amber-500 border border-slate-200' }}">
+                                            <i class="fa-solid fa-heart"></i>
+                                        </button>
+                                    </form>
+                                @endauth
                             </div>
 
                             <h4 class="line-clamp-2 text-base font-black text-slate-900 mb-2">

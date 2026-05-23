@@ -34,10 +34,16 @@
             </div>
         @endif
 
+        @if (!empty($somenteTeste))
+            <div class="mb-6 rounded-xl border border-amber-300 bg-amber-50 px-4 py-3 text-sm text-amber-800">
+                Ambiente de teste ativo: nenhum pagamento real sera cobrado. Utilize apenas dados ficticios.
+            </div>
+        @endif
+
         <div class="grid gap-8 lg:grid-cols-[1.2fr_0.8fr]">
             <section class="rounded-3xl border border-slate-100 bg-white p-6 shadow-sm md:p-8">
                 <h2 class="text-xl font-black text-slate-900">Dados para pagamento</h2>
-                <p class="mt-2 text-sm text-slate-500">Essas informacoes sao usadas para gerar o link de pagamento seguro.</p>
+                <p class="mt-2 text-sm text-slate-500">Essas informacoes sao usadas para simular o fluxo de pagamento com seguranca em ambiente de desenvolvimento.</p>
 
                 <form id="checkoutForm" action="/checkout/processar" method="POST" class="mt-6 space-y-5">
                     @csrf

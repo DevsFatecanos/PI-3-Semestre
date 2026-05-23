@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Produto;
+use App\Models\Favorito;
 use App\Services\CartService;
 use Illuminate\Http\Request;
 
@@ -27,10 +28,40 @@ class CarrinhoController extends Controller
     {
         $resumo = $this->cartService->resumo();
 
+        $categoriasCarrinho = collect($resumo['itens'])
+            ->pluck('produto.categoria')
+            ->filter()
+            ->unique()
+            ->values();
+
+        $produtoIdsCarrinho = collect($resumo['itens'])
+            ->pluck('produto.id')
+            ->values();
+
+        $sugestoes = Produto::query()
+            ->where('ativo', true)
+            ->when(
+                $categoriasCarrinho->isNotEmpty(),
+                fn ($query) => $query->whereIn('categoria', $categoriasCarrinho),
+            )
+            ->whereNotIn('id', $produtoIdsCarrinho)
+            ->inRandomOrder()
+            ->limit(8)
+            ->get();
+
+        $favoritosIds = auth()->check()
+            ? Favorito::query()
+                ->where('user_id', auth()->id())
+                ->pluck('produto_id')
+                ->all()
+            : [];
+
         return view('carrinho', [
             'itens' => $resumo['itens'],
             'total' => $resumo['total'],
             'quantidadeTotal' => $resumo['quantidadeTotal'],
+            'sugestoes' => $sugestoes,
+            'favoritosIds' => $favoritosIds,
         ]);
     }
 
@@ -69,7 +100,9 @@ class CarrinhoController extends Controller
             ]);
         }
 
-        return back()->with('success', "{$produto->nome} foi adicionado ao carrinho.");
+        return redirect()
+            ->route('carrinho.index')
+            ->with('success', "{$produto->nome} foi adicionado ao carrinho.");
     }
 
     public function update(Request $request, Produto $produto)

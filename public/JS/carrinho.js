@@ -291,7 +291,10 @@ document.documentElement.classList.add('js');
                     updateCartBadge();
                     if (!document.getElementById('cartModal').classList.contains('hidden')) {
                         loadCart();
+                        return;
                     }
+
+                    window.location.href = '/carrinho';
                 }
             })
             .catch(error => {
@@ -431,8 +434,10 @@ document.documentElement.classList.add('js');
         }
 
         function finalizarPedido() {
-            window.location.href = '/checkout';
+            window.location.href = '/carrinho';
         }
+
+        window.addToCartGlobal = addToCart;
 
         document.getElementById('cartModal')?.addEventListener('click', function(e) {
             if (e.target === this) {

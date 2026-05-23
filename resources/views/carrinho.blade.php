@@ -28,6 +28,16 @@
             </a>
 
             <div class="flex items-center gap-3">
+                @auth
+                    <a href="{{ route('favoritos.index') }}" class="bg-white/10 px-4 py-2 rounded-full hover:bg-white/20 transition flex items-center gap-2">
+                        <span class="text-sm">❤</span>
+                        <span class="text-xs font-bold hidden md:inline">Favoritos</span>
+                    </a>
+                    <a href="{{ route('pedidos.index') }}" class="bg-white/10 px-4 py-2 rounded-full hover:bg-white/20 transition flex items-center gap-2">
+                        <span class="text-sm">📦</span>
+                        <span class="text-xs font-bold hidden md:inline">Historico</span>
+                    </a>
+                @endauth
                 <a href="/carrinho" class="relative bg-slate-800 px-4 py-2 rounded-full hover:bg-slate-700 transition flex items-center gap-2">
                     <span class="text-sm">🛒</span>
                     <span class="text-xs font-bold hidden md:inline">Carrinho</span>
@@ -59,8 +69,21 @@
                 @forelse ($itens as $item)
                     <article class="rounded-3xl border border-slate-100 bg-white p-4 shadow-sm md:p-5">
                         <div class="flex flex-col gap-4 md:flex-row md:items-center">
-                            <div class="h-24 w-24 shrink-0">
+                            <div class="h-24 w-24 shrink-0 relative">
                                 <x-product-image :url="$item['produto']->url_imagem" :ean="$item['produto']->codigo_barras" class="h-full w-full object-cover" wrapper-class="overflow-hidden rounded-2xl bg-slate-100 h-full w-full" />
+
+                                @auth
+                                    @php $isFavorito = in_array($item['produto']->id, $favoritosIds ?? [], true); @endphp
+                                    <form action="{{ $isFavorito ? route('favoritos.destroy', $item['produto']) : route('favoritos.store', $item['produto']) }}" method="POST" class="absolute right-0 top-0 z-20">
+                                        @csrf
+                                        @if ($isFavorito)
+                                            @method('DELETE')
+                                        @endif
+                                        <button type="submit" aria-label="{{ $isFavorito ? 'Remover dos favoritos' : 'Adicionar aos favoritos' }}" class="m-2 h-8 w-8 rounded-full shadow flex items-center justify-center transition focus:outline-none {{ $isFavorito ? 'bg-red-600 text-white' : 'bg-white text-amber-500 border border-slate-200' }}">
+                                            <i class="fa-solid fa-heart text-sm"></i>
+                                        </button>
+                                    </form>
+                                @endauth
                             </div>
 
                             <div class="flex-1">
@@ -91,6 +114,19 @@
                                         @method('DELETE')
                                         <button type="submit" class="rounded-xl border border-red-200 px-4 py-2 text-sm font-bold text-red-600 transition hover:bg-red-50">Remover</button>
                                     </form>
+
+                                    @auth
+                                        @php $isFavorito = in_array($item['produto']->id, $favoritosIds ?? [], true); @endphp
+                                        <form action="{{ $isFavorito ? route('favoritos.destroy', $item['produto']) : route('favoritos.store', $item['produto']) }}" method="POST">
+                                            @csrf
+                                            @if ($isFavorito)
+                                                @method('DELETE')
+                                            @endif
+                                            <button type="submit" class="rounded-xl border border-amber-200 px-4 py-2 text-sm font-bold text-amber-700 transition hover:bg-amber-50">
+                                                {{ $isFavorito ? 'Remover favorito' : 'Favoritar' }}
+                                            </button>
+                                        </form>
+                                    @endauth
                                 </div>
                             </div>
                         </div>
@@ -129,9 +165,70 @@
                     <a href="/checkout" class="mt-3 inline-flex w-full items-center justify-center rounded-xl bg-emerald-500 px-4 py-3 text-sm font-bold text-white transition hover:bg-emerald-400">Ir para checkout</a>
                 @endif
 
+                @auth
+                    <a href="{{ route('pedidos.index') }}" class="mt-3 inline-flex w-full items-center justify-center rounded-xl border border-white/15 px-4 py-3 text-sm font-bold text-white transition hover:bg-white/10">Ver historico de compras</a>
+                @endauth
+
                 <a href="/" class="mt-3 inline-flex w-full items-center justify-center rounded-xl bg-white px-4 py-3 text-sm font-bold text-slate-900 transition hover:bg-slate-100">Continuar comprando</a>
             </aside>
         </div>
+
+        @if (!empty($sugestoes) && $sugestoes->count() > 0)
+            <section class="mt-12">
+                <div class="mb-5">
+                    <p class="text-sm font-semibold uppercase tracking-[0.28em] text-slate-500">Recomendacoes</p>
+                    <h2 class="mt-2 text-3xl font-black text-slate-900">Pedidos relacionados ao seu carrinho</h2>
+                </div>
+
+                <div class="grid gap-5 sm:grid-cols-2 xl:grid-cols-4">
+                    @foreach ($sugestoes as $produto)
+                        <article class="overflow-hidden rounded-2xl border border-slate-100 bg-white p-4 shadow-sm">
+                            <div class="relative overflow-hidden rounded-xl bg-slate-100 aspect-square mb-0">
+                                <a href="{{ route('produtos.show', $produto) }}" class="block h-full w-full">
+                                    <x-product-image :url="$produto->url_imagem" :ean="$produto->codigo_barras" class="h-full w-full object-contain p-2" />
+                                </a>
+
+                                @auth
+                                    @php $isFavorito = in_array($produto->id, $favoritosIds ?? [], true); @endphp
+                                    <form action="{{ $isFavorito ? route('favoritos.destroy', $produto) : route('favoritos.store', $produto) }}" method="POST" class="absolute right-3 top-3 z-20">
+                                        @csrf
+                                        @if ($isFavorito)
+                                            @method('DELETE')
+                                        @endif
+                                        <button type="submit" aria-label="{{ $isFavorito ? 'Remover dos favoritos' : 'Adicionar aos favoritos' }}" class="h-10 w-10 rounded-full shadow flex items-center justify-center transition focus:outline-none {{ $isFavorito ? 'bg-red-600 text-white' : 'bg-white text-amber-500 border border-slate-200' }}">
+                                            <i class="fa-solid fa-heart"></i>
+                                        </button>
+                                    </form>
+                                @endauth
+                            </div>
+
+                            <h3 class="mt-3 line-clamp-2 text-base font-black text-slate-900">{{ $produto->nome }}</h3>
+                            <p class="text-xs text-slate-500">{{ $produto->categoria ?? 'Sem categoria' }}</p>
+                            <p class="mt-2 text-2xl font-black text-blue-700">R$ {{ number_format((float) $produto->preco_atual, 2, ',', '.') }}</p>
+
+                            <form action="{{ route('carrinho.add', $produto) }}" method="POST" class="mt-3">
+                                @csrf
+                                <input type="hidden" name="quantidade" value="1">
+                                <button type="submit" class="w-full rounded-xl bg-slate-900 py-2 text-sm font-bold text-white transition hover:bg-slate-800">Adicionar</button>
+                            </form>
+
+                            @auth
+                                @php $isFavorito = in_array($produto->id, $favoritosIds ?? [], true); @endphp
+                                <form action="{{ $isFavorito ? route('favoritos.destroy', $produto) : route('favoritos.store', $produto) }}" method="POST" class="mt-3">
+                                    @csrf
+                                    @if ($isFavorito)
+                                        @method('DELETE')
+                                    @endif
+                                    <button type="submit" class="w-full rounded-xl border border-amber-200 py-2 text-sm font-bold text-amber-700 transition hover:bg-amber-50">
+                                        {{ $isFavorito ? 'Remover favorito' : 'Favoritar' }}
+                                    </button>
+                                </form>
+                            @endauth
+                        </article>
+                    @endforeach
+                </div>
+            </section>
+        @endif
     </main>
 
     <footer class="mt-8 border-t border-slate-200 bg-white/70 px-8 py-6 text-center text-sm text-slate-400 backdrop-blur">

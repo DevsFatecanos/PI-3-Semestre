@@ -117,7 +117,8 @@
                         </button>
                         <div id="menu" class="dropdown-content">
                             <a target="_blank" href="/meusdados">Meus dados</a>
-                            <a target="_blank" href="/">Meus Pedidos</a>
+                            <a target="_blank" href="{{ route('pedidos.index') }}">Meus Pedidos</a>
+                            <a target="_blank" href="{{ route('favoritos.index') }}">Meus Favoritos</a>
                             @if(Auth::user()->is_admin)
                                 <a target="_blank" href="/admin/dashboard">Dashboard</a>
                             @endif

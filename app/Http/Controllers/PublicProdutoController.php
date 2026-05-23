@@ -12,6 +12,8 @@ class PublicProdutoController extends Controller
      */
     public function show(Produto $produto)
     {
+        $produto->loadMissing('favoritos');
+
         return view('produtos.show', compact('produto'));
     }
 }

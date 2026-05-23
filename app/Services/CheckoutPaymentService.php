@@ -9,6 +9,10 @@ class CheckoutPaymentService
 {
     public function criarPagamento(array $itens, array $cliente, string $metodoPreferido): array
     {
+        if ($this->somenteModoTeste()) {
+            return $this->simularPagamento($itens, $cliente, $metodoPreferido);
+        }
+
         $token = (string) config('services.mercado_pago.access_token', '');
 
         if ($token !== '') {
@@ -99,5 +103,14 @@ class CheckoutPaymentService
                 'itens' => count($itens),
             ],
         ];
+    }
+
+    private function somenteModoTeste(): bool
+    {
+        return filter_var(
+            config('services.mercado_pago.test_mode_only', true),
+            FILTER_VALIDATE_BOOL,
+            FILTER_NULL_ON_FAILURE,
+        ) ?? true;
     }
 }

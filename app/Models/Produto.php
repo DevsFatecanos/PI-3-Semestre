@@ -84,4 +84,14 @@ class Produto extends Model
         'destaque' => 'boolean',
         'ativo' => 'boolean',
     ];
+
+    public function favoritos()
+    {
+        return $this->hasMany(Favorito::class);
+    }
+
+    public function pedidoItens()
+    {
+        return $this->hasMany(PedidoItem::class);
+    }
 }

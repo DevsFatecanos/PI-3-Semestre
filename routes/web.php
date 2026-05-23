@@ -2,6 +2,7 @@
 
 
 use App\Models\Produto;
+use App\Models\Favorito;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Auth\LoginController;
@@ -9,6 +10,8 @@ use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\CarrinhoController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\EmpresaController;
+use App\Http\Controllers\FavoritoController;
+use App\Http\Controllers\PedidoController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\AdminProdutoController;
 
@@ -16,8 +19,14 @@ Route::get('/', function () {
     $destaques = Produto::where('destaque', 1)->get();
     $produtosGerais = Produto::all();
     $categorias = Produto::distinct()->pluck('categoria');
+    $favoritosIds = auth()->check()
+        ? Favorito::query()
+            ->where('user_id', auth()->id())
+            ->pluck('produto_id')
+            ->all()
+        : [];
 
-    return view('index', compact('destaques', 'produtosGerais', 'categorias'));
+    return view('index', compact('destaques', 'produtosGerais', 'categorias', 'favoritosIds'));
 });
 
 Route::get('/carrinho', [CarrinhoController::class, 'index'])->name('carrinho.index');
@@ -34,6 +43,14 @@ Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.in
 Route::get('/checkout/processar', fn () => redirect()->route('checkout.index'));
 Route::post('/checkout/processar', [CheckoutController::class, 'finalizar'])->name('checkout.processar');
 Route::get('/checkout/retorno', [CheckoutController::class, 'retorno'])->name('checkout.retorno');
+
+Route::middleware('auth')->group(function (): void {
+    Route::get('/favoritos', [FavoritoController::class, 'index'])->name('favoritos.index');
+    Route::post('/favoritos/{produto}', [FavoritoController::class, 'store'])->name('favoritos.store');
+    Route::delete('/favoritos/{produto}', [FavoritoController::class, 'destroy'])->name('favoritos.destroy');
+
+    Route::get('/pedidos', [PedidoController::class, 'index'])->name('pedidos.index');
+});
 
 //Rotas de Conta
 Route::get('/meusdados',[UserController::class, 'meusdados'])->middleware('auth');;

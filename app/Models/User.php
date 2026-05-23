@@ -51,4 +51,14 @@ class User extends Authenticatable
             'is_admin' => 'boolean',
         ];
     }
+
+    public function favoritos()
+    {
+        return $this->hasMany(Favorito::class);
+    }
+
+    public function pedidos()
+    {
+        return $this->hasMany(Pedido::class);
+    }
 }

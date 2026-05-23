@@ -502,6 +502,19 @@ background-color:#a9abae;
                                         -{{ $percentualDesconto }}%
                                     </span>
                                 @endif
+
+                                @auth
+                                    @php $isFavorito = in_array($item->id, $favoritosIds ?? [], true); @endphp
+                                    <form action="{{ $isFavorito ? route('favoritos.destroy', $item) : route('favoritos.store', $item) }}" method="POST" class="absolute right-3 top-3 z-30">
+                                        @csrf
+                                        @if ($isFavorito)
+                                            @method('DELETE')
+                                        @endif
+                                        <button type="submit" aria-label="{{ $isFavorito ? 'Remover dos favoritos' : 'Adicionar aos favoritos' }}" class="h-10 w-10 rounded-full shadow-lg flex items-center justify-center transition focus:outline-none {{ $isFavorito ? 'bg-red-600 text-white' : 'bg-white text-amber-500 border border-slate-200' }}">
+                                            <i class="fa-solid fa-heart"></i>
+                                        </button>
+                                    </form>
+                                @endauth
                             </div>
 
                             <div class="p-5">
@@ -515,20 +528,35 @@ background-color:#a9abae;
                                     <p class="text-2xl font-black {{ $temDesconto ? 'text-red-600' : 'text-blue-700' }}">R$ {{ number_format($precoAtual, 2, ',', '.') }}</p>
                                 </div>
 
-                                <form action="{{ route('carrinho.add', $item, false) }}" method="POST" class="mt-4 add-to-cart-form" onsubmit="return addToCart(event)">
-                                    @csrf
-                                    <div class="mb-3 flex items-center justify-center gap-2">
-                                        <label class="text-xs font-bold uppercase tracking-wider text-slate-500">Qtd:</label>
-                                        <div class="inline-flex items-center rounded-xl border border-slate-200 bg-slate-50">
-                                            <button type="button" class="px-3 py-1.5 text-slate-600 hover:bg-slate-200 transition" onclick="this.nextElementSibling.stepDown()">−</button>
-                                            <input type="number" name="quantidade" value="1" min="1" max="{{ $item->quantidade }}" class="w-14 border-0 bg-transparent text-center text-sm font-bold text-slate-800 outline-none [-moz-appearance:_textfield] [&::-webkit-inner-spin-button]:m-0 [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:m-0 [&::-webkit-outer-spin-button]:appearance-none">
-                                            <button type="button" class="px-3 py-1.5 text-slate-600 hover:bg-slate-200 transition" onclick="this.previousElementSibling.stepUp()">+</button>
+                                <div class="mt-4 flex flex-col gap-3">
+                                    <form action="{{ route('carrinho.add', $item, false) }}" method="POST" class="add-to-cart-form" onsubmit="return addToCart(event)">
+                                        @csrf
+                                        <div class="mb-3 flex items-center justify-center gap-2">
+                                            <label class="text-xs font-bold uppercase tracking-wider text-slate-500">Qtd:</label>
+                                            <div class="inline-flex items-center rounded-xl border border-slate-200 bg-slate-50">
+                                                <button type="button" class="px-3 py-1.5 text-slate-600 hover:bg-slate-200 transition" onclick="this.nextElementSibling.stepDown()">−</button>
+                                                <input type="number" name="quantidade" value="1" min="1" max="{{ $item->quantidade }}" class="w-14 border-0 bg-transparent text-center text-sm font-bold text-slate-800 outline-none [-moz-appearance:_textfield] [&::-webkit-inner-spin-button]:m-0 [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:m-0 [&::-webkit-outer-spin-button]:appearance-none">
+                                                <button type="button" class="px-3 py-1.5 text-slate-600 hover:bg-slate-200 transition" onclick="this.previousElementSibling.stepUp()">+</button>
+                                            </div>
                                         </div>
-                                    </div>
-                                    <button type="submit" class="w-full rounded-xl px-4 py-2 text-sm font-black text-white transition {{ $temDesconto ? 'bg-red-600 hover:bg-red-500' : 'bg-slate-800 hover:bg-slate-700' }} disabled:cursor-not-allowed disabled:bg-slate-300" {{ $item->quantidade <= 0 ? 'disabled' : '' }}>
-                                        {{ $item->quantidade > 0 ? 'Adicionar ao pedido' : 'Esgotado' }}
-                                    </button>
-                                </form>
+                                        <button type="submit" class="w-full rounded-xl px-4 py-2 text-sm font-black text-white transition {{ $temDesconto ? 'bg-red-600 hover:bg-red-500' : 'bg-slate-800 hover:bg-slate-700' }} disabled:cursor-not-allowed disabled:bg-slate-300" {{ $item->quantidade <= 0 ? 'disabled' : '' }}>
+                                            {{ $item->quantidade > 0 ? 'Adicionar ao pedido' : 'Esgotado' }}
+                                        </button>
+                                    </form>
+
+                                    @auth
+                                        @php $isFavorito = in_array($item->id, $favoritosIds ?? [], true); @endphp
+                                        <form action="{{ $isFavorito ? route('favoritos.destroy', $item) : route('favoritos.store', $item) }}" method="POST">
+                                            @csrf
+                                            @if ($isFavorito)
+                                                @method('DELETE')
+                                            @endif
+                                            <button type="submit" class="w-full rounded-xl border border-amber-200 px-4 py-2 text-sm font-bold text-amber-700 transition hover:bg-amber-50">
+                                                {{ $isFavorito ? 'Remover favorito' : 'Favoritar' }}
+                                            </button>
+                                        </form>
+                                    @endauth
+                                </div>
                             </div>
                         </article>
                     @endforeach
@@ -639,11 +667,24 @@ background-color:#a9abae;
                                         <x-product-image :url="$produto->url_imagem" :ean="$produto->codigo_barras" alt="{{ $produto->nome }}" class="h-full w-full object-contain p-2" />
                                     </a>
 
-                                    @if($temDesconto)
-                                        <span class="absolute left-2 top-2 rounded-full bg-red-600 px-2 py-1 text-[11px] font-black text-white">
-                                            -{{ $percentual }}%
-                                        </span>
-                                    @endif
+                                        @if($temDesconto)
+                                            <span class="absolute left-2 top-2 rounded-full bg-red-600 px-2 py-1 text-[11px] font-black text-white">
+                                                -{{ $percentual }}%
+                                            </span>
+                                        @endif
+
+                                        @auth
+                                            @php $isFavorito = in_array($produto->id, $favoritosIds ?? [], true); @endphp
+                                            <form action="{{ $isFavorito ? route('favoritos.destroy', $produto) : route('favoritos.store', $produto) }}" method="POST" class="absolute right-3 top-3 z-20">
+                                                @csrf
+                                                @if ($isFavorito)
+                                                    @method('DELETE')
+                                                @endif
+                                                <button type="submit" aria-label="{{ $isFavorito ? 'Remover dos favoritos' : 'Adicionar aos favoritos' }}" class="h-10 w-10 rounded-full shadow flex items-center justify-center transition focus:outline-none {{ $isFavorito ? 'bg-red-600 text-white' : 'bg-white text-amber-500 border border-slate-200' }}">
+                                                    <i class="fa-solid fa-heart"></i>
+                                                </button>
+                                            </form>
+                                        @endauth
 
                                 </div>
 
@@ -706,6 +747,26 @@ background-color:#a9abae;
                                     </button>
 
                                 </form>
+
+                                @auth
+                                    @php $isFavorito = in_array($produto->id, $favoritosIds ?? [], true); @endphp
+                                    <form
+                                        action="{{ $isFavorito ? route('favoritos.destroy', $produto) : route('favoritos.store', $produto) }}"
+                                        method="POST"
+                                        class="mt-3"
+                                    >
+                                        @csrf
+                                        @if ($isFavorito)
+                                            @method('DELETE')
+                                        @endif
+                                        <button
+                                            type="submit"
+                                            class="w-full rounded-xl border border-amber-200 py-3 text-sm font-black text-amber-700 transition hover:bg-amber-50"
+                                        >
+                                            {{ $isFavorito ? 'Remover favorito' : 'Favoritar produto' }}
+                                        </button>
+                                    </form>
+                                @endauth
                             </article>
 
                         @endforeach
