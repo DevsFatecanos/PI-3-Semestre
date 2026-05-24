@@ -93,6 +93,8 @@ Route::post('/logout', function () {
 Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(function () {
     // Dashboard
     Route::get('/dashboard', [AdminProdutoController::class, 'dashboard'])->name('dashboard');
+    Route::get('/dashboard/export', [AdminProdutoController::class, 'exportCsv'])->name('dashboard.export');
+    Route::get('/dashboard/print', [AdminProdutoController::class, 'printReport'])->name('dashboard.print');
     Route::get('/produtos/search', [AdminProdutoController::class, 'search'])->name('produtos.search');
 
     // CRUD de Produtos

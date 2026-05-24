@@ -17,7 +17,19 @@ class EmpresaController extends Controller
 
     public function consultarCnpj(Request $request)
     {
-        $cnpj = $request->input('cnpj');
+        $request->validate([
+            'cnpj' => ['required', 'string'],
+        ], [
+            'cnpj.required' => 'O campo CNPJ é obrigatório.',
+            'cnpj.string' => 'O CNPJ deve ser uma string válida.',
+        ]);
+
+        $cnpj = preg_replace('/\D/', '', $request->input('cnpj'));
+
+        if (strlen($cnpj) !== 14) {
+            return response()->json(['error' => 'CNPJ inválido'], 422);
+        }
+
         $dadosEmpresa = $this->brasilApiService->consultarCnpj($cnpj);
 
         if ($dadosEmpresa) {

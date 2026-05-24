@@ -63,6 +63,37 @@
         </div>
     </div>
 
+    <!-- Ações de exportação -->
+    <div class="mb-4 text-end">
+        <a href="{{ route('admin.dashboard.export', ['type' => 'sales']) }}" class="btn btn-outline-secondary">Exportar Vendas (CSV)</a>
+        <a href="{{ route('admin.dashboard.export', ['type' => 'products']) }}" class="btn btn-outline-secondary">Exportar Produtos (CSV)</a>
+        <a href="{{ route('admin.dashboard.print', ['type' => 'sales']) }}" target="_blank" class="btn btn-outline-primary">Imprimir Relatório</a>
+    </div>
+
+    <!-- Gráficos do Dashboard -->
+    <div class="row mb-4">
+        <div class="col-md-6">
+            <div class="card p-3">
+                <h5>Distribuição de Estoque</h5>
+                <canvas id="stockChart" height="200"></canvas>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card p-3">
+                <h5>Top Categorias</h5>
+                <canvas id="categoriesChart" height="200"></canvas>
+            </div>
+        </div>
+    </div>
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <div class="card p-3">
+                <h5>Top Produtos</h5>
+                <canvas id="produtosChart" height="120"></canvas>
+            </div>
+        </div>
+    </div>
+
     @if($message = Session::get('success'))
     <div class="alert alert-success alert-dismissible fade show" role="alert">
         {{ $message }}
@@ -325,3 +356,32 @@
 @endforeach
 
 @endsection
+
+@push('scripts')
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    const chartData = @json($chartData ?? []);
+
+    // Stock chart
+    try {
+        const stockCtx = document.getElementById('stockChart').getContext('2d');
+        const stockLabels = Object.keys(chartData.stockDistribution || {});
+        const stockValues = Object.values(chartData.stockDistribution || {});
+        new Chart(stockCtx, { type: 'pie', data: { labels: stockLabels, datasets: [{ data: stockValues, backgroundColor: ['#e74c3c','#f1c40f','#3498db','#2ecc71'] }] } });
+
+        // Categories
+        const catCtx = document.getElementById('categoriesChart').getContext('2d');
+        const categories = (chartData.topCategories || []).map(i => i.categoria || 'N/A');
+        const catValues = (chartData.topCategories || []).map(i => Number(i.total_qtd) || 0);
+        new Chart(catCtx, { type: 'bar', data: { labels: categories, datasets: [{ label: 'Quantidade vendida', data: catValues, backgroundColor: '#3498db' }] }, options: { responsive: true } });
+
+        // Produtos
+        const prodCtx = document.getElementById('produtosChart').getContext('2d');
+        const produtos = (chartData.topProdutos || []).map(i => i.nome || 'N/A');
+        const prodValues = (chartData.topProdutos || []).map(i => Number(i.total_qtd) || 0);
+        new Chart(prodCtx, { type: 'bar', data: { labels: produtos, datasets: [{ label: 'Quantidade vendida', data: prodValues, backgroundColor: '#2ecc71' }] }, options: { indexAxis: 'y', responsive: true } });
+    } catch (e) {
+        console.warn('Erro ao renderizar gráficos do dashboard', e);
+    }
+</script>
+@endpush
