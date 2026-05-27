@@ -5,11 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title', 'Foccus Comercial')</title>
 
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://kit.fontawesome.com/02669f3445.js" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+    <link rel="preconnect" href="https://cdn.tailwindcss.com">
+    <link rel="preconnect" href="https://cdn.jsdelivr.net">
+    <link rel="dns-prefetch" href="https://kit.fontawesome.com">
+
     <link rel="shortcut icon" href="/favicon.png" type="image/x-icon">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://kit.fontawesome.com/02669f3445.js" crossorigin="anonymous" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
     <!-- Bootstrap CSS -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
 
@@ -116,15 +121,15 @@
                             Olá, {{ auth()->user()->name }}
                         </button>
                         <div id="menu" class="dropdown-content">
-                            <a target="_blank" href="/meusdados">Meus dados</a>
-                            <a target="_blank" href="{{ route('pedidos.index') }}">Meus Pedidos</a>
-                            <a target="_blank" href="{{ route('favoritos.index') }}">Meus Favoritos</a>
+                            <a href="/meusdados">Meus dados</a>
+                            <a href="{{ route('pedidos.index') }}">Meus Pedidos</a>
+                            <a href="{{ route('favoritos.index') }}">Meus Favoritos</a>
                             @if(Auth::user()->is_admin)
-                                <a target="_blank" href="/admin/dashboard">Dashboard</a>
+                                <a href="/admin/dashboard">Dashboard</a>
                             @endif
-                            <a target="_blank" href="/change-password">Trocar Senha</a>
+                            <a href="/change-password">Trocar Senha</a>
                             @if(Auth::user()->is_admin)
-                                <a target="_blank" href="/admin/produtos/create">Novo Produto</a>
+                                <a href="/admin/produtos/create">Novo Produto</a>
                             @endif
                             <form action="/logout" method="POST" class="m-0">
                                 @csrf

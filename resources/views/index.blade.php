@@ -6,14 +6,17 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Foccus comercial | Distribuidora</title>
 
+    <link rel="preconnect" href="https://cdn.tailwindcss.com">
+    <link rel="preconnect" href="https://cdn.jsdelivr.net">
+    <link rel="dns-prefetch" href="https://kit.fontawesome.com">
+
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://kit.fontawesome.com/02669f3445.js" crossorigin="anonymous"></script>
+    <script src="https://kit.fontawesome.com/02669f3445.js" crossorigin="anonymous" defer></script>
     <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
     <link rel="shortcut icon" href="/favicon.png" type="image/x-icon">
     <link rel="preload" href="/LOGO_FOCCUS.webp" as="image" type="image/webp">
-    <link rel="preload" href="/LOGO_FOCCUS.png" as="image">
 
     <style>
         :root {
@@ -278,7 +281,7 @@ background-color:#a9abae;
     margin-top: 500px;
 }
 
- </style>
+     </style>
 </head>
 <body class="min-h-screen text-slate-900">
 
@@ -328,14 +331,17 @@ background-color:#a9abae;
         <div class="barra h-[5px] w-0 bg-white"></div>
     </div>
 </div>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script>
-    $(window).on("load",function(){
-        $(".barra").animate({width:"100%"},500,function(){
-            $(".carregando").fadeOut(500);
-        });
-    });
-    </script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const barra = document.querySelector('.barra');
+    const carregando = document.querySelector('.carregando');
+    if (barra && carregando) {
+        barra.style.transition = 'width 500ms ease';
+        barra.style.width = '100%';
+        setTimeout(() => carregando.style.display = 'none', 600);
+    }
+});
+</script>
 
 <!-------------------------------->
     <nav style="padding: 10px;" class="glass sticky top-0 z-50 border-b border-white/10">
@@ -381,17 +387,22 @@ background-color:#a9abae;
                       Olá, {{ auth()->user()->name }}
                     </button>
                     <div id="menu" class="dropdown-content">
-                         <a target="_blank" href="/meusdados">Meus dados</a>
-                         <a target="_blank" href="/">Meus Pedidos</a>
+                         <a href="/meusdados">Meus dados</a>
+                         <a href="{{ route('pedidos.index') }}">Meus Pedidos</a>
+                         <a href="{{ route('favoritos.index') }}">Meus Favoritos</a>
+                         @if(Auth::user()->is_admin)
+                         <a href="/admin/dashboard">Dashboard</a>
+                         @endif
+                         <a href="/change-password">Trocar Senha</a>
+                         @if(Auth::user()->is_admin)
+                         <a href="/admin/produtos/create">Novo Produto</a>
+                         @endif
                          <button type="button" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                             Sair
                         </button>
                         <form id="logout-form" method="POST" action="/logout" class="hidden">
                             @csrf
                         </form>
-                         @if(Auth::user()->is_admin)
-                         <a target="_blank" href="/admin/dashboard">Dashboard</a>
-                         @endif
                     </div>
                 </div>
                 <script>
@@ -863,8 +874,12 @@ background-color:#a9abae;
     }
 </style>
      <!-- Modal -->
-    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js" defer></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.min.js" defer integrity="sha384-G/EV+4j2dNv+tEPo3++6LCgdCROaejBqfUeNjuKAiuXbjrxilcCdDz6ZAVfHWe1Y" crossorigin="anonymous"></script>
+    <script src="{{ asset('js/carrinho.js') }}" defer></script>
+    <script id="#userwayAccessibilityIcon" src="https://cdn.userway.org/widget.js" data-account="wHedvuvp49" defer></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const swiper = new Swiper('.ofertas-swiper', {
@@ -892,9 +907,5 @@ background-color:#a9abae;
             document.querySelector('.ofertas-swiper').addEventListener('mouseleave', () => swiper.autoplay.start());
         });
     </script>
-<script id="#userwayAccessibilityIcon" src = " https://cdn.userway.org/widget.js "  data-account = " wHedvuvp49 " ></script>
-    <script src="{{ asset('js/carrinho.js') }}"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.min.js" integrity="sha384-G/EV+4j2dNv+tEPo3++6LCgdCROaejBqfUeNjuKAiuXbjrxilcCdDz6ZAVfHWe1Y" crossorigin="anonymous"></script>
 </body>
 </html>

@@ -28,7 +28,13 @@
             if (!img._fallbackAttempted) {
                 img._fallbackAttempted = true;
                 @if($eanPicturesUrl)
-                img.src = '{{ $eanPicturesUrl }}';
+                var xhr = new XMLHttpRequest();
+                xhr.timeout = 2000;
+                xhr.open('HEAD', '{{ $eanPicturesUrl }}', true);
+                xhr.onload = function() { if(xhr.status < 400) img.src = '{{ $eanPicturesUrl }}'; else img.src = '{{ $fallback }}'; };
+                xhr.onerror = function() { img.src = '{{ $fallback }}'; };
+                xhr.ontimeout = function() { img.src = '{{ $fallback }}'; };
+                xhr.send();
                 @else
                 img.onerror = null;
                 img.src = '{{ $fallback }}';
