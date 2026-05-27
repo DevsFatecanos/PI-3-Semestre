@@ -77,13 +77,14 @@
             display: none !important;
         }
 
-        .carousel-shell {
-            position: relative;
-            border-radius: 26px;
-            border: 1px solid rgba(29, 78, 216, 0.15);
-            background: linear-gradient(180deg, rgba(255,255,255,0.9) 0%, rgba(248,250,252,0.9) 100%);
-            box-shadow: 0 18px 40px rgba(15, 23, 42, 0.08);
-            padding: 14px;
+        .ofertas-swiper {
+            --swiper-theme-color: #3b82f6;
+        }
+        .ofertas-swiper .swiper-slide {
+            height: auto;
+        }
+        .ofertas-swiper .swiper-slide > article {
+            height: 100%;
         }
 
         .hero-banner-wrap {
@@ -464,27 +465,24 @@ background-color:#a9abae;
             </div>
         </section>
 
-        <section id="ofertas" class="reveal mb-16">
-            <div class="mb-6 flex items-center justify-between gap-3">
+        <section id="ofertas" class="reveal mb-12">
+            <div class="mb-4 flex items-center justify-between">
                 <div class="flex items-center gap-3">
-                    <span class="flex h-10 w-10 items-center justify-center rounded-2xl bg-red-100 text-red-600"><i class="fa-solid fa-fire text-4xl"></i></span>
+                    <span class="flex h-9 w-9 items-center justify-center rounded-xl bg-red-100 text-red-600"><i class="fa-solid fa-fire text-xl"></i></span>
                     <div>
-                        <h2 class="text-2xl font-black text-slate-900">Ofertas da semana</h2>
-                        <p class="text-sm text-slate-500">Produtos Selecionados </p>
+                        <h2 class="text-xl font-bold text-slate-900">Ofertas da semana</h2>
+                        <p class="text-xs text-slate-500">Produtos selecionados</p>
                     </div>
                 </div>
-                <div class="flex items-center gap-2">
-                    <span class="rounded-full bg-red-100 px-3 py-1 text-xs font-black uppercase tracking-wider text-red-700">Descontos ativos</span>
+                <span class="inline-flex items-center gap-2 text-xs text-slate-500">
+                    <span class="rounded-full bg-red-100 px-2 py-0.5 font-bold text-red-700">Descontos ativos</span>
                     <span class="carousel-counter" id="offerCounter" data-total="{{ max($destaques->count(), 1) }}">
-                        <span class="carousel-counter-current" id="offerCounterCurrent">01</span>
-                        <span>/</span>
-                        <span class="carousel-counter-total" id="offerCounterTotal">{{ str_pad(max($destaques->count(), 1), 2, '0', STR_PAD_LEFT) }}</span>
+                        <span class="carousel-counter-current" id="offerCounterCurrent">01</span>/<span class="carousel-counter-total">{{ str_pad(max($destaques->count(), 1), 2, '0', STR_PAD_LEFT) }}</span>
                     </span>
-                </div>
+                </span>
             </div>
 
-            <div class="carousel-shell">
-            <div class="swiper mySwiper">
+            <div class="swiper ofertas-swiper">
                 <div class="swiper-wrapper">
                     @foreach($destaques as $item)
                         @php
@@ -493,76 +491,45 @@ background-color:#a9abae;
                             $temDesconto = $precoAntigo > 0 && $precoAtual > 0 && $precoAtual < $precoAntigo;
                             $percentualDesconto = $temDesconto ? max(1, (int) round((1 - ($precoAtual / $precoAntigo)) * 100)) : 0;
                         @endphp
-                        <article class="swiper-slide promo-card {{ $temDesconto ? 'has-discount' : '' }} overflow-hidden rounded-3xl border bg-white shadow-md {{ $temDesconto ? 'border-red-200' : 'border-slate-100' }}">
-                            <div class="relative aspect-square">
-                                <x-product-image :url="$item->url_imagem" :ean="$item->codigo_barras" alt="{{ $item->nome }}" class="h-full w-full object-contain p-2" />
-                                @if($temDesconto)
-                                    <span class="absolute left-3 top-3 inline-flex items-center gap-2 rounded-full bg-red-600 px-3 py-1 text-xs font-black text-white shadow-lg">
-                                        <i class="fa-solid fa-bolt"></i>
-                                        -{{ $percentualDesconto }}%
-                                    </span>
-                                @endif
-
-                                @auth
-                                    @php $isFavorito = in_array($item->id, $favoritosIds ?? [], true); @endphp
-                                    <form action="{{ $isFavorito ? route('favoritos.destroy', $item) : route('favoritos.store', $item) }}" method="POST" class="absolute right-3 top-3 z-30">
-                                        @csrf
-                                        @if ($isFavorito)
-                                            @method('DELETE')
-                                        @endif
-                                        <button type="submit" aria-label="{{ $isFavorito ? 'Remover dos favoritos' : 'Adicionar aos favoritos' }}" class="h-10 w-10 rounded-full shadow-lg flex items-center justify-center transition focus:outline-none {{ $isFavorito ? 'bg-red-600 text-white' : 'bg-white text-amber-500 border border-slate-200' }}">
-                                            <i class="fa-solid fa-heart"></i>
-                                        </button>
-                                    </form>
-                                @endauth
-                            </div>
-
-                            <div class="p-5">
-                                <h3 class="truncate text-lg font-black text-slate-800">{{ $item->nome }}</h3>
-                                <p class="mt-1 text-xs uppercase tracking-[0.18em] text-slate-400">{{ $item->categoria ?? 'Oferta' }}</p>
-
-                                <div class="mt-3">
+                        <div class="swiper-slide">
+                            <article class="flex flex-col overflow-hidden rounded-xl border bg-white shadow {{ $temDesconto ? 'border-red-200' : 'border-slate-200' }}">
+                                <div class="relative flex h-32 items-center justify-center bg-slate-50">
+                                    <x-product-image :url="$item->url_imagem" :ean="$item->codigo_barras" alt="{{ $item->nome }}" class="max-h-28 max-w-full object-contain" />
                                     @if($temDesconto)
-                                        <span class="text-sm text-slate-400 line-through">R$ {{ number_format($precoAntigo, 2, ',', '.') }}</span>
+                                        <span class="absolute left-2 top-2 rounded-full bg-red-600 px-2 py-1 text-xs font-bold text-white">-{{ $percentualDesconto }}%</span>
                                     @endif
-                                    <p class="text-2xl font-black {{ $temDesconto ? 'text-red-600' : 'text-blue-700' }}">R$ {{ number_format($precoAtual, 2, ',', '.') }}</p>
                                 </div>
+                                <div class="flex flex-1 flex-col p-3">
+                                    <h3 class="truncate text-sm font-bold text-slate-800">{{ $item->nome }}</h3>
+                                    <p class="mt-1 text-xs text-slate-500">{{ $item->categoria ?? 'Oferta' }}</p>
 
-                                <div class="mt-4 flex flex-col gap-3">
-                                    <form action="{{ route('carrinho.add', $item, false) }}" method="POST" class="add-to-cart-form" onsubmit="return addToCart(event)">
+                                    <div class="mt-2">
+                                        @if($temDesconto)
+                                            <span class="text-xs text-slate-400 line-through">R$ {{ number_format($precoAntigo, 2, ',', '.') }}</span>
+                                        @endif
+                                        <p class="text-lg font-bold {{ $temDesconto ? 'text-red-600' : 'text-blue-700' }}">R$ {{ number_format($precoAtual, 2, ',', '.') }}</p>
+                                    </div>
+
+                                    <form action="{{ route('carrinho.add', $item, false) }}" method="POST" class="mt-auto pt-3" onsubmit="return addToCart(event)">
                                         @csrf
-                                        <div class="mb-3 flex items-center justify-center gap-2">
-                                            <label class="text-xs font-bold uppercase tracking-wider text-slate-500">Qtd:</label>
-                                            <div class="inline-flex items-center rounded-xl border border-slate-200 bg-slate-50">
-                                                <button type="button" class="px-3 py-1.5 text-slate-600 hover:bg-slate-200 transition" onclick="this.nextElementSibling.stepDown()">−</button>
-                                                <input type="number" name="quantidade" value="1" min="1" max="{{ $item->quantidade }}" class="w-14 border-0 bg-transparent text-center text-sm font-bold text-slate-800 outline-none [-moz-appearance:_textfield] [&::-webkit-inner-spin-button]:m-0 [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:m-0 [&::-webkit-outer-spin-button]:appearance-none">
-                                                <button type="button" class="px-3 py-1.5 text-slate-600 hover:bg-slate-200 transition" onclick="this.previousElementSibling.stepUp()">+</button>
+                                        <div class="mb-2 flex items-center justify-center gap-2">
+                                            <label class="text-xs font-bold text-slate-500">Qtd:</label>
+                                            <div class="inline-flex items-center rounded bg-slate-100">
+                                                <button type="button" class="px-2 py-1 text-slate-600 hover:bg-slate-200" onclick="this.nextElementSibling.stepDown()">−</button>
+                                                <input type="number" name="quantidade" value="1" min="1" max="{{ $item->quantidade }}" class="w-10 border-0 bg-transparent text-center text-sm font-bold outline-none [-moz-appearance:_textfield] [&::-webkit-inner-spin-button]:m-0 [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:m-0 [&::-webkit-outer-spin-button]:appearance-none" />
+                                                <button type="button" class="px-2 py-1 text-slate-600 hover:bg-slate-200" onclick="this.previousElementSibling.stepUp()">+</button>
                                             </div>
                                         </div>
-                                        <button type="submit" class="w-full rounded-xl px-4 py-2 text-sm font-black text-white transition {{ $temDesconto ? 'bg-red-600 hover:bg-red-500' : 'bg-slate-800 hover:bg-slate-700' }} disabled:cursor-not-allowed disabled:bg-slate-300" {{ $item->quantidade <= 0 ? 'disabled' : '' }}>
+
+                                        <button type="submit" class="w-full rounded-lg px-3 py-2 text-xs font-bold text-white {{ $temDesconto ? 'bg-red-600 hover:bg-red-500' : 'bg-slate-800 hover:bg-slate-700' }} {{ $item->quantidade <= 0 ? 'opacity-50 cursor-not-allowed' : '' }}" {{ $item->quantidade <= 0 ? 'disabled' : '' }}>
                                             {{ $item->quantidade > 0 ? 'Adicionar ao pedido' : 'Esgotado' }}
                                         </button>
                                     </form>
-
-                                    @auth
-                                        @php $isFavorito = in_array($item->id, $favoritosIds ?? [], true); @endphp
-                                        <form action="{{ $isFavorito ? route('favoritos.destroy', $item) : route('favoritos.store', $item) }}" method="POST">
-                                            @csrf
-                                            @if ($isFavorito)
-                                                @method('DELETE')
-                                            @endif
-                                            <button type="submit" class="w-full rounded-xl border border-amber-200 px-4 py-2 text-sm font-bold text-amber-700 transition hover:bg-amber-50">
-                                                {{ $isFavorito ? 'Remover favorito' : 'Favoritar' }}
-                                            </button>
-                                        </form>
-                                    @endauth
                                 </div>
-                            </div>
-                        </article>
+                            </article>
+                        </div>
                     @endforeach
                 </div>
-                <div class="swiper-pagination"></div>
-            </div>
             </div>
         </section>
 
@@ -898,6 +865,33 @@ background-color:#a9abae;
      <!-- Modal -->
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const swiper = new Swiper('.ofertas-swiper', {
+                slidesPerView: 1.2,
+                spaceBetween: 12,
+                autoplay: {
+                    delay: 3000,
+                    disableOnInteraction: false
+                },
+                loop: true,
+                breakpoints: {
+                    480: { slidesPerView: 2.2 },
+                    640: { slidesPerView: 3 },
+                    768: { slidesPerView: 4 },
+                    1024: { slidesPerView: 5 }
+                },
+                on: {
+                    slideChange: function() {
+                        const counter = document.getElementById('offerCounterCurrent');
+                        if (counter) counter.textContent = String(this.realIndex + 1).padStart(2, '0');
+                    }
+                }
+            });
+            document.querySelector('.ofertas-swiper').addEventListener('mouseenter', () => swiper.autoplay.stop());
+            document.querySelector('.ofertas-swiper').addEventListener('mouseleave', () => swiper.autoplay.start());
+        });
+    </script>
 <script id="#userwayAccessibilityIcon" src = " https://cdn.userway.org/widget.js "  data-account = " wHedvuvp49 " ></script>
     <script src="{{ asset('js/carrinho.js') }}"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>

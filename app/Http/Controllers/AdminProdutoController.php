@@ -114,7 +114,7 @@ class AdminProdutoController extends Controller
             'lowStockProducts',
             'filter'
         ))->with('chartData', $chartData);
-        ));
+    }
 
     /**
      * Exporta relatórios em CSV (type: sales|products|stock)
@@ -181,7 +181,6 @@ class AdminProdutoController extends Controller
 
         $pedidos = Pedido::with('itens')->where('status', 'approved')->orderByDesc('data_pagamento')->get();
         return view('admin.reports.sales', compact('pedidos'));
-    }
     }
 
     /**
