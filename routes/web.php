@@ -14,6 +14,7 @@ use App\Http\Controllers\FavoritoController;
 use App\Http\Controllers\PedidoController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\AdminProdutoController;
+use App\Http\Controllers\AdminPedidosController;
 
 Route::get('/', function () {
     $destaques = Produto::where('destaque', 1)->get();
@@ -96,6 +97,10 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(fun
     Route::get('/dashboard/export', [AdminProdutoController::class, 'exportCsv'])->name('dashboard.export');
     Route::get('/dashboard/print', [AdminProdutoController::class, 'printReport'])->name('dashboard.print');
     Route::get('/produtos/search', [AdminProdutoController::class, 'search'])->name('produtos.search');
+
+    // Pedidos
+    Route::get('/pedidos', [AdminPedidosController::class, 'index'])->name('pedidos.index');
+    Route::get('/pedidos/{id}', [AdminPedidosController::class, 'show'])->name('pedidos.show');
 
     // CRUD de Produtos
     Route::resource('produtos', AdminProdutoController::class);

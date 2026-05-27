@@ -291,9 +291,9 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link {{ request()->routeIs('admin.produtos.*') ? 'active' : '' }}"
-                           href="{{ route('admin.dashboard') }}">
-                            <i class="fas fa-box"></i> Produtos
+                        <a class="nav-link {{ request()->routeIs('admin.pedidos.*') ? 'active' : '' }}"
+                           href="{{ route('admin.pedidos.index') }}">
+                            <i class="fas fa-shipping-fast"></i> Gestão de Pedidos
                         </a>
                     </li>
                     @endif
