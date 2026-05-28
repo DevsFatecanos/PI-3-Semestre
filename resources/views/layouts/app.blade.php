@@ -296,6 +296,12 @@
                             <i class="fas fa-shipping-fast"></i> Gestão de Pedidos
                         </a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link {{ request()->routeIs('admin.relatorios') ? 'active' : '' }}"
+                           href="{{ route('admin.relatorios') }}">
+                            <i class="fas fa-chart-bar"></i> Relatórios e Gráficos
+                        </a>
+                    </li>
                     @endif
                     <li class="nav-item">
                         <a class="nav-link" href="/meusdados">

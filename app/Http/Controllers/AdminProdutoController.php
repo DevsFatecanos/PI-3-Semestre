@@ -71,28 +71,21 @@ class AdminProdutoController extends Controller
 
     private function buildProductReportRows()
     {
-        return DB::table('produtos')
-            ->leftJoin('pedido_itens', 'produtos.id', '=', 'pedido_itens.produto_id')
-            ->leftJoin('pedidos', 'pedido_itens.pedido_id', '=', 'pedidos.id')
+        return DB::table('produtos as p')
+            ->leftJoin('pedido_itens as pi', 'p.id', '=', 'pi.produto_id')
+            ->leftJoin('pedidos as ped', 'pi.pedido_id', '=', 'ped.id')
             ->select(
-                'produtos.id',
-                'produtos.nome',
-                'produtos.categoria',
-                'produtos.quantidade',
-                'produtos.preco_atual',
-                'produtos.preco_de_custo',
-                DB::raw('COALESCE(SUM(CASE WHEN pedidos.status = "approved" THEN pedido_itens.quantidade ELSE 0 END),0) as total_qtd'),
-                DB::raw('COALESCE(SUM(CASE WHEN pedidos.status = "approved" THEN pedido_itens.subtotal ELSE 0 END),0) as total_venda')
+                'p.id',
+                'p.nome',
+                'p.categoria',
+                'p.quantidade',
+                'p.preco_atual',
+                'p.preco_de_custo',
+                DB::raw('COALESCE(SUM(CASE WHEN ped.status = \'approved\' THEN pi.quantidade ELSE 0 END),0) as total_qtd'),
+                DB::raw('COALESCE(SUM(CASE WHEN ped.status = \'approved\' THEN pi.subtotal ELSE 0 END),0) as total_venda')
             )
-            ->groupBy(
-                'produtos.id',
-                'produtos.nome',
-                'produtos.categoria',
-                'produtos.quantidade',
-                'produtos.preco_atual',
-                'produtos.preco_de_custo'
-            )
-            ->orderBy('produtos.nome')
+            ->groupBy('p.id', 'p.nome', 'p.categoria', 'p.quantidade', 'p.preco_atual', 'p.preco_de_custo')
+            ->orderBy('p.nome')
             ->get();
     }
 
@@ -152,42 +145,65 @@ class AdminProdutoController extends Controller
     }
 
     /**
+     * Exibe a página de relatórios com gráficos e opções de exportação
+     */
+    public function relatorios()
+    {
+        $chartData = $this->buildDashboardPayload();
+        return view('admin.relatorios', compact('chartData'));
+    }
+
+    /**
      * Exporta relatórios em CSV (type: sales|products|stock)
      */
     public function exportCsv(Request $request)
     {
         $type = $request->get('type', 'sales');
+        $filename = 'report_' . $type . '_' . now()->format('Ymd_His') . '.csv';
 
-        $filename = 'report_' . $type . '_' . date('Ymd_His') . '.csv';
+        $callback = function() use ($type) {
+            $file = fopen('php://output', 'w');
 
-        $handle = fopen('php://memory', 'w');
+            if ($type === 'products') {
+                fputcsv($file, ['Produto ID', 'Nome', 'Categoria', 'Estoque', 'Preco Atual', 'Preco de Custo', 'Total Vendido Qtd', 'Total Vendido Valor'], ';');
 
-        if ($type === 'products') {
-            fputcsv($handle, ['Produto ID', 'Nome', 'Categoria', 'Estoque', 'Preco Atual', 'Preco de Custo', 'Total Vendido Qtd', 'Total Vendido Valor']);
+                $rows = $this->buildProductReportRows();
 
-            $rows = $this->buildProductReportRows();
+                foreach ($rows as $r) {
+                    fputcsv($file, [
+                        $r->id,
+                        $r->nome,
+                        $r->categoria,
+                        $r->quantidade,
+                        number_format((float) $r->preco_atual, 2, ',', '.'),
+                        number_format((float) ($r->preco_de_custo ?? 0), 2, ',', '.'),
+                        $r->total_qtd ?? 0,
+                        number_format((float) ($r->total_venda ?? 0), 2, ',', '.')
+                    ], ';');
+                }
+            } else { // sales
+                fputcsv($file, ['Pedido ID', 'Referencia', 'Data Pagamento', 'Cliente', 'Email', 'Total', 'Itens'], ';');
 
-            foreach ($rows as $r) {
-                fputcsv($handle, [(int) $r->id, $r->nome, $r->categoria, (int) $r->quantidade, (float) $r->preco_atual, (float) $r->preco_de_custo, (int) $r->total_qtd, (float) $r->total_venda]);
+                $pedidos = Pedido::withCount('itens')->where('status', 'approved')->orderByDesc('data_pagamento')->get();
+
+                foreach ($pedidos as $p) {
+                    fputcsv($file, [
+                        $p->id,
+                        $p->referencia,
+                        $p->data_pagamento?->format('d/m/Y H:i:s') ?? '',
+                        $p->nome_cliente,
+                        $p->email_cliente,
+                        number_format((float) $p->total, 2, ',', '.'),
+                        $p->itens_count
+                    ], ';');
+                }
             }
-        } else { // sales
-            fputcsv($handle, ['Pedido ID', 'Referencia', 'Data Pagamento', 'Cliente', 'Email', 'Total', 'Itens']);
 
-            $pedidos = Pedido::withCount('itens')->where('status', 'approved')->orderByDesc('data_pagamento')->get();
+            fclose($file);
+        };
 
-            foreach ($pedidos as $p) {
-                fputcsv($handle, [$p->id, $p->referencia, $p->data_pagamento?->toDateTimeString() ?? '', $p->nome_cliente, $p->email_cliente, (float) $p->total, $p->itens_count]);
-            }
-        }
-
-        rewind($handle);
-
-        $content = stream_get_contents($handle);
-        fclose($handle);
-
-        return response($content, 200, [
+        return response()->streamDownload($callback, $filename, [
             'Content-Type' => 'text/csv; charset=UTF-8',
-            'Content-Disposition' => "attachment; filename=\"{$filename}\"",
         ]);
     }
 

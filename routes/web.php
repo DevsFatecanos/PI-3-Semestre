@@ -95,6 +95,7 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(fun
     Route::get('/dashboard/data', [AdminProdutoController::class, 'dashboardData'])->name('dashboard.data');
     Route::get('/dashboard/export', [AdminProdutoController::class, 'exportCsv'])->name('dashboard.export');
     Route::get('/dashboard/print', [AdminProdutoController::class, 'printReport'])->name('dashboard.print');
+    Route::get('/relatorios', [AdminProdutoController::class, 'relatorios'])->name('relatorios');
     Route::get('/produtos/search', [AdminProdutoController::class, 'search'])->name('produtos.search');
 
     // Pedidos
