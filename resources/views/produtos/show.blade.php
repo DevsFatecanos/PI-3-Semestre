@@ -20,6 +20,12 @@
         <span>/</span>
         <span class="text-slate-900 font-semibold">{{ $produto->nome }}</span>
     </nav>
+    <script id="#userwayAccessibilityIcon" src = " https://cdn.userway.org/widget.js "  data-account = " wHedvuvp49 " ></script>
+    <style>
+    #userwayAccessibilityIcon {
+        margin-top: 500px;
+    }
+    </style>
 
         <!-- Produto Container -->
         <div class="grid gap-8 md:grid-cols-2 lg:gap-12">

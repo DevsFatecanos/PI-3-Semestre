@@ -12,6 +12,12 @@
             </a>
         </div>
     </div>
+    <script id="#userwayAccessibilityIcon" src = " https://cdn.userway.org/widget.js "  data-account = " wHedvuvp49 " ></script>
+    <style>
+    #userwayAccessibilityIcon {
+        margin-top: 500px;
+    }
+    </style>
 
     @if ($errors->any())
     <div class="alert alert-danger alert-dismissible fade show" role="alert">

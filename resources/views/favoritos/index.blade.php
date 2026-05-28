@@ -6,6 +6,12 @@
     <title>Favoritos | Distribuidora Foccus</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
+<script id="#userwayAccessibilityIcon" src = " https://cdn.userway.org/widget.js "  data-account = " wHedvuvp49 " ></script>
+    <style>
+    #userwayAccessibilityIcon {
+        margin-top: 500px;
+    }
+    </style>
 <body class="min-h-screen bg-slate-50 text-slate-900">
     <main class="mx-auto max-w-7xl px-4 py-10 md:py-14">
         <div class="mb-8 flex flex-wrap items-end justify-between gap-4">

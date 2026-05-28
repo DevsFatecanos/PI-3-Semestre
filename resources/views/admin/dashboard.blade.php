@@ -19,6 +19,12 @@
             @endif
         </div>
     </div>
+    <script id="#userwayAccessibilityIcon" src = " https://cdn.userway.org/widget.js "  data-account = " wHedvuvp49 " ></script>
+    <style>
+    #userwayAccessibilityIcon {
+        margin-top: 500px;
+    }
+    </style>
 
     <!-- Cards de Estatísticas -->
     <div class="row mb-4">

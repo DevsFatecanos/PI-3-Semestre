@@ -16,6 +16,12 @@
                 linear-gradient(180deg, #f8fafc 0%, #eef2ff 100%);
         }
     </style>
+    <script id="#userwayAccessibilityIcon" src = " https://cdn.userway.org/widget.js "  data-account = " wHedvuvp49 " ></script>
+    <style>
+    #userwayAccessibilityIcon {
+        margin-top: 500px;
+    }
+    </style>
 </head>
 <body class="min-h-screen text-slate-900">
     <nav class="bg-slate-500 text-white p-4 shadow-lg sticky top-0 z-50">

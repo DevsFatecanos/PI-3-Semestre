@@ -5,6 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Historico de compras | Distribuidora Foccus</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script id="#userwayAccessibilityIcon" src = " https://cdn.userway.org/widget.js "  data-account = " wHedvuvp49 " ></script>
+    <style>
+    #userwayAccessibilityIcon {
+        margin-top: 500px;
+    }
+    </style>
 </head>
 <body class="min-h-screen bg-slate-50 text-slate-900">
     <main class="mx-auto max-w-7xl px-4 py-10 md:py-14">

@@ -6,6 +6,12 @@
     <title>Retorno do Checkout | Distribuidora Foccus</title>
 
     <script src="https://cdn.tailwindcss.com"></script>
+    <script id="#userwayAccessibilityIcon" src = " https://cdn.userway.org/widget.js "  data-account = " wHedvuvp49 " ></script>
+    <style>
+    #userwayAccessibilityIcon {
+        margin-top: 500px;
+    }
+    </style>
     <link rel="shortcut icon" href="/favicon.png" type="image/x-icon">
 </head>
 <body class="min-h-screen bg-slate-950 px-4 py-14 text-white">

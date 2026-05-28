@@ -10,6 +10,12 @@
         </h1>
         <p class="text-muted">Visualize e gerencie todos os pedidos realizados pelos clientes</p>
     </div>
+    <script id="#userwayAccessibilityIcon" src = " https://cdn.userway.org/widget.js "  data-account = " wHedvuvp49 " ></script>
+    <style>
+    #userwayAccessibilityIcon {
+        margin-top: 500px;
+    }
+    </style>
 
     @if($pedidos->isEmpty())
         <div class="alert alert-info" role="alert">
