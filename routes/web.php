@@ -54,8 +54,8 @@ Route::middleware('auth')->group(function (): void {
 });
 
 //Rotas de Conta
-Route::get('/meusdados',[UserController::class, 'meusdados'])->middleware('auth');;
-Route::post('/meusdados/update', function (\Illuminate\Http\Request $request) {
+Route::get('/meusdados', [UserController::class, 'meusdados'])->middleware('auth');
+Route::middleware('auth')->post('/meusdados/update', function (\Illuminate\Http\Request $request) {
 
     $user = auth()->user();
 
@@ -76,8 +76,6 @@ Route::middleware('auth')->group(function () {
 });
 
 // Rotas de Registro
-Route::get('/register', [RegisteredUserController::class, 'create'])->name('register');
-Route::post('/register', [RegisteredUserController::class, 'store']);
 Route::get('/empresa/{cnpj}', [EmpresaController::class, 'consultarCnpj']);
 Route::get('/register', function () { return view('auth.register'); })->name('register');
 Route::post('/register', [RegisteredUserController::class, 'store']);
@@ -94,6 +92,7 @@ Route::post('/logout', function () {
 Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(function () {
     // Dashboard
     Route::get('/dashboard', [AdminProdutoController::class, 'dashboard'])->name('dashboard');
+    Route::get('/dashboard/data', [AdminProdutoController::class, 'dashboardData'])->name('dashboard.data');
     Route::get('/dashboard/export', [AdminProdutoController::class, 'exportCsv'])->name('dashboard.export');
     Route::get('/dashboard/print', [AdminProdutoController::class, 'printReport'])->name('dashboard.print');
     Route::get('/produtos/search', [AdminProdutoController::class, 'search'])->name('produtos.search');

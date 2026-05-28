@@ -37,6 +37,7 @@
                                 @php
                                     $statusClass = match($pedido->status) {
                                         'pending' => 'warning',
+                                        'approved' => 'success',
                                         'completed' => 'success',
                                         'failed' => 'danger',
                                         'cancelled' => 'secondary',
@@ -44,6 +45,7 @@
                                     };
                                     $statusLabel = match($pedido->status) {
                                         'pending' => 'Pendente',
+                                        'approved' => 'Aprovado',
                                         'completed' => 'Concluído',
                                         'failed' => 'Falhou',
                                         'cancelled' => 'Cancelado',

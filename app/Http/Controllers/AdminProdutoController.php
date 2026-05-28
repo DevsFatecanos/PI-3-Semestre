@@ -11,6 +11,91 @@ use Illuminate\Http\Response;
 
 class AdminProdutoController extends Controller
 {
+    private function buildDashboardPayload(): array
+    {
+        $approvedPedidos = Pedido::query()->where('status', 'approved');
+
+        $totalOrders = $approvedPedidos->count();
+        $totalRevenue = (float) $approvedPedidos->sum('total');
+
+        $profitRow = DB::table('pedido_itens')
+            ->join('pedidos', 'pedido_itens.pedido_id', '=', 'pedidos.id')
+            ->leftJoin('produtos', 'pedido_itens.produto_id', '=', 'produtos.id')
+            ->where('pedidos.status', 'approved')
+            ->selectRaw('SUM(pedido_itens.subtotal) as revenue, SUM(COALESCE(produtos.preco_de_custo,0) * pedido_itens.quantidade) as cost')
+            ->first();
+
+        $revenueFromItems = (float) ($profitRow->revenue ?? 0);
+        $costFromItems = (float) ($profitRow->cost ?? 0);
+        $grossProfit = $revenueFromItems - $costFromItems;
+        $grossMarginPercent = $revenueFromItems > 0 ? ($grossProfit / $revenueFromItems) * 100 : 0;
+
+        $topCategories = DB::table('pedido_itens')
+            ->join('pedidos', 'pedido_itens.pedido_id', '=', 'pedidos.id')
+            ->where('pedidos.status', 'approved')
+            ->select('pedido_itens.categoria_produto as categoria', DB::raw('SUM(pedido_itens.quantidade) as total_qtd'), DB::raw('SUM(pedido_itens.subtotal) as total_venda'))
+            ->groupBy('pedido_itens.categoria_produto')
+            ->orderByDesc('total_qtd')
+            ->limit(8)
+            ->get();
+
+        $topProdutos = DB::table('pedido_itens')
+            ->join('pedidos', 'pedido_itens.pedido_id', '=', 'pedidos.id')
+            ->where('pedidos.status', 'approved')
+            ->select('pedido_itens.produto_id', 'pedido_itens.nome_produto as nome', DB::raw('SUM(pedido_itens.quantidade) as total_qtd'), DB::raw('SUM(pedido_itens.subtotal) as total_venda'))
+            ->groupBy('pedido_itens.produto_id', 'pedido_itens.nome_produto')
+            ->orderByDesc('total_qtd')
+            ->limit(8)
+            ->get();
+
+        $critical = config('stock.critical_threshold', 1);
+        $low = config('stock.low_threshold', 5);
+
+        $stockDistribution = DB::table('produtos')
+            ->selectRaw("CASE WHEN quantidade <= 0 THEN 'out' WHEN quantidade <= ? THEN 'critical' WHEN quantidade <= ? THEN 'low' ELSE 'ok' END as status", [$critical, $low])
+            ->selectRaw('count(*) as total')
+            ->groupBy('status')
+            ->pluck('total', 'status')
+            ->toArray();
+
+        return [
+            'topCategories' => $topCategories,
+            'topProdutos' => $topProdutos,
+            'stockDistribution' => $stockDistribution,
+            'revenue' => $totalRevenue,
+            'orders' => $totalOrders,
+            'grossProfit' => $grossProfit,
+            'grossMarginPercent' => round($grossMarginPercent, 2),
+        ];
+    }
+
+    private function buildProductReportRows()
+    {
+        return DB::table('produtos')
+            ->leftJoin('pedido_itens', 'produtos.id', '=', 'pedido_itens.produto_id')
+            ->leftJoin('pedidos', 'pedido_itens.pedido_id', '=', 'pedidos.id')
+            ->select(
+                'produtos.id',
+                'produtos.nome',
+                'produtos.categoria',
+                'produtos.quantidade',
+                'produtos.preco_atual',
+                'produtos.preco_de_custo',
+                DB::raw('COALESCE(SUM(CASE WHEN pedidos.status = "approved" THEN pedido_itens.quantidade ELSE 0 END),0) as total_qtd'),
+                DB::raw('COALESCE(SUM(CASE WHEN pedidos.status = "approved" THEN pedido_itens.subtotal ELSE 0 END),0) as total_venda')
+            )
+            ->groupBy(
+                'produtos.id',
+                'produtos.nome',
+                'produtos.categoria',
+                'produtos.quantidade',
+                'produtos.preco_atual',
+                'produtos.preco_de_custo'
+            )
+            ->orderBy('produtos.nome')
+            ->get();
+    }
+
     /**
      * Exibe o painel de admin com listagem de produtos
      */
@@ -43,65 +128,7 @@ class AdminProdutoController extends Controller
                                   ->limit(5)
                                   ->get();
 
-        // --- Dados do dashboard ---
-        $approvedPedidos = Pedido::query()->where('status', 'approved');
-
-        $totalOrders = $approvedPedidos->count();
-        $totalRevenue = (float) $approvedPedidos->sum('total');
-
-        $profitRow = DB::table('pedido_itens')
-            ->join('pedidos', 'pedido_itens.pedido_id', '=', 'pedidos.id')
-            ->leftJoin('produtos', 'pedido_itens.produto_id', '=', 'produtos.id')
-            ->where('pedidos.status', 'approved')
-            ->selectRaw('SUM(pedido_itens.subtotal) as revenue, SUM(COALESCE(produtos.preco_de_custo,0) * pedido_itens.quantidade) as cost')
-            ->first();
-
-        $revenueFromItems = (float) ($profitRow->revenue ?? 0);
-        $costFromItems = (float) ($profitRow->cost ?? 0);
-        $grossProfit = $revenueFromItems - $costFromItems;
-        $grossMarginPercent = $revenueFromItems > 0 ? ($grossProfit / $revenueFromItems) * 100 : 0;
-
-        // Top categorias
-        $topCategories = DB::table('pedido_itens')
-            ->join('pedidos', 'pedido_itens.pedido_id', '=', 'pedidos.id')
-            ->where('pedidos.status', 'approved')
-            ->select('pedido_itens.categoria_produto as categoria', DB::raw('SUM(pedido_itens.quantidade) as total_qtd'), DB::raw('SUM(pedido_itens.subtotal) as total_venda'))
-            ->groupBy('pedido_itens.categoria_produto')
-            ->orderByDesc('total_qtd')
-            ->limit(8)
-            ->get();
-
-        // Top produtos
-        $topProdutos = DB::table('pedido_itens')
-            ->join('pedidos', 'pedido_itens.pedido_id', '=', 'pedidos.id')
-            ->where('pedidos.status', 'approved')
-            ->select('pedido_itens.produto_id', 'pedido_itens.nome_produto as nome', DB::raw('SUM(pedido_itens.quantidade) as total_qtd'), DB::raw('SUM(pedido_itens.subtotal) as total_venda'))
-            ->groupBy('pedido_itens.produto_id', 'pedido_itens.nome_produto')
-            ->orderByDesc('total_qtd')
-            ->limit(8)
-            ->get();
-
-        // Distribuição de estoque
-        $critical = config('stock.critical_threshold', 1);
-        $low = config('stock.low_threshold', 5);
-
-        $stockDistribution = DB::table('produtos')
-            ->selectRaw("CASE WHEN quantidade <= 0 THEN 'out' WHEN quantidade <= ? THEN 'critical' WHEN quantidade <= ? THEN 'low' ELSE 'ok' END as status", [$critical, $low])
-            ->selectRaw('count(*) as total')
-            ->groupBy('status')
-            ->pluck('total', 'status')
-            ->toArray();
-
-        // Dados para gráficos (JSON)
-        $chartData = [
-            'topCategories' => $topCategories,
-            'topProdutos' => $topProdutos,
-            'stockDistribution' => $stockDistribution,
-            'revenue' => $totalRevenue,
-            'orders' => $totalOrders,
-            'grossProfit' => $grossProfit,
-            'grossMarginPercent' => round($grossMarginPercent, 2),
-        ];
+        $chartData = $this->buildDashboardPayload();
 
         return view('admin.dashboard', compact(
             'produtos',
@@ -114,6 +141,14 @@ class AdminProdutoController extends Controller
             'lowStockProducts',
             'filter'
         ))->with('chartData', $chartData);
+    }
+
+    public function dashboardData(Request $request)
+    {
+        return response()->json([
+            'generatedAt' => now()->toIso8601String(),
+            'chartData' => $this->buildDashboardPayload(),
+        ]);
     }
 
     /**
@@ -130,12 +165,7 @@ class AdminProdutoController extends Controller
         if ($type === 'products') {
             fputcsv($handle, ['Produto ID', 'Nome', 'Categoria', 'Estoque', 'Preco Atual', 'Preco de Custo', 'Total Vendido Qtd', 'Total Vendido Valor']);
 
-            $rows = DB::table('produtos')
-                ->leftJoin('pedido_itens', 'produtos.id', '=', 'pedido_itens.produto_id')
-                ->leftJoin('pedidos', 'pedido_itens.pedido_id', '=', 'pedidos.id')
-                ->select('produtos.id', 'produtos.nome', 'produtos.categoria', 'produtos.quantidade', 'produtos.preco_atual', 'produtos.preco_de_custo', DB::raw('COALESCE(SUM(CASE WHEN pedidos.status = "approved" THEN pedido_itens.quantidade ELSE 0 END),0) as total_qtd'), DB::raw('COALESCE(SUM(CASE WHEN pedidos.status = "approved" THEN pedido_itens.subtotal ELSE 0 END),0) as total_venda'))
-                ->groupBy('produtos.id')
-                ->get();
+            $rows = $this->buildProductReportRows();
 
             foreach ($rows as $r) {
                 fputcsv($handle, [(int) $r->id, $r->nome, $r->categoria, (int) $r->quantidade, (float) $r->preco_atual, (float) $r->preco_de_custo, (int) $r->total_qtd, (float) $r->total_venda]);
@@ -169,12 +199,7 @@ class AdminProdutoController extends Controller
         $type = $request->get('type', 'sales');
 
         if ($type === 'products') {
-            $rows = DB::table('produtos')
-                ->leftJoin('pedido_itens', 'produtos.id', '=', 'pedido_itens.produto_id')
-                ->leftJoin('pedidos', 'pedido_itens.pedido_id', '=', 'pedidos.id')
-                ->select('produtos.*', DB::raw('COALESCE(SUM(CASE WHEN pedidos.status = "approved" THEN pedido_itens.quantidade ELSE 0 END),0) as total_qtd'), DB::raw('COALESCE(SUM(CASE WHEN pedidos.status = "approved" THEN pedido_itens.subtotal ELSE 0 END),0) as total_venda'))
-                ->groupBy('produtos.id')
-                ->get();
+            $rows = $this->buildProductReportRows();
 
             return view('admin.reports.products', compact('rows'));
         }

@@ -39,28 +39,29 @@
                     <tbody>
                         @foreach($pedidos as $pedido)
                             <tr>
-                                <td><strong>#{{ $pedido->id }}</strong></td>
-                                <td>
+                                <td data-label="#ID"><strong>#{{ $pedido->id }}</strong></td>
+                                <td data-label="Data">
                                     <small>{{ \Carbon\Carbon::parse($pedido->created_at)->format('d/m/Y H:i') }}</small>
                                 </td>
-                                <td>
+                                <td data-label="Cliente">
                                     <div>{{ $pedido->nome_cliente }}</div>
                                     @if($pedido->user_name)
                                         <small class="text-muted">({{ $pedido->user_name }})</small>
                                     @endif
                                 </td>
-                                <td><small>{{ $pedido->email_cliente }}</small></td>
-                                <td><small>{{ $pedido->telefone_cliente ?? '—' }}</small></td>
-                                <td>
+                                <td data-label="Email"><small>{{ $pedido->email_cliente }}</small></td>
+                                <td data-label="Telefone"><small>{{ $pedido->telefone_cliente ?? '—' }}</small></td>
+                                <td data-label="Método de Pagamento">
                                     <span class="badge bg-info">
                                         {{ ucfirst($pedido->metodo_pagamento) }}
                                     </span>
                                 </td>
-                                <td><strong>R$ {{ number_format($pedido->total, 2, ',', '.') }}</strong></td>
-                                <td>
+                                <td data-label="Valor Total"><strong>R$ {{ number_format($pedido->total, 2, ',', '.') }}</strong></td>
+                                <td data-label="Status">
                                     @php
                                         $statusClass = match($pedido->status) {
                                             'pending' => 'warning',
+                                            'approved' => 'success',
                                             'completed' => 'success',
                                             'failed' => 'danger',
                                             'cancelled' => 'secondary',
@@ -68,6 +69,7 @@
                                         };
                                         $statusLabel = match($pedido->status) {
                                             'pending' => 'Pendente',
+                                            'approved' => 'Aprovado',
                                             'completed' => 'Concluído',
                                             'failed' => 'Falhou',
                                             'cancelled' => 'Cancelado',
@@ -76,7 +78,7 @@
                                     @endphp
                                     <span class="badge bg-{{ $statusClass }}">{{ $statusLabel }}</span>
                                 </td>
-                                <td>
+                                <td data-label="Ações">
                                     <a href="{{ route('admin.pedidos.show', $pedido->id) }}"
                                        class="btn btn-sm btn-primary"
                                        title="Visualizar detalhes">
